@@ -14,7 +14,7 @@
 <title>Daily Life OS</title>
 <style>
 :root{
-  /* Hanya Mode Cerah (Light Mode) untuk Semangat Harian */
+  /* Terkunci di Mode Cerah (Light Mode) */
   --bg: #FBF8F1;
   --card: #FFFFFF;
   --green: #0F7A5A;
@@ -25,11 +25,6 @@
   --muted: #66756D;
   --line: #E7E2D6;
   --done: #2E9E75;
-  
-  --cat-kuliah: #3B82F6; 
-  --cat-toko: #F59E0B;   
-  --cat-ibadah: #10B981; 
-  --cat-kitab: #8B5CF6;  
   
   --radius-lg: 24px;
   --radius: 16px;
@@ -152,7 +147,6 @@ small{font-size:13px; font-weight: 600;}
 .btn.primary{background:var(--green);border-color:var(--green);color:#fff;}
 .btn.primary:hover{background:var(--green-deep);}
 .btn.small{padding:8px 12px;font-size:13px}
-.btn.focus-btn {background: var(--bg); color: var(--green); border-color: var(--green); padding: 6px 12px; font-size: 12px; border-radius: 8px;}
 
 /* ---------- Task List ---------- */
 #tasks{margin-top:8px;}
@@ -202,7 +196,7 @@ small{font-size:13px; font-weight: 600;}
   font-size:12px;font-weight:800; color: #fff;
   border-radius:999px;padding:4px 12px;
   display:inline-block;margin-top:8px; text-transform: uppercase; letter-spacing: 0.05em;
-  background: var(--muted);
+  background: var(--muted); /* Diperbarui oleh JS di bawah berdasarkan teksnya */
 }
 .note{font-size:13px;color:var(--muted);margin-top:6px}
 .actions{display:flex;gap:6px; margin-top: 8px;}
@@ -268,6 +262,8 @@ form label{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--muted
       <p class="kicker">Daily Life OS</p>
       <h1>Agenda Asisten</h1>
     </div>
+    <!-- Tombol ini wajib ada agar app.js tidak error saat mendeteksi Service Worker -->
+    <button id="install" class="btn small hidden">Pasang aplikasi</button>
     <div style="text-align: right;">
       <div id="masehiDate" style="font-weight: 800; font-size: 15px;">Memuat...</div>
       <div id="hijriDate" class="muted" style="font-size: 13px; font-weight: 600;">Memuat...</div>
@@ -310,13 +306,12 @@ form label{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--muted
       <select id="filter" aria-label="Filter kategori"><option value="">Semua kategori</option></select>
     </div>
     
-    <!-- Wadah ini akan diisi oleh logika app.js milikmu -->
     <div id="tasks"></div>
   </section>
 
   <section class="panel">
     <h2>Catatan & Backup (Cadangan)</h2>
-    <p class="muted" style="font-size: 14px; margin-top: 6px;">Jadwalmu tersimpan di HP/Browser ini. Jika kamu membersihkan memori browser, jadwal bisa hilang. Gunakan tombol <strong>Ekspor JSON</strong> di bawah untuk menyimpan cadangan file jadwalmu.</p>
+    <p class="muted" style="font-size: 14px; margin-top: 6px;">Jadwal tersimpan di HP/Browser ini. Jika Anda membersihkan memori browser, jadwal akan hilang. Gunakan <strong>Ekspor JSON</strong> di bawah secara rutin untuk menyimpan file jadwal sebagai cadangan.</p>
     <div class="row" style="margin-top:14px">
       <span id="cloudStatus" class="muted">Mode lokal / offline</span>
       <div>
@@ -335,7 +330,6 @@ form label{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--muted
   <p class="footer">Dibuat khusus untuk Kak Rofi fauzi — Daily Life OS</p>
 </main>
 
-<!-- Floating Action Buttons -->
 <div class="fab-container">
   <button class="fab" aria-label="Catatan Kilat Toko" onclick="document.getElementById('quickPad').showModal()">⚡</button>
   <button id="new" class="fab fab-primary" aria-label="Tambah Jadwal">+</button>
@@ -356,25 +350,18 @@ form label{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--muted
   <ul id="quickOrderList"></ul>
 </dialog>
 
-<!-- Form Utama Tambah Agenda (Sudah Diperbaiki Harinya!) -->
+<!-- Form Utama Tambah Agenda (Membiarkan app.js mengisi otomatis elemen select ini) -->
 <dialog id="editor">
   <form id="editForm">
     <div class="dialog-header">
       <h2 id="formTitle">Tambah Kegiatan</h2>
     </div>
     <input type="hidden" id="taskId">
+    
     <label>Hari
-      <select id="taskDay" required>
-        <option value="" disabled selected>Pilih Hari...</option>
-        <option value="Senin">Senin</option>
-        <option value="Selasa">Selasa</option>
-        <option value="Rabu">Rabu</option>
-        <option value="Kamis">Kamis</option>
-        <option value="Jumat">Jumat</option>
-        <option value="Sabtu">Sabtu</option>
-        <option value="Minggu">Minggu</option>
-      </select>
+      <select id="taskDay" required></select>
     </label>
+    
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
       <label>Mulai<input type="time" id="taskStart" required></label>
       <label>Selesai<input type="time" id="taskEnd" required></label>
@@ -390,13 +377,13 @@ form label{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--muted
 </dialog>
 
 <script>
-  // 1. Asisten Sapaan
+  // Asisten Sapaan
   const now = new Date();
   const h = now.getHours();
   let sapaan = h < 4 ? "Malam yang hening" : h < 11 ? "Pagi yang berkah" : h < 15 ? "Siang yang produktif" : h < 18 ? "Sore yang tenang" : "Malam yang damai";
   document.getElementById("greeting").textContent = `${sapaan}, Kak Rofi fauzi!`;
 
-  // 2. Format Tanggal Masehi & Penarikan Manual Bulan Hijriyah
+  // Format Tanggal Masehi & Penarikan Manual Bulan Hijriyah
   const masehiOpts = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
   document.getElementById("masehiDate").textContent = new Intl.DateTimeFormat('id-ID', masehiOpts).format(now);
   
@@ -414,7 +401,7 @@ form label{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--muted
     document.getElementById("hijriDate").textContent = "";
   }
 
-  // 3. Afirmasi Harian
+  // Afirmasi Harian
   const quotes = [
     "Barangsiapa bersungguh-sungguh, sesungguhnya kesungguhannya itu adalah untuk dirinya sendiri.",
     "Jangan menunda pekerjaan hari ini hingga esok hari, sebab esok memiliki urusannya sendiri.",
@@ -425,7 +412,7 @@ form label{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--muted
   ];
   document.getElementById("dailyQuote").textContent = quotes[Math.floor(Math.random() * quotes.length)];
 
-  // 4. Logika Quick Pad AlmidaStore
+  // Logika Quick Pad AlmidaStore
   let quickOrders = JSON.parse(localStorage.getItem('almida_quick_orders')) || [];
   function renderOrders() {
     const ul = document.getElementById('quickOrderList');
@@ -451,7 +438,7 @@ form label{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--muted
   }
   renderOrders(); 
 
-  // Pemicu Confetti saat persentase berubah ke 100%
+  // Pemicu Confetti saat persentase berubah ke 100% dari app.js
   const observer = new MutationObserver(function(mutations) {
     mutations.forEach(function(mutation) {
       if (mutation.target.textContent.trim() === "100%") {
@@ -460,9 +447,21 @@ form label{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--muted
     });
   });
   const percentEl = document.getElementById('percent');
-  if(percentEl) {
-    observer.observe(percentEl, { characterData: true, childList: true, subtree: true });
-  }
+  if(percentEl) observer.observe(percentEl, { characterData: true, childList: true, subtree: true });
+
+  // Mewarnai kategori secara otomatis dari hasil render app.js
+  const taskObserver = new MutationObserver(() => {
+    document.querySelectorAll('.tag').forEach(tag => {
+      const text = tag.textContent.toLowerCase();
+      if (text.includes('kuliah')) tag.style.background = '#3B82F6';
+      else if (text.includes('toko') || text.includes('rekap')) tag.style.background = '#F59E0B';
+      else if (text.includes('ibadah')) tag.style.background = '#10B981';
+      else if (text.includes('mutholaah') || text.includes('kitab') || text.includes('bahtsul') || text.includes('mengajar')) tag.style.background = '#8B5CF6';
+      else tag.style.background = '#66756D';
+    });
+  });
+  const tasksContainer = document.getElementById('tasks');
+  if(tasksContainer) taskObserver.observe(tasksContainer, { childList: true });
 </script>
 
 <script src="./firebase-config.js"></script>
