@@ -156,6 +156,18 @@ small{font-size:13px;font-weight:600}
 }
 .task:last-child{border-bottom:none}
 #tasks.ready .task{animation:none}
+
+/* ---------- Banner pengingat ---------- */
+.reminder-banner{
+  position:fixed;top:16px;left:50%;transform:translateX(-50%);
+  width:min(520px,calc(100% - 28px));z-index:200;
+  background:var(--card);border:1px solid var(--line);border-left:5px solid var(--green);
+  border-radius:var(--radius);box-shadow:0 18px 40px rgba(10,90,67,.18);
+  padding:14px 16px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;
+}
+.rb-title{margin:0;font-weight:800;color:var(--green-deep)}
+.rb-body{margin:2px 0 0;font-size:14px;color:var(--muted);white-space:pre-line}
+.rb-actions{display:flex;gap:8px}
 @keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 
 .task input[type="checkbox"]{
@@ -380,6 +392,17 @@ form input,form select,form textarea{
   <p class="footer">Dibuat khusus untuk Kak Rofi fauzi — Daily Life OS</p>
 </main>
 
+<div id="reminderBanner" class="reminder-banner hidden" role="alert">
+  <div>
+    <p id="bannerTitle" class="rb-title"></p>
+    <p id="bannerBody" class="rb-body"></p>
+  </div>
+  <div class="rb-actions">
+    <button id="bannerSnooze" class="btn small" type="button">Tunda 10 menit</button>
+    <button id="bannerClose" class="btn small primary" type="button">Sudah</button>
+  </div>
+</div>
+
 <div class="fab-container">
   <button id="openOrder" class="fab fab-order" aria-label="Catatan kilat AlmidaStore">⚡</button>
   <button id="new" class="fab fab-primary" aria-label="Tambah jadwal">+</button>
@@ -399,13 +422,28 @@ form input,form select,form textarea{
   <ul id="quickOrderList"></ul>
 </dialog>
 
+<!-- Salin kegiatan ke hari lain -->
+<dialog id="copyDialog" aria-labelledby="copyTitle">
+  <form id="copyForm">
+    <div class="dialog-header"><h2 id="copyTitle">Salin kegiatan</h2></div>
+    <p id="copyInfo" class="muted" style="margin:0;font-size:14px"></p>
+    <label>Salin ke hari
+      <select id="copyDay" required></select>
+    </label>
+    <div class="form-row">
+      <button type="button" class="btn" id="copyCancel">Batal</button>
+      <button type="submit" class="btn primary">Salin</button>
+    </div>
+  </form>
+</dialog>
+
 <!-- Form tambah/ubah agenda (app.js mengisi pilihan hari) -->
 <dialog id="editor">
   <form id="editForm">
     <div class="dialog-header"><h2 id="formTitle">Tambah kegiatan</h2></div>
     <input type="hidden" id="taskId">
     <label>Hari
-      <select id="taskDay" required>
+        <select id="taskDay" required>
         <option value="Senin">Senin</option>
         <option value="Selasa">Selasa</option>
         <option value="Rabu">Rabu</option>
@@ -637,6 +675,6 @@ form input,form select,form textarea{
 </script>
 
 <script src="./firebase-config.js"></script>
-<script type="module" src="./app_v2.js"></script>
+<script type="module" src="./app.js"></script>
 </body>
 </html>
