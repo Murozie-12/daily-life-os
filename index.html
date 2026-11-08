@@ -1,0 +1,1022 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0F7A5A">
+<meta name="description" content="Daily Life OS — Asisten Pribadi: Jadwal kuliah, AlmidaStore, ibadah dan mutholaah">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon-192.png?v=3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<title>Daily Life OS — V2.0</title>
+<style>
+:root{
+  --bg:#FBF8F1;
+  --card:#FFFFFF;
+  --green:#0F7A5A;
+  --green-deep:#0A5A43;
+  --gold:#E0A84E;
+  --gold-deep:#A8741E;
+  --gold-text:#8A5D12;
+  --mint:#E6F3EC;
+  --ink:#1E2B25;
+  --muted:#5F6E66;
+  --line:#E7E2D6;
+  --done:#2E9E75;
+  --warm:#FBF3E2;
+  --radius-lg:24px;
+  --radius:16px;
+  --shadow:0 10px 30px rgba(10,90,67,.08);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:var(--bg);color:var(--ink);
+  font:16px/1.6 "Plus Jakarta Sans",system-ui,sans-serif;
+  min-height:100vh;-webkit-font-smoothing:antialiased;
+}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:none;background:transparent}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible,a:focus-visible{
+  outline:3px solid var(--gold);outline-offset:2px;
+}
+a{color:var(--green)}
+.hidden{display:none!important}
+
+.wrap{max-width:720px;margin:0 auto;padding:24px 18px 110px}
+
+/* ---------- Header ---------- */
+header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+h1{font-size:26px;font-weight:800;letter-spacing:-.02em;margin:4px 0 2px;color:var(--green-deep)}
+h2{font-size:18px;font-weight:700;margin:0;letter-spacing:-.01em}
+.muted,small{color:var(--muted)}
+small{font-size:13px;font-weight:600}
+.kicker{font-size:13px;color:var(--gold-text);font-weight:800;letter-spacing:.05em;margin:0;text-transform:uppercase}
+.label{font-size:13px;font-weight:700;color:var(--muted);margin:0 0 8px}
+
+/* ---------- Greeting card ---------- */
+.greet{
+  position:relative;overflow:hidden;
+  background:linear-gradient(135deg,var(--green-deep) 0%,var(--green) 100%);
+  color:#fff;border-radius:var(--radius-lg);
+  padding:28px 24px;margin-top:16px;
+  box-shadow:0 18px 40px rgba(15,122,90,.3);text-align:center;
+}
+.greet::before{
+  content:"";position:absolute;inset:0;
+  background-image:radial-gradient(circle at top right,rgba(255,255,255,.12) 0%,transparent 60%);
+  pointer-events:none;
+}
+.greet > *{position:relative}
+.ar{font-family:"Amiri",serif;direction:rtl;line-height:1.7;margin:0}
+.sholawat-top{font-size:24px;color:#FFE7B0;margin-bottom:16px;text-shadow:0 2px 4px rgba(0,0,0,.2)}
+.greet .ar-main{font-size:32px;color:#fff;font-weight:700}
+.greet .tr{font-size:14px;color:rgba(255,255,255,.92);margin:0}
+.greet .sapaan{font-size:20px;font-weight:800;margin:12px 0 4px}
+.motivation-box{
+  background:rgba(255,255,255,.12);
+  border-left:4px solid var(--gold);
+  border-radius:12px;padding:16px 20px;margin-top:24px;
+  font-style:italic;font-size:14.5px;color:#fff;line-height:1.6;text-align:left;
+}
+
+/* ---------- Panels ---------- */
+.panel{
+  background:var(--card);border:1px solid rgba(0,0,0,.03);
+  border-radius:var(--radius-lg);padding:24px;margin-top:20px;box-shadow:var(--shadow);
+}
+.row{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+
+/* ---------- Fokus hari ini (niat + berikutnya) ---------- */
+.focus{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.intent-row{display:flex;gap:8px}
+.intent-row input{
+  flex:1;min-width:0;background:var(--bg);border:1px solid var(--line);
+  border-radius:12px;padding:11px 13px;font-size:15px;
+}
+.intent-saved{font-size:14px;color:var(--green-deep);margin:10px 0 0;font-weight:600}
+.next-card{background:var(--mint);border-radius:var(--radius);padding:16px 18px}
+.next-text{font-weight:800;margin:0;color:var(--green-deep);font-size:16px;word-wrap:break-word}
+.next-sub{font-size:13px;color:var(--muted);margin:4px 0 0}
+
+/* ---------- Progres ---------- */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+.stat{background:var(--mint);border-radius:var(--radius);padding:16px 8px;text-align:center}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--green-deep);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat small{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase}
+.bar{height:12px;background:var(--line);border-radius:20px;overflow:hidden;margin:20px 0 12px}
+.bar>div{
+  height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--gold));
+  border-radius:20px;transition:width .8s cubic-bezier(.34,1.56,.64,1);
+}
+.support{margin:0;font-size:14px;background:var(--warm);border-radius:12px;padding:12px 14px;line-height:1.6}
+
+/* ---------- Agenda ---------- */
+.days{
+  display:flex;gap:10px;overflow-x:auto;padding:8px 0 16px;margin:0 -4px;scrollbar-width:none;
+  position:sticky;top:0;background:var(--card);z-index:10;margin-top:10px;
+}
+.days::-webkit-scrollbar{display:none}
+.days button{
+  white-space:nowrap;flex:1 0 auto;background:var(--bg);border:1px solid var(--line);
+  border-radius:999px;padding:10px 18px;font-weight:700;font-size:14px;color:var(--ink);transition:background .2s,border-color .2s;
+}
+.days button:hover{border-color:var(--green)}
+.days .active{background:var(--green);border-color:var(--green);color:#fff;box-shadow:0 4px 12px rgba(15,122,90,.2)}
+
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0}
+.toolbar input,.toolbar select{
+  background:var(--bg);border:1px solid var(--line);color:var(--ink);
+  border-radius:12px;padding:11px 13px;min-width:0;font-size:15px;
+}
+.toolbar input{flex:1;min-width:150px}
+.toolbar select{flex:0 1 200px}
+
+.btn{
+  border:1px solid var(--line);background:var(--card);color:var(--ink);
+  border-radius:14px;padding:12px 18px;font-weight:700;font-size:14px;
+  transition:all .2s;box-shadow:0 2px 4px rgba(0,0,0,.02);
+}
+.btn:hover{border-color:var(--green);transform:translateY(-2px);box-shadow:0 6px 12px rgba(0,0,0,.05)}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--green);border-color:var(--green);color:#fff}
+.btn.primary:hover{background:var(--green-deep)}
+.btn.small{padding:9px 13px;font-size:13px}
+
+/* ---------- Task list ---------- */
+#tasks{margin-top:8px}
+.task{
+  display:flex;align-items:flex-start;gap:16px;
+  border-bottom:1px solid var(--line);padding:20px 0;
+  animation:slideUp .4s ease forwards;
+}
+.task:last-child{border-bottom:none}
+#tasks.ready .task{animation:none}
+
+/* ---------- Banner pengingat ---------- */
+.reminder-banner{
+  position:fixed;top:16px;left:50%;transform:translateX(-50%);
+  width:min(520px,calc(100% - 28px));z-index:200;
+  background:var(--card);border:1px solid var(--line);border-left:5px solid var(--green);
+  border-radius:var(--radius);box-shadow:0 18px 40px rgba(10,90,67,.18);
+  padding:14px 16px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;
+}
+.rb-title{margin:0;font-weight:800;color:var(--green-deep)}
+.rb-body{margin:2px 0 0;font-size:14px;color:var(--muted);white-space:pre-line}
+.rb-actions{display:flex;gap:8px}
+@keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+.task input[type="checkbox"]{
+  appearance:none;-webkit-appearance:none;
+  width:24px;height:24px;flex-shrink:0;
+  border:2px solid var(--muted);border-radius:8px;margin-top:2px;cursor:pointer;position:relative;
+  transition:all .3s cubic-bezier(.4,0,.2,1);background:var(--card);
+}
+.task input[type="checkbox"]:checked{background:var(--done);border-color:var(--done)}
+.task input[type="checkbox"]:checked::after{
+  content:"✓";color:#fff;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-size:16px;font-weight:800;
+}
+
+.time{font-size:14px;font-weight:800;color:var(--ink);min-width:96px;padding-top:2px;font-variant-numeric:tabular-nums}
+.task .body{flex:1;min-width:0}
+.task .title{font-weight:700;color:var(--ink);font-size:16px;display:inline-block;position:relative;word-wrap:break-word}
+.task.done .title{color:var(--muted)}
+.task.done .title::after{
+  content:"";position:absolute;left:0;top:50%;height:2px;background:var(--muted);border-radius:2px;
+  animation:strike .3s ease-out forwards;
+}
+@keyframes strike{0%{width:0}100%{width:100%}}
+.task.done .time{color:var(--muted)}
+
+.tag{
+  font-size:12px;font-weight:800;color:#fff;border-radius:999px;padding:4px 12px;
+  display:inline-block;margin-top:8px;text-transform:uppercase;letter-spacing:.05em;background:var(--muted);
+}
+.note{font-size:13px;color:var(--muted);margin-top:6px}
+.actions{display:flex;gap:6px;margin-top:8px}
+.empty{text-align:center;padding:28px 12px;color:var(--muted)}
+.empty b{display:block;color:var(--ink);font-size:16px;margin-bottom:4px}
+
+/* ---------- Refleksi malam ---------- */
+details.reflect summary{cursor:pointer;font-size:18px;font-weight:700;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:8px}
+details.reflect summary::-webkit-details-marker{display:none}
+details.reflect summary::after{content:"+";font-size:22px;color:var(--green);font-weight:700}
+details.reflect[open] summary::after{content:"−"}
+details.reflect[open] summary{margin-bottom:16px}
+.reflect label{display:grid;gap:6px;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:14px}
+.reflect textarea{
+  width:100%;background:var(--bg);border:1px solid var(--line);color:var(--ink);
+  border-radius:12px;padding:11px 13px;font-size:15px;resize:vertical;
+}
+.moods{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 14px}
+.moods .mood-label{width:100%;font-size:13px;font-weight:700;color:var(--muted);margin:0 0 2px}
+.moods button{
+  padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--bg);
+  font-weight:600;font-size:14px;
+}
+.moods button:hover{border-color:var(--green)}
+.moods button[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:#fff}
+.reflect-foot{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+#refSaved{font-size:14px;color:var(--green-deep);font-weight:600}
+
+/* ---------- Floating buttons ---------- */
+.fab-container{position:fixed;bottom:30px;right:30px;z-index:100;display:flex;flex-direction:column;gap:12px}
+.fab{
+  width:60px;height:60px;border-radius:50%;color:#fff;font-size:24px;
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .3s,box-shadow .3s;
+}
+.fab-order{background:var(--gold-deep);box-shadow:0 8px 20px rgba(168,116,30,.35)}
+.fab-primary{background:var(--green);box-shadow:0 8px 20px rgba(15,122,90,.35)}
+.fab:hover{transform:scale(1.06)}
+
+/* ---------- Dialogs ---------- */
+dialog{
+  background:var(--card);color:var(--ink);
+  border:1px solid var(--line);border-radius:var(--radius-lg);
+  width:min(500px,92vw);padding:28px;box-shadow:0 24px 60px rgba(0,0,0,.2);
+}
+dialog::backdrop{background:rgba(0,0,0,.45);backdrop-filter:blur(4px)}
+.dialog-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;gap:8px}
+.dialog-header h2{margin:0;font-size:20px}
+form{display:grid;gap:12px}
+form label{display:grid;gap:6px;font-size:13px;font-weight:700;color:var(--muted)}
+form input,form select,form textarea{
+  background:var(--bg);border:1px solid var(--line);color:var(--ink);
+  border-radius:12px;padding:11px 13px;font-size:15px;width:100%;min-width:0;
+}
+.form-row{display:flex;gap:8px;justify-content:flex-end}
+.order-form{display:flex;gap:8px}
+.order-form input{flex:1}
+#quickOrderList{list-style:none;padding:0;margin:16px 0 0;max-height:260px;overflow-y:auto}
+#quickOrderList li{
+  background:var(--bg);padding:14px;border-radius:12px;margin-bottom:10px;
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  border:1px solid var(--line);font-weight:600;font-size:14px;
+}
+#quickOrderList li span{word-break:break-word}
+#quickOrderList .order-empty{color:var(--muted);justify-content:center;font-weight:500}
+.del-btn{color:#B42318;font-weight:800;font-size:20px;padding:2px 10px;border-radius:8px;flex-shrink:0}
+.del-btn:hover{background:#FDECEA}
+
+#cloudStatus{font-size:14px;font-weight:600}
+.footer{color:var(--muted);font-size:13px;margin:28px 0 0;line-height:1.7;text-align:center}
+
+@media (max-width:640px){
+  .focus{grid-template-columns:1fr}
+}
+@media (max-width:550px){
+  .wrap{padding:16px 14px 110px}
+  .greet{padding:24px 20px}
+  .greet .ar-main{font-size:28px}
+  .time{min-width:78px;font-size:13px}
+  .stats{gap:8px}
+  .stat b{font-size:24px}
+  .fab-container{bottom:20px;right:20px}
+  .actions{flex-direction:column}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}
+
+/* V2.0 — additive UI improvements, preserving existing app IDs */
+:root[data-theme="dark"]{--bg:#101b19;--card:#192824;--green:#41b992;--green-deep:#a6e8d0;--gold:#efc777;--gold-deep:#c58f3b;--gold-text:#efc777;--mint:#243b33;--ink:#edf6f1;--muted:#b4c6bc;--line:#354a41;--done:#38b989;--warm:#293a30;--shadow:0 10px 30px rgba(0,0,0,.2);color-scheme:dark}
+:root[data-theme="dark"] .greet{background:linear-gradient(135deg,#123f36,#17644e)}
+:root[data-theme="dark"] .btn.primary,:root[data-theme="dark"] .days .active{color:#092b21}
+:root[data-theme="dark"] .tag{color:#fff}
+:root[data-theme="dark"] .greet .ar-main{color:#fff}
+.v2-head-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.v2-head-actions .btn{min-height:42px}
+.v2-dock{position:fixed;bottom:0;left:0;right:0;z-index:90;background:var(--card);border-top:1px solid var(--line);padding:9px max(12px,env(safe-area-inset-right)) calc(9px + env(safe-area-inset-bottom));display:flex;justify-content:space-around;gap:5px;box-shadow:0 -6px 24px rgba(0,0,0,.07)}
+.v2-dock a{color:var(--muted);text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:2px;flex:1;min-width:0;font-size:11px;font-weight:800;border-radius:12px;padding:5px 2px}
+.v2-dock a span{font-size:20px;line-height:1.3}
+.v2-dock a[aria-current="page"]{color:var(--green-deep);background:var(--mint)}
+.v2-section-label{font-size:11px;text-transform:uppercase;letter-spacing:.12em;font-weight:800;color:var(--gold-text)}
+.v2-affirmation{font-style:normal}
+.v2-affirmation small{display:block;color:#f8e3ae;font-weight:700;margin-bottom:5px}
+.v2-affirmation p{margin:0}
+.v2-theme-note{font-size:12px;color:var(--muted)}
+html{scroll-padding-top:18px;scroll-behavior:smooth}
+.wrap{padding-bottom:165px}
+.fab-container{bottom:90px}
+@media(max-width:550px){.fab-container{bottom:88px;right:14px}.fab{width:52px;height:52px}.v2-head-actions{width:100%}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+
+/* V2.1 — Academic & Teaching Workspace */
+.study-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.study-box{background:var(--mint);border-radius:16px;padding:16px}
+.study-box strong{font-size:23px;color:var(--green-deep);display:block}
+.study-box small{display:block}
+.study-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px}
+.study-form label{display:grid;gap:5px;font-size:13px;font-weight:700;color:var(--muted)}
+.study-form input,.study-form select,.study-form textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px;color:var(--ink)}
+.study-form .wide{grid-column:1/-1}
+.study-list{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:10px}
+.study-list li{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.study-list li div{min-width:0;overflow-wrap:anywhere}
+.study-list li small{display:block;margin-top:3px}
+.study-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.study-muted{color:var(--muted);font-size:13px}
+.study-progress{height:10px;border-radius:12px;background:var(--line);overflow:hidden;margin-top:10px}
+.study-progress>div{height:100%;background:linear-gradient(90deg,var(--green),var(--gold));transition:width .2s}
+@media(max-width:550px){.study-grid{grid-template-columns:1fr}.study-form{grid-template-columns:1fr}}
+
+
+/* V2.2 — Almida Store Manager */
+.store-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:15px 0}
+.store-stat{background:var(--mint);border-radius:15px;padding:13px 10px;min-width:0}
+.store-stat small{display:block;font-size:11px}.store-stat strong{display:block;color:var(--green-deep);font-size:clamp(15px,3vw,21px);overflow-wrap:anywhere}
+.store-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin:14px 0}
+.store-form .wide{grid-column:1/-1}.store-form label{min-width:0}
+.store-toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.store-toolbar input,.store-toolbar select{min-width:0;flex:1 1 135px;background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:10px}
+.store-list{list-style:none;padding:0;margin:12px 0}.store-list li{padding:14px 0;border-bottom:1px solid var(--line)}
+.store-item-head{display:flex;justify-content:space-between;gap:8px;align-items:start;flex-wrap:wrap}.store-item-head strong{overflow-wrap:anywhere}
+.store-item-meta{font-size:13px;color:var(--muted);margin:4px 0;overflow-wrap:anywhere}.store-item-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+.store-message{font-size:13px;color:var(--green-deep);min-height:1.5em}
+@media(max-width:480px){.store-grid{grid-template-columns:1fr 1fr}.store-form{grid-template-columns:1fr}.store-form .wide{grid-column:auto}}
+
+/* V2.3 Smart Schedule */
+.smart-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0}.smart-metric{background:var(--mint);border-radius:14px;padding:12px;text-align:center}.smart-metric strong{display:block;font-size:22px;color:var(--green-deep)}.smart-list{list-style:none;padding:0;margin:12px 0}.smart-list li{padding:12px;border-bottom:1px solid var(--line);font-size:14px}.smart-list li:last-child{border:0}.smart-warn{border-left:4px solid #B45309;padding-left:10px}.smart-muted{font-size:13px;color:var(--muted)}.smart-control{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:12px}.smart-control select{border:1px solid var(--line);background:var(--card);padding:10px;border-radius:10px}.smart-active{background:var(--mint);border-radius:12px;padding:14px;margin-top:12px}body[data-theme="dark"] .smart-metric,body[data-theme="dark"] .smart-active{background:rgba(15,122,90,.17)}@media(max-width:450px){.smart-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <header>
+    <div>
+      <p class="kicker">Daily Life OS</p>
+      <h1>Agenda Asisten</h1>
+    </div>
+    <div class="v2-head-actions"><button id="themeToggle" class="btn small" type="button" aria-label="Ganti tema" aria-pressed="false">🌙 Mode gelap</button><button id="install" class="btn small hidden">Pasang aplikasi</button></div>
+    <div style="text-align:right">
+      <div id="masehiDate" style="font-weight:800;font-size:15px">Memuat...</div>
+      <div id="hijriDate" class="muted" style="font-size:13px;font-weight:600">Memuat...</div>
+    </div>
+  </header>
+
+  <section class="greet" id="homeSection" aria-label="Sapaan">
+    <div class="sholawat-top">
+      <p class="ar">اللَّهُمَّ صَلِّ عَلَى سَيِّدِنَا مُحَمَّدٍ</p>
+    </div>
+    <p class="ar ar-main" lang="ar">السَّلامُ عَلَيْكُمْ</p>
+    <p class="tr">Assalamu'alaikum Warahmatullahi Wabarakatuh</p>
+    <p class="sapaan" id="greeting">Selamat beraktivitas, Kak Rofi fauzi!</p>
+    <div class="motivation-box v2-affirmation" aria-live="polite"><small>✦ AFIRMASI HARI INI</small><p id="dailyQuote">Memuat afirmasi hari ini...</p></div>
+  </section>
+
+  <section class="panel focus" id="focusSection" aria-label="Fokus hari ini">
+    <div>
+      <p class="label" for="intentInput">Niat hari ini</p>
+      <div class="intent-row">
+        <input id="intentInput" maxlength="120" placeholder="Contoh: fokus kuliah sampai zuhur">
+        <button id="intentSave" class="btn small primary" type="button">Simpan</button>
+      </div>
+      <p id="intentSaved" class="intent-saved hidden"></p>
+    </div>
+    <div class="next-card" id="nextCard" aria-live="polite"></div>
+  </section>
+
+  <section class="panel">
+    <div class="row">
+      <h2>Progres <span id="daylabel">hari ini</span></h2>
+      <span id="dateLabel" class="muted"></span>
+    </div>
+    <div class="stats">
+      <div class="stat"><b id="total">0</b><small>Agenda</small></div>
+      <div class="stat"><b id="complete">0</b><small>Selesai</small></div>
+      <div class="stat"><b id="percent">0%</b><small>Progres</small></div>
+    </div>
+    <div class="bar" role="progressbar" aria-label="Progres harian"><div id="progress"></div></div>
+    <p id="supportMsg" class="support"></p>
+  </section>
+
+  <section class="panel" id="agendaSection">
+    <div class="row">
+      <h2>Daftar agenda</h2>
+    </div>
+    <nav class="days" id="days" aria-label="Pilih hari"></nav>
+    <div class="toolbar">
+      <input id="search" type="search" placeholder="Cari kegiatan..." aria-label="Cari kegiatan">
+      <select id="filter" aria-label="Filter kategori"><option value="">Semua kategori</option></select>
+    </div>
+    <div id="tasks"></div>
+  </section>
+
+  <details class="panel reflect" id="reflectionSection">
+    <summary>Refleksi malam <span class="muted" style="font-size:13px;font-weight:600">(opsional, sekitar 1 menit)</span></summary>
+    <label>Hal yang berjalan baik hari ini
+      <textarea id="refGood" rows="2" maxlength="300" placeholder="Sekecil apa pun boleh"></textarea>
+    </label>
+    <label>Satu langkah kecil untuk besok
+      <textarea id="refNext" rows="2" maxlength="300" placeholder="Cukup satu hal yang realistis"></textarea>
+    </label>
+    <div class="moods" role="group" aria-labelledby="moodLabel">
+      <p class="mood-label" id="moodLabel">Bagaimana perasaanmu hari ini?</p>
+      <button type="button" data-mood="1" aria-pressed="false">😔 Berat</button>
+      <button type="button" data-mood="2" aria-pressed="false">😌 Lelah</button>
+      <button type="button" data-mood="3" aria-pressed="false">😐 Biasa</button>
+      <button type="button" data-mood="4" aria-pressed="false">🙂 Baik</button>
+      <button type="button" data-mood="5" aria-pressed="false">🤩 Mantap</button>
+    </div>
+    <div class="reflect-foot">
+      <button id="refSave" class="btn small primary" type="button">Simpan refleksi</button>
+      <span id="refSaved" aria-live="polite"></span>
+    </div>
+  </details>
+
+
+  <!-- V2.1: independent local workspace; existing schedule IDs and app.js unchanged -->
+  <section class="panel" id="studySection" aria-labelledby="studyTitle">
+    <div class="row"><h2 id="studyTitle">📚 Muthola'ah Tracker</h2><span class="v2-section-label">V2.1</span></div>
+    <p class="study-muted">Catat persiapan mengajar dan telaah kitab. Target awal 3 jam per sesi mengajar; bisa diubah sesuai kebutuhan.</p>
+    <div class="study-grid">
+      <div class="study-box"><small>Persiapan Senin</small><strong id="studyMon">0 / 180 menit</strong><div class="study-progress"><div id="studyMonBar"></div></div></div>
+      <div class="study-box"><small>Persiapan Selasa</small><strong id="studyTue">0 / 180 menit</strong><div class="study-progress"><div id="studyTueBar"></div></div></div>
+      <div class="study-box"><small>Persiapan Sabtu</small><strong id="studySat">0 / 180 menit</strong><div class="study-progress"><div id="studySatBar"></div></div></div>
+      <div class="study-box"><small>Total minggu ini</small><strong id="studyWeek">0 menit</strong><small id="studyWeekDates"></small></div>
+    </div>
+    <form id="studyForm" class="study-form">
+      <label>Tanggal<input id="studyDate" type="date" required></label>
+      <label>Untuk mengajar hari<select id="studyTarget"><option value="Senin">Senin</option><option value="Selasa">Selasa</option><option value="Sabtu">Sabtu</option></select></label>
+      <label>Durasi (menit)<input id="studyMinutes" type="number" min="1" max="720" value="30" required></label>
+      <label>Kitab / materi<input id="studyBook" maxlength="120" placeholder="Nama kitab atau bab" required></label>
+      <label class="wide">Hasil telaah / catatan<textarea id="studyNotes" rows="2" maxlength="800" placeholder="Ibarah, poin penting, atau halaman"></textarea></label>
+      <button type="submit" class="btn primary wide">+ Simpan sesi muthola'ah</button>
+    </form>
+    <h2 style="margin-top:22px">Riwayat sesi</h2><ul class="study-list" id="studyList"></ul>
+  </section>
+
+  <section class="panel" id="bahtsulSection" aria-labelledby="bahtsulTitle">
+    <div class="row"><h2 id="bahtsulTitle">📖 Bahtsul Masail Workspace</h2><span class="v2-section-label">V2.1</span></div>
+    <p class="study-muted">Susun topik Rabu, rumusan masalah, referensi kitab, dan hasil telaah. Target telaah mingguan 4–6 jam.</p>
+    <div class="study-grid">
+      <div class="study-box"><small>Waktu telaah minggu ini</small><strong id="bmTotal">0 menit</strong><div class="study-progress"><div id="bmBar"></div></div><small>Target minimum 240 menit</small></div>
+      <div class="study-box"><small>Topik belum selesai</small><strong id="bmOpen">0</strong><small>Perlu tindak lanjut</small></div>
+    </div>
+    <form id="bmForm" class="study-form">
+      <label>Tanggal pembahasan (Rabu)<input id="bmDate" type="date" required></label>
+      <label>Durasi telaah (menit)<input id="bmMinutes" type="number" min="0" max="720" value="60" required></label>
+      <label class="wide">Topik / masalah<input id="bmTopic" maxlength="180" required placeholder="Rumusan topik yang dibahas"></label>
+      <label class="wide">Referensi kitab / ibarah<textarea id="bmReference" rows="2" maxlength="1200" placeholder="Nama kitab, halaman, kutipan atau referensi"></textarea></label>
+      <label class="wide">Hasil telaah<textarea id="bmResult" rows="2" maxlength="1200" placeholder="Kesimpulan sementara atau pertanyaan lanjutan"></textarea></label>
+      <label>Status<select id="bmStatus"><option value="Persiapan">Persiapan</option><option value="Dibahas">Dibahas</option><option value="Selesai">Selesai</option></select></label>
+      <button type="submit" class="btn primary wide">+ Simpan pembahasan</button>
+    </form>
+    <h2 style="margin-top:22px">Daftar pembahasan</h2><ul class="study-list" id="bmList"></ul>
+    <div class="study-actions"><button type="button" id="academicExport" class="btn small">⬇️ Backup data akademik (JSON)</button><button type="button" id="academicImport" class="btn small">⬆️ Pulihkan data akademik</button><input id="academicFile" type="file" accept="application/json" class="hidden"></div>
+    <p class="study-muted">Data V2.1 tersimpan lokal di perangkat ini dan <strong>belum</strong> masuk sinkronisasi Firebase atau Ekspor JSON agenda lama. Gunakan backup akademik secara terpisah.</p>
+    <p id="academicMessage" class="study-muted" role="status" aria-live="polite"></p>
+  </section>
+
+
+  <!-- V2.2: independent store ledger; legacy quick notes remain unchanged -->
+  <section class="panel" id="storeSection" aria-labelledby="storeTitle">
+    <div class="row"><h2 id="storeTitle">🛍️ Almida Store Manager</h2><span class="v2-section-label">V2.2</span></div>
+    <p class="study-muted">Catat transaksi dan pantau laba kotor. Catatan kilat ⚡ tetap tersedia secara terpisah. Data transaksi disimpan lokal di perangkat ini.</p>
+    <div class="store-grid">
+      <div class="store-stat"><small>Omzet terfilter</small><strong id="storeRevenue">Rp0</strong></div>
+      <div class="store-stat"><small>Modal terfilter</small><strong id="storeCost">Rp0</strong></div>
+      <div class="store-stat"><small>Laba kotor terfilter</small><strong id="storeProfit">Rp0</strong></div>
+    </div>
+    <form id="storeForm" class="store-form">
+      <input type="hidden" id="storeEditId">
+      <label>Tanggal transaksi<input id="storeDate" type="date" required></label>
+      <label>Nama pelanggan<input id="storeCustomer" maxlength="100" placeholder="Nama / kode pelanggan" required></label>
+      <label>Produk / layanan<input id="storeProduct" maxlength="140" placeholder="Paket data 50 GB" required></label>
+      <label>Status<select id="storeStatus"><option value="Selesai">Selesai</option><option value="Menunggu">Menunggu</option><option value="Batal">Batal</option></select></label>
+      <label>Modal per unit (Rp)<input id="storeUnitCost" type="number" min="0" max="1000000000" step="1" required></label>
+      <label>Harga jual per unit (Rp)<input id="storeUnitPrice" type="number" min="0" max="1000000000" step="1" required></label>
+      <label>Jumlah<input id="storeQty" type="number" min="1" max="10000" value="1" step="1" required></label>
+      <label>Catatan (opsional)<input id="storeNote" maxlength="300" placeholder="Nomor referensi (jangan simpan PIN/OTP)"></label>
+      <div class="wide row"><button class="btn primary" type="submit" id="storeSubmit">Simpan transaksi</button><button class="btn" type="button" id="storeCancelEdit">Batal edit</button></div>
+    </form>
+    <div class="store-toolbar">
+      <input type="month" id="storeMonth" aria-label="Filter bulan">
+      <select id="storeFilterStatus" aria-label="Filter status"><option value="">Semua status</option><option>Selesai</option><option>Menunggu</option><option>Batal</option></select>
+      <input type="search" id="storeSearch" placeholder="Cari pelanggan / produk" aria-label="Cari transaksi">
+    </div>
+    <div class="row"><h2>Riwayat transaksi</h2><small id="storeCount">0 transaksi</small></div>
+    <ul class="store-list" id="storeList"></ul>
+    <div class="study-actions"><button type="button" id="storeExport" class="btn small">⬇️ Ekspor transaksi JSON</button><button type="button" id="storeCsv" class="btn small">⬇️ Ekspor CSV</button><button type="button" id="storeImport" class="btn small">⬆️ Impor JSON</button><input type="file" id="storeFile" accept="application/json,.json" class="hidden"></div>
+    <p class="study-muted">Omzet, modal, dan laba hanya menghitung transaksi berstatus <strong>Selesai</strong> yang sesuai filter. Laba = (harga jual − modal) × jumlah, belum termasuk biaya admin atau operasional. Ekspor agenda lama dan backup akademik tidak mencakup transaksi V2.2.</p>
+    <p id="storeMessage" class="store-message" role="status" aria-live="polite"></p>
+  </section>
+
+
+<section class="panel" id="smartSection" aria-label="Smart Schedule">
+ <div class="row"><h2>Smart Schedule <small>V2.3</small></h2><button class="btn small" id="smartRefresh" type="button">Periksa ulang</button></div>
+ <p class="smart-muted">Analisis dari jadwal yang benar-benar tersimpan di aplikasi, termasuk perubahan dari Firebase. Benturan kegiatan fleksibel hanya ditandai untuk ditinjau.</p>
+ <div class="smart-grid"><div class="smart-metric"><strong id="smartTotal">—</strong><small>Agenda minggu ini</small></div><div class="smart-metric"><strong id="smartConflicts">—</strong><small>Potensi bentrok</small></div><div class="smart-metric"><strong id="smartUpcoming">—</strong><small>Belum mulai hari ini</small></div></div>
+ <div class="smart-active" id="smartNow" role="status">Memuat agenda aktif...</div>
+ <div class="smart-control"><label for="smartDay">Periksa hari</label><select id="smartDay"></select><label for="smartLead">Pengingat sebelum</label><select id="smartLead"><option value="0">Nonaktif</option><option value="5">5 menit</option><option value="10">10 menit</option><option value="15">15 menit</option><option value="30">30 menit</option></select></div>
+ <h3 style="font-size:16px;margin:18px 0 6px">Benturan yang perlu diperiksa</h3><ul class="smart-list" id="smartConflictList"><li>Memuat...</li></ul>
+ <p class="smart-muted">Jadwal salat pada agenda adalah perkiraan, bukan jadwal azan real-time. Sesuaikan dengan jadwal resmi setempat. Pengingat browser hanya berjalan andal saat aplikasi terbuka/aktif; tidak dijamin saat aplikasi ditutup.</p>
+</section>
+  <section class="panel" id="settingsSection">
+    <h2>Catatan & backup</h2>
+    <p class="muted" style="font-size:14px;margin:8px 0 0">Jadwal tersimpan di browser ini. Jika memori browser dibersihkan, jadwal bisa hilang. Simpan <strong>Ekspor JSON</strong> secara rutin sebagai cadangan.</p>
+    <div class="row" style="margin-top:14px">
+      <span id="cloudStatus" class="muted">Mode lokal / offline</span>
+      <div>
+        <button id="login" class="btn small hidden">Login Google</button>
+        <button id="logout" class="btn small hidden">Keluar</button>
+      </div>
+    </div>
+    <div class="toolbar" style="margin-top:16px">
+      <button id="export" class="btn small">⬇️ Ekspor JSON</button>
+      <button id="import" class="btn small">⬆️ Impor JSON</button>
+      <input type="file" id="file" accept="application/json" class="hidden">
+      <button id="enableNotif" class="btn small hidden">Aktifkan pengingat</button>
+      <button id="resetDay" class="btn small">Reset ceklis hari ini</button>
+    </div>
+  </section>
+
+  <p class="footer">Dibuat khusus untuk Kak Rofi fauzi — Daily Life OS</p>
+</main>
+
+<div id="reminderBanner" class="reminder-banner hidden" role="alert">
+  <div>
+    <p id="bannerTitle" class="rb-title"></p>
+    <p id="bannerBody" class="rb-body"></p>
+  </div>
+  <div class="rb-actions">
+    <button id="bannerSnooze" class="btn small" type="button">Tunda 10 menit</button>
+    <button id="bannerClose" class="btn small primary" type="button">Sudah</button>
+  </div>
+</div>
+
+<nav class="v2-dock" aria-label="Navigasi utama"><a href="#homeSection" aria-current="page"><span aria-hidden="true">⌂</span>Beranda</a><a href="#agendaSection"><span aria-hidden="true">▦</span>Agenda</a><a href="#focusSection"><span aria-hidden="true">◎</span>Fokus</a><a href="#studySection"><span aria-hidden="true">▤</span>Belajar</a><a href="#storeSection"><span aria-hidden="true">▣</span>Toko</a><a href="#smartSection"><span aria-hidden="true">◷</span>Smart</a><a href="#reflectionSection"><span aria-hidden="true">✎</span>Refleksi</a><a href="#settingsSection"><span aria-hidden="true">⚙</span>Data</a></nav>
+<div class="fab-container">
+  <button id="openOrder" class="fab fab-order" aria-label="Catatan kilat AlmidaStore">⚡</button>
+  <button id="new" class="fab fab-primary" aria-label="Tambah jadwal">+</button>
+</div>
+
+<!-- Catatan kilat AlmidaStore -->
+<dialog id="quickPad" aria-labelledby="quickTitle">
+  <div class="dialog-header">
+    <h2 id="quickTitle">Catatan kilat AlmidaStore</h2>
+    <button class="btn small" id="closeOrder" type="button">Tutup</button>
+  </div>
+  <p class="muted" style="font-size:13px;margin:0 0 16px">Catat pesanan masuk tanpa mengubah jadwal utama. Data tersimpan di browser ini.</p>
+  <form id="formOrder" class="order-form">
+    <input type="text" id="orderInput" placeholder="Contoh: Axis 50rb - Kak Rina" required aria-label="Isi catatan pesanan">
+    <button type="submit" class="btn primary">Catat</button>
+  </form>
+  <ul id="quickOrderList"></ul>
+</dialog>
+
+<!-- Salin kegiatan ke hari lain -->
+<dialog id="copyDialog" aria-labelledby="copyTitle">
+  <form id="copyForm">
+    <div class="dialog-header"><h2 id="copyTitle">Salin kegiatan</h2></div>
+    <p id="copyInfo" class="muted" style="margin:0;font-size:14px"></p>
+    <label>Salin ke hari
+      <select id="copyDay" required></select>
+    </label>
+    <div class="form-row">
+      <button type="button" class="btn" id="copyCancel">Batal</button>
+      <button type="submit" class="btn primary">Salin</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Form tambah/ubah agenda (app.js mengisi pilihan hari) -->
+<dialog id="editor">
+  <form id="editForm">
+    <div class="dialog-header"><h2 id="formTitle">Tambah kegiatan</h2></div>
+    <input type="hidden" id="taskId">
+    <label>Hari
+        <select id="taskDay" required>
+        <option value="Senin">Senin</option>
+        <option value="Selasa">Selasa</option>
+        <option value="Rabu">Rabu</option>
+        <option value="Kamis">Kamis</option>
+        <option value="Jumat">Jumat</option>
+        <option value="Sabtu">Sabtu</option>
+        <option value="Minggu">Minggu</option>
+      </select>
+    </label>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <label>Mulai<input type="time" id="taskStart" required></label>
+      <label>Selesai<input type="time" id="taskEnd" required></label>
+    </div>
+    <label>Nama kegiatan<input id="taskTitle" maxlength="150" required></label>
+    <label>Kategori<input id="taskCategory" maxlength="40" required placeholder="Contoh: ibadah, mutholaah, toko"></label>
+    <label>Catatan<textarea id="taskNotes" rows="3" maxlength="1000"></textarea></label>
+    <div class="form-row">
+      <button type="button" class="btn" id="cancel">Batal</button>
+      <button type="submit" class="btn primary">Simpan agenda</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+  // Sapaan sesuai waktu
+  (function(){
+    var now = new Date(), h = now.getHours();
+    var s = h < 4 ? "Malam yang hening" : h < 11 ? "Pagi yang berkah" : h < 15 ? "Siang yang produktif" : h < 18 ? "Sore yang tenang" : "Malam yang damai";
+    document.getElementById("greeting").textContent = s + ", Kak Rofi fauzi!";
+
+    document.getElementById("masehiDate").textContent = new Intl.DateTimeFormat('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(now);
+
+    try{
+      var raw = new Intl.DateTimeFormat('en-US-u-ca-islamic-umalqura',{day:'numeric',month:'numeric',year:'numeric'}).format(now);
+      var parts = raw.split('/');
+      if(parts.length >= 3){
+        var months = ["","Muharram","Shafar","Rabiul Awal","Rabiul Akhir","Jumadil Awal","Jumadil Akhir","Rajab","Sya'ban","Ramadhan","Syawal","Dzulqa'dah","Dzulhijjah"];
+        document.getElementById("hijriDate").textContent = parseInt(parts[1]) + " " + months[parseInt(parts[0])] + " " + parseInt(parts[2]) + " H";
+      }
+    }catch(e){ document.getElementById("hijriDate").textContent = ""; }
+
+    var quotes = [
+      "Barangsiapa bersungguh-sungguh, sesungguhnya kesungguhannya itu adalah untuk dirinya sendiri.",
+      "Jangan menunda pekerjaan hari ini hingga esok hari, sebab esok memiliki urusannya sendiri.",
+      "Sesudah kesulitan itu pasti ada kemudahan. Tetaplah melangkah walau perlahan.",
+      "Ilmu itu seperti buruan, dan tulisan adalah ikatannya. Ikatlah ilmu dengan rajin mencatat.",
+      "Sebaik-baik manusia adalah yang paling bermanfaat bagi manusia lainnya. Semangat berniaga dan berbagi!",
+      "Tugas yang menumpuk tidak akan selesai hanya dengan dipikirkan. Mulailah dengan Bismillah."
+    ];
+    // Stable daily affirmation: one quote per local calendar date.
+    var dayStamp = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
+    var hash = 0;
+    for (var qi=0; qi<dayStamp.length; qi++) hash = (hash*31 + dayStamp.charCodeAt(qi)) >>> 0;
+    document.getElementById("dailyQuote").textContent = quotes[hash % quotes.length];
+  })();
+</script>
+
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var todayKey = new Date().toLocaleDateString('sv-SE');
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function safeGet(key, fallback){
+    try{ var v = localStorage.getItem(key); return v === null ? fallback : JSON.parse(v); }
+    catch(e){ return fallback; }
+  }
+  function safeSet(key, value){
+    try{ localStorage.setItem(key, JSON.stringify(value)); return true; }
+    catch(e){ return false; }
+  }
+
+  /* ---------- 1. Niat hari ini ---------- */
+  var intentKey = 'dl_intent_' + todayKey;
+  var intentInput = $('intentInput'), intentSaved = $('intentSaved');
+  function showIntent(text){
+    intentSaved.textContent = text ? 'Niatmu hari ini: ' + text : '';
+    intentSaved.classList.toggle('hidden', !text);
+  }
+  intentInput.value = safeGet(intentKey, '') || '';
+  showIntent(intentInput.value.trim());
+  $('intentSave').addEventListener('click', function(){
+    var v = intentInput.value.trim();
+    if(v){ safeSet(intentKey, v); } else { try{ localStorage.removeItem(intentKey); }catch(e){} }
+    showIntent(v);
+  });
+  intentInput.addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){ e.preventDefault(); $('intentSave').click(); }
+  });
+
+  /* ---------- 2. Kegiatan berikutnya (dibaca dari daftar yang tampil) ---------- */
+  var nextCard = $('nextCard');
+  function setNext(main, sub){
+    nextCard.replaceChildren();
+    var lbl = document.createElement('p'); lbl.className = 'label'; lbl.textContent = 'Kegiatan berikutnya';
+    var t = document.createElement('p'); t.className = 'next-text'; t.textContent = main;
+    nextCard.appendChild(lbl); nextCard.appendChild(t);
+    if(sub){
+      var s = document.createElement('p'); s.className = 'next-sub'; s.textContent = sub;
+      nextCard.appendChild(s);
+    }
+  }
+  function renderNext(){
+    var items = Array.prototype.slice.call(document.querySelectorAll('#tasks .task'));
+    if(!items.length){ setNext('Belum ada kegiatan', 'Tekan tombol + untuk menambah jadwal.'); return; }
+    var nowMin = new Date().getHours()*60 + new Date().getMinutes();
+    var pick = null, undone = 0;
+    items.forEach(function(el){
+      var cb = el.querySelector('input[type="checkbox"]');
+      var done = el.classList.contains('done') || (cb && cb.checked);
+      if(done || pick) return;
+      undone++;
+      var tm = el.querySelector('.time');
+      var m = tm && tm.textContent.match(/(\d{1,2})[:.](\d{2})/);
+      if(!m) return;
+      var start = parseInt(m[1],10)*60 + parseInt(m[2],10);
+      if(start >= nowMin - 30) pick = { el: el, time: tm.textContent.trim() };
+    });
+    if(pick){
+      var title = pick.el.querySelector('.title');
+      setNext(title ? title.textContent.trim() : 'Kegiatan', pick.time);
+    } else if(undone === 0){
+      setNext('Semua kegiatan sudah selesai', 'Beristirahatlah dengan tenang, atau tambahkan kegiatan baru.');
+    } else {
+      setNext('Tidak ada kegiatan berikutnya', 'Ada kegiatan yang belum dicentang. Tandai jika sudah, atau geser jadwalnya.');
+    }
+  }
+  var tasksEl = $('tasks');
+  new MutationObserver(renderNext).observe(tasksEl, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
+  document.addEventListener('change', function(e){ if(e.target && e.target.type === 'checkbox') setTimeout(renderNext, 0); });
+  setInterval(renderNext, 60000);
+  renderNext();
+
+  /* ---------- 3. Dukungan progres + perayaan sekali per hari ---------- */
+  var pct = $('percent'), supportEl = $('supportMsg');
+  function renderSupport(){
+    var v = parseInt(pct.textContent, 10) || 0;
+    var msg;
+    if(v === 0) msg = 'Mulai dari satu kegiatan kecil. Itu sudah sebuah langkah.';
+    else if(v < 50) msg = 'Sudah berjalan. Lanjutkan pelan-pelan, tidak perlu terburu-buru.';
+    else if(v < 100) msg = 'Lebih dari separuh jalan. Kamu sudah bekerja dengan baik.';
+    else msg = 'Alhamdulillah, semua kegiatan selesai hari ini. Istirahatlah dengan tenang.';
+    supportEl.textContent = msg;
+
+    if(v === 100 && !reduceMotion && typeof window.confetti === 'function' && safeGet('dl_celebrated', '') !== todayKey){
+      safeSet('dl_celebrated', todayKey);
+      window.confetti({ particleCount: 140, spread: 80, origin: { y: 0.6 }, colors: ['#0F7A5A','#E0A84E','#2563EB'] });
+    }
+  }
+  new MutationObserver(renderSupport).observe(pct, { childList: true, characterData: true, subtree: true });
+  renderSupport();
+
+  /* ---------- 4. Konfirmasi sebelum reset ceklis ---------- */
+  // Konfirmasi reset sudah ditangani app.js, jadi tidak perlu ditambahkan di sini.
+
+  /* ---------- 5. Catatan kilat AlmidaStore ---------- */
+  var quickPad = $('quickPad');
+  var orders = safeGet('almida_quick_orders', []);
+  if(!Array.isArray(orders)) orders = [];
+  function renderOrders(){
+    var ul = $('quickOrderList');
+    ul.replaceChildren();
+    if(!orders.length){
+      var empty = document.createElement('li'); empty.className = 'order-empty';
+      empty.textContent = 'Belum ada catatan pesanan.';
+      ul.appendChild(empty);
+      return;
+    }
+    orders.forEach(function(text, idx){
+      var li = document.createElement('li');
+      var span = document.createElement('span'); span.textContent = '⚡ ' + text;
+      var del = document.createElement('button');
+      del.type = 'button'; del.className = 'del-btn';
+      del.setAttribute('aria-label', 'Hapus catatan');
+      del.textContent = '×';
+      del.addEventListener('click', function(){
+        orders.splice(idx, 1);
+        safeSet('almida_quick_orders', orders);
+        renderOrders();
+      });
+      li.appendChild(span); li.appendChild(del);
+      ul.appendChild(li);
+    });
+  }
+  $('formOrder').addEventListener('submit', function(e){
+    e.preventDefault();
+    var input = $('orderInput');
+    var v = input.value.trim();
+    if(!v) return;
+    var time = new Date().toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' });
+    orders.push(v + ' · ' + time);
+    safeSet('almida_quick_orders', orders);
+    input.value = '';
+    renderOrders();
+    input.focus();
+  });
+  $('openOrder').addEventListener('click', function(){ renderOrders(); quickPad.showModal(); });
+  $('closeOrder').addEventListener('click', function(){ quickPad.close(); });
+  renderOrders();
+
+  /* ---------- 6. Refleksi malam ---------- */
+  var refKey = 'dl_reflect_' + todayKey;
+  var ref = safeGet(refKey, {}) || {};
+  var mood = Number(ref.mood) || 0;
+  $('refGood').value = ref.good || '';
+  $('refNext').value = ref.next || '';
+  var moodBtns = document.querySelectorAll('[data-mood]');
+  function paintMood(){
+    moodBtns.forEach(function(b){ b.setAttribute('aria-pressed', String(Number(b.dataset.mood) === mood)); });
+  }
+  moodBtns.forEach(function(b){
+    b.addEventListener('click', function(){ mood = Number(b.dataset.mood); paintMood(); });
+  });
+  paintMood();
+  $('refSave').addEventListener('click', function(){
+    var ok = safeSet(refKey, { good: $('refGood').value.trim(), next: $('refNext').value.trim(), mood: mood });
+    $('refSaved').textContent = ok ? 'Tersimpan. Terima kasih sudah meluangkan waktu untuk dirimu.' : 'Gagal menyimpan. Coba lagi.';
+  });
+
+  /* ---------- 7. Warna kategori (kontras diperbaiki untuk teks putih) ---------- */
+  var colorObserver = new MutationObserver(function(){
+    document.querySelectorAll('.tag').forEach(function(tag){
+      var t = tag.textContent.toLowerCase();
+      if(t.indexOf('kuliah') !== -1) tag.style.background = '#2563EB';
+      else if(t.indexOf('toko') !== -1 || t.indexOf('rekap') !== -1) tag.style.background = '#B45309';
+      else if(t.indexOf('ibadah') !== -1) tag.style.background = '#0F7A5A';
+      else if(/mutholaah|kitab|bahtsul|mengajar/.test(t)) tag.style.background = '#7C3AED';
+      else tag.style.background = '#5F6E66';
+    });
+  });
+  colorObserver.observe(tasksEl, { childList: true, subtree: true });
+})();
+</script>
+
+<script>
+// V2.0 UI-only enhancements. No changes to app.js/Firebase storage.
+(function(){
+  var root=document.documentElement, toggle=document.getElementById('themeToggle');
+  var theme='light';
+  try { theme=localStorage.getItem('dlos_theme_v2')==='dark'?'dark':'light'; } catch(e){}
+  function paint(){
+    root.dataset.theme=theme;
+    toggle.textContent=theme==='dark'?'☀️ Mode terang':'🌙 Mode gelap';
+    toggle.setAttribute('aria-pressed',String(theme==='dark'));
+    document.querySelector('meta[name="theme-color"]').setAttribute('content',theme==='dark'?'#101b19':'#0F7A5A');
+  }
+  toggle.addEventListener('click',function(){theme=theme==='dark'?'light':'dark';try{localStorage.setItem('dlos_theme_v2',theme)}catch(e){}paint()});
+  paint();
+  var links=Array.from(document.querySelectorAll('.v2-dock a'));
+  links.forEach(function(link){link.addEventListener('click',function(){links.forEach(function(l){l.removeAttribute('aria-current')});link.setAttribute('aria-current','page')})});
+})();
+</script>
+<script>
+// V2.1 — standalone local academic workspace, does not alter legacy app storage.
+(function(){
+  'use strict';
+  const $=id=>document.getElementById(id), KEY='dlos_academic_v21';
+  const today=()=>{const d=new Date();return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')};
+  const monday=date=>{const d=new Date(date+'T12:00:00');d.setDate(d.getDate()-((d.getDay()+6)%7));return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')};
+  const weekKey=monday(today());
+  const state=()=>{try{const a=JSON.parse(localStorage.getItem(KEY));return a&&Array.isArray(a.study)&&Array.isArray(a.bahtsul)?a:{study:[],bahtsul:[]}}catch(e){return {study:[],bahtsul:[]}}};
+  let data=state();
+  const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(data));return true}catch(e){$('academicMessage').textContent='Penyimpanan gagal. Periksa ruang browser.';return false}};
+  const make=(tag,text,cls)=>{const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e};
+  const minutes=n=>`${n} menit`;
+  function render(){
+    const thisWeek=a=>a.filter(x=>typeof x.date==='string'&&monday(x.date)===weekKey);
+    const study=thisWeek(data.study);
+    [['Senin','Mon'],['Selasa','Tue'],['Sabtu','Sat']].forEach(([day,id])=>{
+      const n=study.filter(x=>x.target===day).reduce((a,x)=>a+Number(x.minutes||0),0);
+      $('study'+id).textContent=n+' / 180 menit';$('study'+id+'Bar').style.width=Math.min(100,n/180*100)+'%';
+    });
+    $('studyWeek').textContent=minutes(study.reduce((a,x)=>a+Number(x.minutes||0),0));
+    $('studyWeekDates').textContent='Pekan mulai '+weekKey;
+    const bm=thisWeek(data.bahtsul).reduce((a,x)=>a+Number(x.minutes||0),0);
+    $('bmTotal').textContent=minutes(bm);$('bmBar').style.width=Math.min(100,bm/240*100)+'%';
+    $('bmOpen').textContent=data.bahtsul.filter(x=>x.status!=='Selesai').length;
+    function list(id,items,describe){const ul=$(id);ul.replaceChildren();
+      if(!items.length){ul.append(make('li','Belum ada catatan.'));return}
+      items.slice().sort((a,b)=>b.date.localeCompare(a.date)).forEach(item=>{
+        const li=make('li'),body=make('div'),title=make('b',describe(item)),meta=make('small',item.date+' · '+minutes(item.minutes));
+        body.append(title,meta);
+        if(item.notes)body.append(make('small',item.notes));
+        if(item.reference)body.append(make('small','Referensi: '+item.reference));
+        if(item.result)body.append(make('small','Hasil: '+item.result));
+        const del=make('button','Hapus','btn small');del.type='button';del.setAttribute('aria-label','Hapus catatan');
+        del.addEventListener('click',()=>{if(!confirm('Hapus catatan ini?'))return;const key=id==='studyList'?'study':'bahtsul';const old=data[key];data[key]=old.filter(x=>x.id!==item.id);if(!save())data[key]=old;render()});
+        li.append(body,del);ul.append(li);
+      });
+    }
+    list('studyList',data.study,x=>x.target+' · '+x.book);
+    list('bmList',data.bahtsul,x=>x.topic+' · '+x.status);
+  }
+  $('studyDate').value=today();$('bmDate').value=today();
+  $('studyForm').addEventListener('submit',e=>{
+    e.preventDefault();const item={id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),date:$('studyDate').value,target:$('studyTarget').value,minutes:Number($('studyMinutes').value),book:$('studyBook').value.trim(),notes:$('studyNotes').value.trim()};
+    if(!item.date||!item.book||!Number.isInteger(item.minutes)||item.minutes<1||item.minutes>720)return;
+    data.study.push(item);if(!save()){data.study.pop();return}e.target.reset();$('studyDate').value=today();render();
+  });
+  $('bmForm').addEventListener('submit',e=>{
+    e.preventDefault();const item={id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),date:$('bmDate').value,minutes:Number($('bmMinutes').value),topic:$('bmTopic').value.trim(),reference:$('bmReference').value.trim(),result:$('bmResult').value.trim(),status:$('bmStatus').value};
+    if(!item.date||!item.topic||!Number.isInteger(item.minutes)||item.minutes<0||item.minutes>720)return;
+    data.bahtsul.push(item);if(!save()){data.bahtsul.pop();return}e.target.reset();$('bmDate').value=today();render();
+  });
+  $('academicExport').addEventListener('click',()=>{
+    const blob=new Blob([JSON.stringify({app:'Daily Life OS',version:'2.1',exportedAt:new Date().toISOString(),...data},null,2)],{type:'application/json'});
+    const url=URL.createObjectURL(blob),a=make('a');a.href=url;a.download='daily-life-os-akademik-'+today()+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  });
+  $('academicImport').addEventListener('click',()=>$('academicFile').click());
+  $('academicFile').addEventListener('change',async e=>{
+    const file=e.target.files[0];if(!file)return;
+    try{if(file.size>2e6)throw Error('File terlalu besar');const obj=JSON.parse(await file.text());
+      if(obj.app!=='Daily Life OS'||!Array.isArray(obj.study)||!Array.isArray(obj.bahtsul))throw Error('Format backup tidak sesuai');
+      if(!confirm('Pulihkan backup? Data akademik V2.1 saat ini akan diganti.'))return;
+      const old=data;data={study:obj.study,bahtsul:obj.bahtsul};if(!save())data=old;else{$('academicMessage').textContent='Backup akademik berhasil dipulihkan.';render()}
+    }catch(err){$('academicMessage').textContent='Impor gagal: '+err.message}finally{e.target.value=''}
+  });
+  render();
+})();
+</script>
+
+<script>
+// Daily Life OS V2.2 — separate, local-only Almida Store transaction ledger.
+(()=>{
+ 'use strict';
+ const $=id=>document.getElementById(id), KEY='dlos_store_v22';
+ const money=n=>new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(n);
+ const today=()=>{const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+ const fields=['storeDate','storeCustomer','storeProduct','storeStatus','storeUnitCost','storeUnitPrice','storeQty','storeNote'];
+ const safeNum=n=>Number.isSafeInteger(Number(n))&&Number(n)>=0?Number(n):NaN;
+ const valid=x=>x&&typeof x.id==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x.date)&&!Number.isNaN(Date.parse(x.date+'T00:00:00'))&&typeof x.customer==='string'&&x.customer.length<=100&&typeof x.product==='string'&&x.product.length<=140&&['Selesai','Menunggu','Batal'].includes(x.status)&&Number.isSafeInteger(x.cost)&&x.cost>=0&&x.cost<=1e9&&Number.isSafeInteger(x.price)&&x.price>=0&&x.price<=1e9&&Number.isSafeInteger(x.qty)&&x.qty>=1&&x.qty<=10000&&typeof x.note==='string'&&x.note.length<=300;
+ let entries=[];
+ try{const v=JSON.parse(localStorage.getItem(KEY)||'[]');if(Array.isArray(v))entries=v.filter(valid)}catch(e){}
+ const msg=t=>{$('storeMessage').textContent=t};
+ const persist=()=>{try{localStorage.setItem(KEY,JSON.stringify(entries));return true}catch(e){msg('Penyimpanan gagal. Ekspor backup dan periksa ruang penyimpanan.');return false}};
+ const download=(name,body,type)=>{const u=URL.createObjectURL(new Blob([body],{type}));const a=document.createElement('a');a.href=u;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000)};
+ const filtered=()=>{const m=$('storeMonth').value,st=$('storeFilterStatus').value,q=$('storeSearch').value.toLocaleLowerCase('id-ID').trim();return entries.filter(x=>(!m||x.date.startsWith(m))&&(!st||x.status===st)&&(!q||(x.customer+' '+x.product+' '+x.note).toLocaleLowerCase('id-ID').includes(q))).sort((a,b)=>b.date.localeCompare(a.date))};
+ function render(){
+   const data=filtered(),done=data.filter(x=>x.status==='Selesai');
+   const revenue=done.reduce((a,x)=>a+x.price*x.qty,0),cost=done.reduce((a,x)=>a+x.cost*x.qty,0);
+   $('storeRevenue').textContent=money(revenue);$('storeCost').textContent=money(cost);$('storeProfit').textContent=money(revenue-cost);$('storeCount').textContent=data.length+' transaksi';
+   const list=$('storeList');list.replaceChildren();
+   if(!data.length){const li=document.createElement('li');li.textContent='Belum ada transaksi untuk filter ini.';list.append(li);return}
+   for(const x of data){
+     const li=document.createElement('li'),head=document.createElement('div');head.className='store-item-head';
+     const name=document.createElement('strong');name.textContent=x.product+' × '+x.qty;
+     const status=document.createElement('small');status.textContent=x.status;head.append(name,status);
+     const meta=document.createElement('p');meta.className='store-item-meta';meta.textContent=`${x.date} • ${x.customer} • Modal ${money(x.cost*x.qty)} • Jual ${money(x.price*x.qty)} • Laba ${money((x.price-x.cost)*x.qty)}`;
+     li.append(head,meta);
+     if(x.note){const note=document.createElement('p');note.className='store-item-meta';note.textContent=x.note;li.append(note)}
+     const acts=document.createElement('div');acts.className='store-item-actions';
+     const edit=document.createElement('button');edit.className='btn small';edit.type='button';edit.textContent='Edit';edit.addEventListener('click',()=>{
+       $('storeEditId').value=x.id;$('storeDate').value=x.date;$('storeCustomer').value=x.customer;$('storeProduct').value=x.product;$('storeStatus').value=x.status;$('storeUnitCost').value=x.cost;$('storeUnitPrice').value=x.price;$('storeQty').value=x.qty;$('storeNote').value=x.note;$('storeSubmit').textContent='Perbarui transaksi';$('storeForm').scrollIntoView({behavior:'smooth',block:'center'});
+     });
+     const del=document.createElement('button');del.className='btn small';del.type='button';del.textContent='Hapus';del.addEventListener('click',()=>{if(!confirm('Hapus transaksi ini?'))return;const old=entries;entries=entries.filter(y=>y.id!==x.id);if(!persist())entries=old;else{msg('Transaksi dihapus.');render()}});
+     acts.append(edit,del);li.append(acts);list.append(li);
+   }
+ }
+ const reset=()=>{$('storeForm').reset();$('storeDate').value=today();$('storeEditId').value='';$('storeSubmit').textContent='Simpan transaksi'};
+ $('storeForm').addEventListener('submit',e=>{
+   e.preventDefault();const id=$('storeEditId').value||((crypto.randomUUID&&crypto.randomUUID())||String(Date.now())+'-'+Math.random());
+   const x={id,date:$('storeDate').value,customer:$('storeCustomer').value.trim(),product:$('storeProduct').value.trim(),status:$('storeStatus').value,cost:safeNum($('storeUnitCost').value),price:safeNum($('storeUnitPrice').value),qty:safeNum($('storeQty').value),note:$('storeNote').value.trim()};
+   if(!x.customer||!x.product||!valid(x)){msg('Periksa tanggal, jumlah, modal, harga, dan kelengkapan formulir.');return}
+   const old=entries.slice(),idx=entries.findIndex(y=>y.id===id);if(idx>=0)entries[idx]=x;else entries.push(x);
+   if(!persist()){entries=old;return}reset();render();msg(idx>=0?'Transaksi diperbarui.':'Transaksi tersimpan di perangkat ini.');
+ });
+ $('storeCancelEdit').addEventListener('click',reset);
+ ['storeMonth','storeFilterStatus','storeSearch'].forEach(id=>$(id).addEventListener(id==='storeSearch'?'input':'change',render));
+ $('storeExport').addEventListener('click',()=>download('almida-transaksi-'+today()+'.json',JSON.stringify({app:'Daily Life OS',version:'2.2',type:'almida-transactions',entries},null,2),'application/json'));
+ $('storeCsv').addEventListener('click',()=>{
+   const cols=['date','customer','product','status','qty','cost','price','note'];const csv=[cols.join(','),...filtered().map(x=>cols.map(k=>'"'+String(x[k]).replace(/"/g,'""')+'"').join(','))].join('\r\n');
+   download('almida-transaksi-'+today()+'.csv','\ufeff'+csv,'text/csv;charset=utf-8');
+ });
+ $('storeImport').addEventListener('click',()=>$('storeFile').click());
+ $('storeFile').addEventListener('change',async e=>{
+   const file=e.target.files?.[0];if(!file)return;
+   try{
+     if(file.size>3e6)throw Error('File terlalu besar (maksimal 3 MB).');
+     const v=JSON.parse(await file.text());if(v?.type!=='almida-transactions'||!Array.isArray(v.entries)||v.entries.length>10000||!v.entries.every(valid))throw Error('Format backup tidak valid.');
+     if(!confirm('Impor akan mengganti seluruh transaksi V2.2 di perangkat ini. Lanjutkan?'))return;
+     const old=entries;entries=v.entries;if(!persist())entries=old;else{render();msg('Backup transaksi berhasil dipulihkan.')} 
+   }catch(err){msg('Impor gagal: '+err.message)}finally{e.target.value=''}
+ });
+ reset();render();
+})();
+</script>
+
+
+<script>
+// V2.3 — read-only Smart Schedule: uses the live app state, never overwrites schedule.
+(()=>{
+ const $=id=>document.getElementById(id),DAYS=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+ const day=$('smartDay');DAYS.forEach(d=>day.add(new Option(d,d)));day.value=DAYS[new Date().getDay()];
+ const lead=$('smartLead');try{lead.value=String(localStorage.getItem('dlos_reminder_lead_v23')??'5')}catch{lead.value='5'}
+ lead.addEventListener('change',()=>{try{localStorage.setItem('dlos_reminder_lead_v23',lead.value)}catch{}});
+ const mins=s=>{const m=String(s||'').match(/^(\d{1,2})[.:](\d{2})$/);return m?Number(m[1])*60+Number(m[2]):NaN};
+ const fmt=s=>String(s||'').replace('.',':');
+ function render(tasks){if(!Array.isArray(tasks))return;
+  const d=day.value,rows=tasks.filter(t=>t.day===d).map(t=>({...t,a:mins(t.start),b:mins(t.end)})).filter(t=>Number.isFinite(t.a)&&Number.isFinite(t.b)).sort((a,b)=>a.a-b.a);
+  const conflicts=[];
+  for(let i=0;i<rows.length;i++)for(let j=i+1;j<rows.length;j++){
+   const a=rows[i],b=rows[j];if(b.a>=a.b&&a.b>a.a)break;
+   // Cross-midnight activities extend to the next day; compare only same-day portion.
+   const endA=a.b<=a.a?1440:a.b,endB=b.b<=b.a?1440:b.b;
+   if(Math.max(a.a,b.a)<Math.min(endA,endB)){
+    const flexible=/fleksibel|toko \+|saat sepi|bila memungkinkan|pesan dapat mengantre/i.test([a.title,a.notes,b.title,b.notes].join(' '));
+    conflicts.push({a,b,flexible});
+   }
+  }
+  const now=new Date(),isToday=d===DAYS[now.getDay()],clock=now.getHours()*60+now.getMinutes();
+  const upcoming=isToday?rows.filter(t=>t.a>clock).length:0;
+  $('smartTotal').textContent=tasks.length;$('smartConflicts').textContent=conflicts.length;$('smartUpcoming').textContent=isToday?upcoming:'—';
+  const current=isToday?rows.find(t=>t.a<=clock&&(t.b<=t.a?clock<1440:clock<t.b)):null;
+  const next=isToday?rows.find(t=>t.a>clock):rows[0];
+  $('smartNow').textContent=(current?'Sedang berlangsung: '+current.title+' ('+fmt(current.start)+'–'+fmt(current.end)+')':isToday?'Tidak ada kegiatan yang sedang berlangsung.':'Hari '+d)+ (next?' • Berikutnya: '+next.title+' ('+fmt(next.start)+')':'');
+  const list=$('smartConflictList');list.replaceChildren();if(!conflicts.length){const li=document.createElement('li');li.textContent='Tidak ditemukan benturan pada '+d+'.';list.append(li)}
+  conflicts.forEach(({a,b,flexible})=>{const li=document.createElement('li');li.className='smart-warn';const strong=document.createElement('strong');strong.textContent=fmt(a.start)+'–'+fmt(a.end)+' '+a.title;const second=document.createElement('div');second.textContent='Bertabrakan dengan '+fmt(b.start)+'–'+fmt(b.end)+' '+b.title;const note=document.createElement('small');note.textContent=flexible?'Kegiatan fleksibel / multitugas — periksa apakah memang disengaja.':'Potensi benturan waktu — pertimbangkan penyesuaian.';li.append(strong,second,note);list.append(li)});
+ }
+ let latest=[];window.addEventListener('dlos:tasks-updated',e=>{latest=e.detail?.tasks||[];render(latest)});
+ function load(){try{const db=JSON.parse(localStorage.getItem('daily-life-os-v1')||'{}');if(Array.isArray(db.tasks)){latest=db.tasks;render(latest)}}catch{}}
+ $('smartRefresh').addEventListener('click',load);day.addEventListener('change',()=>render(latest));load();setInterval(()=>render(latest),60000);
+})();
+</script>
+<script src="./firebase-config.js"></script>
+<script type="module" src="./app.js"></script>
+</body>
+</html>
