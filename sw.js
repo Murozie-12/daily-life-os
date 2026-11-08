@@ -1,7 +1,7 @@
-const CACHE = 'daily-life-os-v2';
 
-// Daftar ini harus persis sesuai nama file yang ada di folder aplikasi.
-// Jika ada satu file yang tidak ditemukan, service worker gagal dipasang sama sekali.
+const CACHE = 'daily-life-os-v3';
+const CACHE_PREFIX = 'daily-life-os-';
+
 const CORE = [
   './',
   './index.html',
@@ -10,38 +10,88 @@ const CORE = [
   './firebase-config.js',
   './manifest.webmanifest',
   './icon-192.png',
-  './icon-512.png'
+  './icon-512.png',
+  './icon-maskable-512.png'
 ];
 
-self.addEventListener('install', e => {
-  e.waitUntil(
+// Install: simpan aset utama aplikasi
+self.addEventListener('install', event => {
+  event.waitUntil(
     caches.open(CACHE)
-      .then(c => c.addAll(CORE))
+      .then(cache => cache.addAll(CORE))
       .then(() => self.skipWaiting())
   );
 });
 
-self.addEventListener('activate', e => {
-  e.waitUntil(
+// Activate: hapus hanya cache versi lama aplikasi
+self.addEventListener('activate', event => {
+  event.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
+      .then(keys =>
+        Promise.all(
+          keys
+            .filter(key =>
+              key.startsWith(CACHE_PREFIX) &&
+              key !== CACHE
+            )
+            .map(key => caches.delete(key))
+        )
+      )
       .then(() => self.clients.claim())
   );
 });
 
-// Network-first: ambil data terbaru dari internet dulu. Jika offline, pakai cache.
-self.addEventListener('fetch', e => {
-  if (e.request.method !== 'GET' || new URL(e.request.url).origin !== self.location.origin) return;
+// Fetch: network-first dengan fallback offline
+self.addEventListener('fetch', event => {
+  const request = event.request;
+  const url = new URL(request.url);
 
-  e.respondWith(
-    fetch(e.request)
+  // Jangan tangani request lintas origin atau non-GET
+  if (
+    request.method !== 'GET' ||
+    url.origin !== self.location.origin
+  ) {
+    return;
+  }
+
+  // Jangan cache URL di luar cakupan aplikasi
+  if (!url.pathname.startsWith(
+    new URL(self.registration.scope).pathname
+  )) {
+    return;
+  }
+
+  event.respondWith(
+    fetch(request)
       .then(response => {
-        if (response.ok) {
+        if (
+          response.ok &&
+          response.type === 'basic' &&
+          !url.pathname.endsWith('/sw.js')
+        ) {
           const copy = response.clone();
-          caches.open(CACHE).then(c => c.put(e.request, copy));
+
+          event.waitUntil(
+            caches.open(CACHE)
+              .then(cache => cache.put(request, copy))
+          );
         }
+
         return response;
       })
-      .catch(() => caches.match(e.request).then(response => response || caches.match('./index.html')))
+      .catch(async () => {
+        const cached = await caches.match(request);
+
+        if (cached) return cached;
+
+        // Fallback HTML hanya untuk halaman navigasi
+        if (request.mode === 'navigate') {
+          return (
+            await caches.match('./index.html')
+          ) || Response.error();
+        }
+
+        return Response.error();
+      })
   );
 });
