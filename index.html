@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0F7A5A">
+<meta name="description" content="Daily Life OS — jadwal kuliah, toko, ibadah dan mutholaah">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Daily Life OS</title>
+<style>
+:root{
+  --bg:#FBF8F1;
+  --card:#FFFFFF;
+  --green:#0F7A5A;
+  --green-deep:#0A5A43;
+  --gold:#E0A84E;
+  --mint:#E6F3EC;
+  --ink:#1E2B25;
+  --muted:#66756D;
+  --line:#E7E2D6;
+  --done:#2E9E75;
+  --radius-lg:24px;
+  --radius:16px;
+  --shadow:0 1px 2px rgba(30,43,37,.04),0 8px 24px rgba(30,43,37,.06);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font:16px/1.6 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{
+  outline:2px solid var(--green);outline-offset:2px;
+}
+a{color:var(--green)}
+.hidden{display:none!important}
+
+.wrap{max-width:720px;margin:0 auto;padding:24px 18px 96px}
+
+/* ---------- Header ---------- */
+header{position:relative;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+h1{font-size:28px;font-weight:800;letter-spacing:-.02em;margin:4px 0 2px;color:var(--green-deep)}
+h2{font-size:18px;font-weight:700;margin:0;letter-spacing:-.01em}
+.muted,small{color:var(--muted)}
+small{font-size:13px}
+.kicker{font-size:13px;color:var(--muted);margin:0}
+
+/* ---------- Greeting card (elemen utama) ---------- */
+.greet{
+  position:relative;
+  overflow:hidden;
+  background:linear-gradient(135deg,var(--green) 0%,var(--green-deep) 100%);
+  color:#fff;
+  border-radius:var(--radius-lg);
+  padding:24px 22px;
+  margin-top:16px;
+  box-shadow:0 14px 34px rgba(15,122,90,.25);
+}
+.greet::before{
+  /* pola geometris sangat tipis sebagai ornamen */
+  content:"";
+  position:absolute;inset:0;
+  background-image:
+    repeating-linear-gradient(45deg,rgba(255,255,255,.05) 0 1px,transparent 1px 14px),
+    repeating-linear-gradient(-45deg,rgba(255,255,255,.05) 0 1px,transparent 1px 14px);
+  pointer-events:none;
+}
+.greet > *{position:relative}
+.ar{font-family:"Amiri",serif;direction:rtl;unicode-bidi:isolate;line-height:1.7;margin:0}
+.greet .ar-main{font-size:30px;color:#fff}
+.greet .tr{font-size:14px;color:rgba(255,255,255,.85);margin:0}
+.greet .sapaan{font-size:18px;font-weight:700;margin:14px 0 2px}
+.greet .sub{font-size:14px;color:rgba(255,255,255,.85);margin:0}
+.greet .divider{height:1px;background:rgba(255,255,255,.22);margin:16px 0}
+.greet .ar-small{font-size:22px;color:#FFE7B0}
+.greet .ar-small-tr{font-size:13px;color:rgba(255,255,255,.8)}
+
+/* ---------- Panels ---------- */
+.panel{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius-lg);
+  padding:20px;
+  margin-top:16px;
+  box-shadow:var(--shadow);
+}
+.row{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+
+/* ---------- Progres ---------- */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.stat{background:var(--mint);border-radius:var(--radius);padding:14px 8px;text-align:center}
+.stat b{display:block;font-size:26px;font-weight:800;color:var(--green-deep);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.stat small{font-size:12px;color:var(--muted)}
+.bar{height:10px;background:#EFEADF;border-radius:20px;overflow:hidden;margin:16px 0 12px}
+.bar>div{
+  height:100%;width:0;
+  background:linear-gradient(90deg,var(--green),var(--gold));
+  border-radius:20px;
+  transition:width .5s cubic-bezier(.2,.7,.2,1);
+}
+.notice{
+  font-size:13px;color:var(--muted);
+  background:#FBF3E2;border-left:3px solid var(--gold);
+  border-radius:10px;padding:10px 12px;line-height:1.6;
+}
+
+/* ---------- Agenda ---------- */
+.days{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px;margin:0 -4px;scrollbar-width:none}
+.days::-webkit-scrollbar{display:none}
+.days button{
+  white-space:nowrap;flex:1 0 auto;
+  background:var(--bg);border:1px solid var(--line);
+  border-radius:999px;padding:9px 14px;font-weight:600;font-size:14px;color:var(--ink);
+}
+.days button:hover{border-color:var(--green)}
+.days .active{background:var(--green);border-color:var(--green);color:#fff}
+
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0}
+.toolbar input,.toolbar select,form input,form select,form textarea{
+  background:var(--bg);border:1px solid var(--line);color:var(--ink);
+  border-radius:12px;padding:11px 13px;min-width:0;font-size:15px;
+}
+.toolbar input{flex:1;min-width:150px}
+.toolbar input::placeholder{color:#9AA69F}
+
+.btn{
+  border:1px solid var(--line);background:#fff;color:var(--ink);
+  border-radius:12px;padding:10px 14px;font-weight:600;font-size:14px;
+  transition:background .15s,border-color .15s,transform .1s;
+}
+.btn:hover{border-color:var(--green);color:var(--green-deep)}
+.btn:active{transform:scale(.98)}
+.btn.primary{background:var(--green);border-color:var(--green);color:#fff}
+.btn.primary:hover{background:var(--green-deep);color:#fff}
+.btn.small{padding:8px 12px;font-size:13px}
+
+/* ---------- Task list ---------- */
+#tasks{margin-top:4px}
+.task{
+  display:flex;align-items:flex-start;gap:12px;
+  border-top:1px solid var(--line);padding:16px 0;
+}
+.task:first-child{border-top:0}
+.task input[type=checkbox]{width:20px;height:20px;accent-color:var(--done);margin-top:3px;flex:none}
+.time{
+  font-size:13px;font-weight:700;color:var(--green);
+  font-variant-numeric:tabular-nums;min-width:96px;padding-top:1px;
+}
+.task .body{flex:1;min-width:0}
+.task .title{font-weight:600;color:var(--ink);word-wrap:break-word}
+.task.done .title{text-decoration:line-through;color:var(--muted)}
+.task.done .time{color:var(--muted)}
+.tag{
+  font-size:12px;font-weight:600;color:var(--green-deep);
+  background:var(--mint);border-radius:999px;padding:3px 10px;
+  display:inline-block;margin-top:8px;
+}
+.note{font-size:13px;color:var(--muted);margin-top:6px}
+.actions{display:flex;gap:6px}
+
+/* Empty state */
+.empty{text-align:center;padding:28px 12px;color:var(--muted)}
+.empty b{display:block;color:var(--ink);font-size:16px;margin-bottom:4px}
+
+/* ---------- Sinkronisasi / cadangan ---------- */
+.panel p{margin:8px 0 0}
+#cloudStatus{font-size:14px;font-weight:600}
+
+.footer{color:var(--muted);font-size:13px;margin:28px 0 0;line-height:1.7;text-align:center}
+.footer .ar-footer{font-family:"Amiri",serif;font-size:20px;color:var(--green);margin:0 0 6px;direction:rtl}
+
+/* ---------- Dialog ---------- */
+dialog{
+  background:var(--card);color:var(--ink);
+  border:1px solid var(--line);border-radius:var(--radius-lg);
+  width:min(480px,94vw);padding:22px;
+  box-shadow:0 24px 60px rgba(30,43,37,.18);
+}
+dialog::backdrop{background:rgba(30,43,37,.35)}
+form{display:grid;gap:12px}
+form label{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--muted)}
+form h2{margin-bottom:4px}
+
+@media (max-width:550px){
+  .wrap{padding:18px 14px 80px}
+  h1{font-size:25px}
+  .greet{padding:20px 18px}
+  .greet .ar-main{font-size:26px}
+  .task{gap:10px}
+  .time{min-width:78px;font-size:12px}
+  .actions{flex-direction:column}
+  .stats{gap:8px}
+  .stat{padding:12px 4px}
+  .stat b{font-size:22px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+  <header>
+    <div>
+      <p class="kicker">Daily Life OS</p>
+      <h1>Kegiatan hari ini</h1>
+      <small>Kuliah • Almida Store • Kitab • Ibadah</small>
+    </div>
+    <button class="btn small hidden" id="install">Pasang aplikasi</button>
+  </header>
+
+  <section class="greet" aria-label="Sapaan">
+    <p class="ar ar-main" lang="ar">السَّلامُ عَلَيْكُمْ</p>
+    <p class="tr">Assalamu'alaikum</p>
+    <p class="sapaan" id="greeting">Selamat datang</p>
+    <p class="sub">Semoga hari ini penuh berkah dan kelancaran.</p>
+    <div class="divider"></div>
+    <p class="ar ar-small" lang="ar">أَهْلاً وَسَهْلاً</p>
+    <p class="ar-small-tr">Ahlan wa sahlan</p>
+  </section>
+
+  <section class="panel">
+    <div class="row">
+      <h2>Progres <span id="daylabel">hari ini</span></h2>
+      <span id="dateLabel" class="muted"></span>
+    </div>
+    <div class="stats">
+      <div class="stat"><b id="total">0</b><small>Agenda</small></div>
+      <div class="stat"><b id="complete">0</b><small>Selesai</small></div>
+      <div class="stat"><b id="percent">0%</b><small>Progres</small></div>
+    </div>
+    <div class="bar" role="progressbar" aria-label="Progres harian"><div id="progress"></div></div>
+    <div class="notice">Toko buka 08.00–20.00. Saat kuliah, salat, atau mengajar, pesanan ditangani setelah kegiatan utama selesai. Jam salat di jadwal merupakan blok perkiraan, bukan waktu azan aktual.</div>
+  </section>
+
+  <section class="panel">
+    <div class="row">
+      <h2>Agenda mingguan</h2>
+      <button id="new" class="btn primary small">+ Tambah kegiatan</button>
+    </div>
+    <nav class="days" id="days" aria-label="Pilih hari"></nav>
+    <div class="toolbar">
+      <input id="search" type="search" placeholder="Cari kegiatan..." aria-label="Cari kegiatan">
+      <select id="filter" aria-label="Filter kategori"><option value="">Semua kategori</option></select>
+    </div>
+    <div id="tasks"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Catatan & sinkronisasi</h2>
+    <p class="muted">Progres tersimpan di perangkat ini. Aktifkan Firebase untuk sinkronisasi antarperangkat dengan akun Google.</p>
+    <div class="row" style="margin-top:14px">
+      <span id="cloudStatus" class="muted">Mode lokal / offline</span>
+      <div>
+        <button id="login" class="btn small hidden">Login Google</button>
+        <button id="logout" class="btn small hidden">Keluar</button>
+      </div>
+    </div>
+    <div class="toolbar">
+      <button id="export" class="btn small">Ekspor cadangan JSON</button>
+      <button id="import" class="btn small">Impor cadangan</button>
+      <input type="file" id="file" accept="application/json" class="hidden">
+      <button id="resetDay" class="btn small">Reset ceklis hari ini</button>
+    </div>
+    <small>Checklist dibedakan per tanggal. Kegiatan berulang setiap minggu. Cadangan JSON mencakup kegiatan, status, dan catatan.</small>
+  </section>
+
+  <p class="footer">
+    <span class="ar-footer" lang="ar">اللَّهُمَّ صَلِّ عَلَى سَيِّدِنَا مُحَمَّدٍ</span>
+    Allahumma sholli 'ala sayyidina Muhammad<br>
+    Aplikasi ini bisa dipasang dari browser Android setelah diterbitkan di GitHub Pages. Pengingat otomatis ketika aplikasi tertutup belum tersedia pada versi awal. Jangan masukkan kata sandi atau data sensitif dalam catatan.
+  </p>
+</main>
+
+<dialog id="editor">
+  <form id="editForm">
+    <h2 id="formTitle">Tambah kegiatan</h2>
+    <input type="hidden" id="taskId">
+    <label>Hari<select id="taskDay" required></select></label>
+    <label>Mulai<input type="time" id="taskStart" required></label>
+    <label>Selesai<input type="time" id="taskEnd" required></label>
+    <label>Kegiatan<input id="taskTitle" maxlength="150" required></label>
+    <label>Kategori<input id="taskCategory" maxlength="40" required></label>
+    <label>Catatan<textarea id="taskNotes" rows="3" maxlength="1000"></textarea></label>
+    <div class="row">
+      <button type="button" class="btn" id="cancel">Batal</button>
+      <button type="submit" class="btn primary">Simpan</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+  // Sapaan sesuai waktu. Berdiri sendiri, tidak mengganggu app.js.
+  (function(){
+    var h = new Date().getHours();
+    var s = h < 4 ? "Selamat malam" : h < 11 ? "Selamat pagi" : h < 15 ? "Selamat siang" : h < 18 ? "Selamat sore" : "Selamat malam";
+    var el = document.getElementById("greeting");
+    if (el) el.textContent = s;
+  })();
+</script>
+<script src="./firebase-config.js"></script>
+<script type="module" src="./app.js"></script>
+</body>
+</html>
