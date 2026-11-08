@@ -14,243 +14,262 @@
 <title>Daily Life OS</title>
 <style>
 :root{
-  /* Terkunci di Mode Cerah (Light Mode) */
-  --bg: #FBF8F1;
-  --card: #FFFFFF;
-  --green: #0F7A5A;
-  --green-deep: #0A5A43;
-  --gold: #E0A84E;
-  --mint: #E6F3EC;
-  --ink: #1E2B25;
-  --muted: #66756D;
-  --line: #E7E2D6;
-  --done: #2E9E75;
-  
-  --radius-lg: 24px;
-  --radius: 16px;
-  --shadow: 0 10px 30px rgba(10, 90, 67, 0.08);
-  color-scheme: light;
+  --bg:#FBF8F1;
+  --card:#FFFFFF;
+  --green:#0F7A5A;
+  --green-deep:#0A5A43;
+  --gold:#E0A84E;
+  --gold-deep:#A8741E;
+  --gold-text:#8A5D12;
+  --mint:#E6F3EC;
+  --ink:#1E2B25;
+  --muted:#5F6E66;
+  --line:#E7E2D6;
+  --done:#2E9E75;
+  --warm:#FBF3E2;
+  --radius-lg:24px;
+  --radius:16px;
+  --shadow:0 10px 30px rgba(10,90,67,.08);
+  color-scheme:light;
 }
-
 *{box-sizing:border-box}
 html,body{margin:0}
 body{
-  background:var(--bg);
-  color:var(--ink);
+  background:var(--bg);color:var(--ink);
   font:16px/1.6 "Plus Jakarta Sans",system-ui,sans-serif;
-  min-height:100vh;
-  -webkit-font-smoothing:antialiased;
+  min-height:100vh;-webkit-font-smoothing:antialiased;
 }
 button,input,select,textarea{font:inherit;color:inherit}
-button{cursor:pointer; border:none; background:transparent;}
-button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{
-  outline:2px solid var(--gold);outline-offset:2px;
+button{cursor:pointer;border:none;background:transparent}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible,a:focus-visible{
+  outline:3px solid var(--gold);outline-offset:2px;
 }
 a{color:var(--green)}
 .hidden{display:none!important}
 
-.wrap{max-width:720px;margin:0 auto;padding:24px 18px 96px}
+.wrap{max-width:720px;margin:0 auto;padding:24px 18px 110px}
 
 /* ---------- Header ---------- */
-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
 h1{font-size:26px;font-weight:800;letter-spacing:-.02em;margin:4px 0 2px;color:var(--green-deep)}
 h2{font-size:18px;font-weight:700;margin:0;letter-spacing:-.01em}
 .muted,small{color:var(--muted)}
-small{font-size:13px; font-weight: 600;}
-.kicker{font-size:13px;color:var(--gold);font-weight:800;letter-spacing:0.05em;margin:0;text-transform:uppercase;}
+small{font-size:13px;font-weight:600}
+.kicker{font-size:13px;color:var(--gold-text);font-weight:800;letter-spacing:.05em;margin:0;text-transform:uppercase}
+.label{font-size:13px;font-weight:700;color:var(--muted);margin:0 0 8px}
 
-/* ---------- Greeting Card (Premium) ---------- */
+/* ---------- Greeting card ---------- */
 .greet{
-  position:relative;
-  overflow:hidden;
+  position:relative;overflow:hidden;
   background:linear-gradient(135deg,var(--green-deep) 0%,var(--green) 100%);
-  color:#fff;
-  border-radius:var(--radius-lg);
-  padding:28px 24px;
-  margin-top:16px;
-  box-shadow:0 18px 40px rgba(15,122,90,.3);
-  text-align: center;
+  color:#fff;border-radius:var(--radius-lg);
+  padding:28px 24px;margin-top:16px;
+  box-shadow:0 18px 40px rgba(15,122,90,.3);text-align:center;
 }
 .greet::before{
-  content:""; position:absolute; inset:0;
-  background-image: radial-gradient(circle at top right, rgba(255,255,255,0.1) 0%, transparent 60%);
+  content:"";position:absolute;inset:0;
+  background-image:radial-gradient(circle at top right,rgba(255,255,255,.12) 0%,transparent 60%);
   pointer-events:none;
 }
 .greet > *{position:relative}
 .ar{font-family:"Amiri",serif;direction:rtl;line-height:1.7;margin:0}
-.sholawat-top { font-size: 24px; color: var(--gold); margin-bottom: 16px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-.greet .ar-main{font-size:32px;color:#fff; font-weight:bold;}
-.greet .tr{font-size:14px;color:rgba(255,255,255,.9);margin:0}
+.sholawat-top{font-size:24px;color:#FFE7B0;margin-bottom:16px;text-shadow:0 2px 4px rgba(0,0,0,.2)}
+.greet .ar-main{font-size:32px;color:#fff;font-weight:700}
+.greet .tr{font-size:14px;color:rgba(255,255,255,.92);margin:0}
 .greet .sapaan{font-size:20px;font-weight:800;margin:12px 0 4px}
-
-.motivation-box {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border-left: 4px solid var(--gold);
-  border-radius: 12px;
-  padding: 16px 20px;
-  margin-top: 24px;
-  font-style: italic;
-  font-size: 14.5px;
-  color: #fff;
-  line-height: 1.6;
-  text-align: left;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+.motivation-box{
+  background:rgba(255,255,255,.12);
+  border-left:4px solid var(--gold);
+  border-radius:12px;padding:16px 20px;margin-top:24px;
+  font-style:italic;font-size:14.5px;color:#fff;line-height:1.6;text-align:left;
 }
-.motivation-box::before { content: "❝"; font-size: 24px; color: var(--gold); display: block; margin-bottom: -10px; opacity: 0.8; }
 
 /* ---------- Panels ---------- */
 .panel{
-  background:var(--card); border: 1px solid rgba(0,0,0,0.03);
-  border-radius:var(--radius-lg); padding:24px; margin-top:20px;
-  box-shadow:var(--shadow);
+  background:var(--card);border:1px solid rgba(0,0,0,.03);
+  border-radius:var(--radius-lg);padding:24px;margin-top:20px;box-shadow:var(--shadow);
 }
 .row{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
 
+/* ---------- Fokus hari ini (niat + berikutnya) ---------- */
+.focus{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.intent-row{display:flex;gap:8px}
+.intent-row input{
+  flex:1;min-width:0;background:var(--bg);border:1px solid var(--line);
+  border-radius:12px;padding:11px 13px;font-size:15px;
+}
+.intent-saved{font-size:14px;color:var(--green-deep);margin:10px 0 0;font-weight:600}
+.next-card{background:var(--mint);border-radius:var(--radius);padding:16px 18px}
+.next-text{font-weight:800;margin:0;color:var(--green-deep);font-size:16px;word-wrap:break-word}
+.next-sub{font-size:13px;color:var(--muted);margin:4px 0 0}
+
 /* ---------- Progres ---------- */
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
-.stat{background:var(--mint);border-radius:var(--radius);padding:16px 8px;text-align:center; transition: transform 0.2s;}
-.stat:hover {transform: translateY(-2px);}
-.stat b{display:block;font-size:28px;font-weight:800;color:var(--green-deep);letter-spacing:-.02em}
-.stat small{font-size:12px;font-weight:700;color:var(--muted); text-transform: uppercase;}
+.stat{background:var(--mint);border-radius:var(--radius);padding:16px 8px;text-align:center}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--green-deep);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.stat small{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase}
 .bar{height:12px;background:var(--line);border-radius:20px;overflow:hidden;margin:20px 0 12px}
 .bar>div{
-  height:100%;width:0; background:linear-gradient(90deg,var(--green),var(--gold));
-  border-radius:20px; transition:width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+  height:100%;width:0;background:linear-gradient(90deg,var(--green),var(--gold));
+  border-radius:20px;transition:width .8s cubic-bezier(.34,1.56,.64,1);
 }
+.support{margin:0;font-size:14px;background:var(--warm);border-radius:12px;padding:12px 14px;line-height:1.6}
 
-/* ---------- Toolbar & Buttons ---------- */
-.days{display:flex;gap:10px;overflow-x:auto;padding:8px 0 16px;margin:0 -4px;scrollbar-width:none; position: sticky; top: 0; background: var(--card); z-index: 10; margin-top: 10px;}
+/* ---------- Agenda ---------- */
+.days{
+  display:flex;gap:10px;overflow-x:auto;padding:8px 0 16px;margin:0 -4px;scrollbar-width:none;
+  position:sticky;top:0;background:var(--card);z-index:10;margin-top:10px;
+}
 .days::-webkit-scrollbar{display:none}
 .days button{
-  white-space:nowrap;flex:1 0 auto;
-  background:var(--bg); border:1px solid var(--line);
-  border-radius:999px;padding:10px 18px;font-weight:700;font-size:14px;color:var(--ink);
-  transition: all 0.2s;
+  white-space:nowrap;flex:1 0 auto;background:var(--bg);border:1px solid var(--line);
+  border-radius:999px;padding:10px 18px;font-weight:700;font-size:14px;color:var(--ink);transition:background .2s,border-color .2s;
 }
-.days .active{background:var(--green);border-color:var(--green);color:#fff; box-shadow: 0 4px 12px rgba(15,122,90,0.2);}
+.days button:hover{border-color:var(--green)}
+.days .active{background:var(--green);border-color:var(--green);color:#fff;box-shadow:0 4px 12px rgba(15,122,90,.2)}
 
 .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0}
-.toolbar input,.toolbar select,form input,form select,form textarea{
+.toolbar input,.toolbar select{
   background:var(--bg);border:1px solid var(--line);color:var(--ink);
-  border-radius:12px;padding:11px 13px;min-width:0;font-size:15px; width:100%;
+  border-radius:12px;padding:11px 13px;min-width:0;font-size:15px;
 }
 .toolbar input{flex:1;min-width:150px}
+.toolbar select{flex:0 1 200px}
 
 .btn{
   border:1px solid var(--line);background:var(--card);color:var(--ink);
   border-radius:14px;padding:12px 18px;font-weight:700;font-size:14px;
-  transition:all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  transition:all .2s;box-shadow:0 2px 4px rgba(0,0,0,.02);
 }
-.btn:hover{border-color:var(--green); transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.05);}
+.btn:hover{border-color:var(--green);transform:translateY(-2px);box-shadow:0 6px 12px rgba(0,0,0,.05)}
 .btn:active{transform:scale(.97)}
-.btn.primary{background:var(--green);border-color:var(--green);color:#fff;}
-.btn.primary:hover{background:var(--green-deep);}
-.btn.small{padding:8px 12px;font-size:13px}
+.btn.primary{background:var(--green);border-color:var(--green);color:#fff}
+.btn.primary:hover{background:var(--green-deep)}
+.btn.small{padding:9px 13px;font-size:13px}
 
-/* ---------- Task List ---------- */
-#tasks{margin-top:8px;}
+/* ---------- Task list ---------- */
+#tasks{margin-top:8px}
 .task{
   display:flex;align-items:flex-start;gap:16px;
   border-bottom:1px solid var(--line);padding:20px 0;
-  animation: slideUp 0.4s ease forwards;
+  animation:slideUp .4s ease forwards;
 }
-.task:last-child { border-bottom: none; }
-@keyframes slideUp { from {opacity: 0; transform: translateY(15px);} to {opacity: 1; transform: translateY(0);} }
+.task:last-child{border-bottom:none}
+#tasks.ready .task{animation:none}
+@keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 
-/* Bouncing Checkbox Custom */
-.task input[type="checkbox"] {
-  appearance: none; -webkit-appearance: none;
-  width: 24px; height: 24px; flex-shrink: 0;
-  border: 2px solid var(--muted); border-radius: 8px;
-  margin-top: 2px; cursor: pointer; position: relative;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  background: var(--card);
+.task input[type="checkbox"]{
+  appearance:none;-webkit-appearance:none;
+  width:24px;height:24px;flex-shrink:0;
+  border:2px solid var(--muted);border-radius:8px;margin-top:2px;cursor:pointer;position:relative;
+  transition:all .3s cubic-bezier(.4,0,.2,1);background:var(--card);
 }
-.task input[type="checkbox"]:checked {
-  background: var(--done); border-color: var(--done);
-  animation: bounceCheck 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+.task input[type="checkbox"]:checked{background:var(--done);border-color:var(--done)}
+.task input[type="checkbox"]:checked::after{
+  content:"✓";color:#fff;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-size:16px;font-weight:800;
 }
-.task input[type="checkbox"]:checked::after {
-  content: "✓"; color: white; position: absolute;
-  top: 50%; left: 50%; transform: translate(-50%, -50%);
-  font-size: 16px; font-weight: 800;
-}
-@keyframes bounceCheck { 0% {transform: scale(1)} 50% {transform: scale(1.3)} 100% {transform: scale(1)} }
 
-.time{ font-size:14px; font-weight:800; color:var(--ink); min-width:96px; padding-top:2px; }
+.time{font-size:14px;font-weight:800;color:var(--ink);min-width:96px;padding-top:2px;font-variant-numeric:tabular-nums}
 .task .body{flex:1;min-width:0}
-
-/* Animated Strikethrough */
-.task .title{font-weight:700;color:var(--ink); font-size: 16px; display: inline-block; position: relative; word-wrap:break-word;}
-.task.done .title { color: var(--muted); }
-.task.done .title::after {
-  content: ""; position: absolute; left: 0; top: 50%;
-  height: 2px; background: var(--muted); border-radius: 2px;
-  animation: strike 0.3s ease-out forwards;
+.task .title{font-weight:700;color:var(--ink);font-size:16px;display:inline-block;position:relative;word-wrap:break-word}
+.task.done .title{color:var(--muted)}
+.task.done .title::after{
+  content:"";position:absolute;left:0;top:50%;height:2px;background:var(--muted);border-radius:2px;
+  animation:strike .3s ease-out forwards;
 }
-@keyframes strike { 0% { width: 0; } 100% { width: 100%; } }
-.task.done .time {color: var(--muted);}
+@keyframes strike{0%{width:0}100%{width:100%}}
+.task.done .time{color:var(--muted)}
 
 .tag{
-  font-size:12px;font-weight:800; color: #fff;
-  border-radius:999px;padding:4px 12px;
-  display:inline-block;margin-top:8px; text-transform: uppercase; letter-spacing: 0.05em;
-  background: var(--muted); /* Diperbarui oleh JS di bawah berdasarkan teksnya */
+  font-size:12px;font-weight:800;color:#fff;border-radius:999px;padding:4px 12px;
+  display:inline-block;margin-top:8px;text-transform:uppercase;letter-spacing:.05em;background:var(--muted);
 }
 .note{font-size:13px;color:var(--muted);margin-top:6px}
-.actions{display:flex;gap:6px; margin-top: 8px;}
-
-/* Empty state */
+.actions{display:flex;gap:6px;margin-top:8px}
 .empty{text-align:center;padding:28px 12px;color:var(--muted)}
 .empty b{display:block;color:var(--ink);font-size:16px;margin-bottom:4px}
 
-/* ---------- Floating Action Button (FAB) ---------- */
-.fab-container { position: fixed; bottom: 30px; right: 30px; z-index: 100; display: flex; flex-direction: column; gap: 12px; }
-.fab {
-  width: 60px; height: 60px; border-radius: 50%;
-  background: var(--gold); color: #fff; font-size: 24px;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 8px 20px rgba(224, 168, 78, 0.4);
-  transition: transform 0.3s, box-shadow 0.3s;
+/* ---------- Refleksi malam ---------- */
+details.reflect summary{cursor:pointer;font-size:18px;font-weight:700;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:8px}
+details.reflect summary::-webkit-details-marker{display:none}
+details.reflect summary::after{content:"+";font-size:22px;color:var(--green);font-weight:700}
+details.reflect[open] summary::after{content:"−"}
+details.reflect[open] summary{margin-bottom:16px}
+.reflect label{display:grid;gap:6px;font-size:13px;font-weight:700;color:var(--muted);margin-bottom:14px}
+.reflect textarea{
+  width:100%;background:var(--bg);border:1px solid var(--line);color:var(--ink);
+  border-radius:12px;padding:11px 13px;font-size:15px;resize:vertical;
 }
-.fab:hover { transform: scale(1.08) rotate(5deg); box-shadow: 0 12px 25px rgba(224, 168, 78, 0.5); }
-.fab-primary { background: var(--green); box-shadow: 0 8px 20px rgba(15, 122, 90, 0.4); }
+.moods{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 14px}
+.moods .mood-label{width:100%;font-size:13px;font-weight:700;color:var(--muted);margin:0 0 2px}
+.moods button{
+  padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:var(--bg);
+  font-weight:600;font-size:14px;
+}
+.moods button:hover{border-color:var(--green)}
+.moods button[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:#fff}
+.reflect-foot{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+#refSaved{font-size:14px;color:var(--green-deep);font-weight:600}
 
-/* ---------- Dialogs (Modals) ---------- */
+/* ---------- Floating buttons ---------- */
+.fab-container{position:fixed;bottom:30px;right:30px;z-index:100;display:flex;flex-direction:column;gap:12px}
+.fab{
+  width:60px;height:60px;border-radius:50%;color:#fff;font-size:24px;
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .3s,box-shadow .3s;
+}
+.fab-order{background:var(--gold-deep);box-shadow:0 8px 20px rgba(168,116,30,.35)}
+.fab-primary{background:var(--green);box-shadow:0 8px 20px rgba(15,122,90,.35)}
+.fab:hover{transform:scale(1.06)}
+
+/* ---------- Dialogs ---------- */
 dialog{
   background:var(--card);color:var(--ink);
   border:1px solid var(--line);border-radius:var(--radius-lg);
-  width:min(500px,92vw);padding:28px;
-  box-shadow:0 24px 60px rgba(0,0,0,.2);
+  width:min(500px,92vw);padding:28px;box-shadow:0 24px 60px rgba(0,0,0,.2);
 }
-dialog::backdrop{background:rgba(0,0,0,.5); backdrop-filter: blur(4px);}
-.dialog-header {display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;}
-.dialog-header h2 {margin: 0; font-size: 20px;}
+dialog::backdrop{background:rgba(0,0,0,.45);backdrop-filter:blur(4px)}
+.dialog-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;gap:8px}
+.dialog-header h2{margin:0;font-size:20px}
 form{display:grid;gap:12px}
-form label{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--muted)}
-
-/* Quick Pad List */
-#quickOrderList { list-style: none; padding: 0; margin: 16px 0; max-height: 250px; overflow-y: auto; }
-#quickOrderList li {
-  background: var(--bg); padding: 14px; border-radius: 12px; margin-bottom: 10px;
-  display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--line);
-  font-weight: 600; font-size: 14px;
+form label{display:grid;gap:6px;font-size:13px;font-weight:700;color:var(--muted)}
+form input,form select,form textarea{
+  background:var(--bg);border:1px solid var(--line);color:var(--ink);
+  border-radius:12px;padding:11px 13px;font-size:15px;width:100%;min-width:0;
 }
-.del-btn { color: #EF4444; font-weight: bold; font-size: 18px; padding: 4px 8px; }
+.form-row{display:flex;gap:8px;justify-content:flex-end}
+.order-form{display:flex;gap:8px}
+.order-form input{flex:1}
+#quickOrderList{list-style:none;padding:0;margin:16px 0 0;max-height:260px;overflow-y:auto}
+#quickOrderList li{
+  background:var(--bg);padding:14px;border-radius:12px;margin-bottom:10px;
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  border:1px solid var(--line);font-weight:600;font-size:14px;
+}
+#quickOrderList li span{word-break:break-word}
+#quickOrderList .order-empty{color:var(--muted);justify-content:center;font-weight:500}
+.del-btn{color:#B42318;font-weight:800;font-size:20px;padding:2px 10px;border-radius:8px;flex-shrink:0}
+.del-btn:hover{background:#FDECEA}
 
 #cloudStatus{font-size:14px;font-weight:600}
 .footer{color:var(--muted);font-size:13px;margin:28px 0 0;line-height:1.7;text-align:center}
 
+@media (max-width:640px){
+  .focus{grid-template-columns:1fr}
+}
 @media (max-width:550px){
-  .wrap{padding:16px 14px 100px}
+  .wrap{padding:16px 14px 110px}
   .greet{padding:24px 20px}
   .greet .ar-main{font-size:28px}
   .time{min-width:78px;font-size:13px}
   .stats{gap:8px}
   .stat b{font-size:24px}
-  .fab-container { bottom: 20px; right: 20px; }
+  .fab-container{bottom:20px;right:20px}
   .actions{flex-direction:column}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
 }
 </style>
 </head>
@@ -262,11 +281,10 @@ form label{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--muted
       <p class="kicker">Daily Life OS</p>
       <h1>Agenda Asisten</h1>
     </div>
-    <!-- Tombol ini wajib ada agar app.js tidak error saat mendeteksi Service Worker -->
     <button id="install" class="btn small hidden">Pasang aplikasi</button>
-    <div style="text-align: right;">
-      <div id="masehiDate" style="font-weight: 800; font-size: 15px;">Memuat...</div>
-      <div id="hijriDate" class="muted" style="font-size: 13px; font-weight: 600;">Memuat...</div>
+    <div style="text-align:right">
+      <div id="masehiDate" style="font-weight:800;font-size:15px">Memuat...</div>
+      <div id="hijriDate" class="muted" style="font-size:13px;font-weight:600">Memuat...</div>
     </div>
   </header>
 
@@ -277,10 +295,19 @@ form label{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--muted
     <p class="ar ar-main" lang="ar">السَّلامُ عَلَيْكُمْ</p>
     <p class="tr">Assalamu'alaikum Warahmatullahi Wabarakatuh</p>
     <p class="sapaan" id="greeting">Selamat beraktivitas, Kak Rofi fauzi!</p>
-    
-    <div class="motivation-box" id="dailyQuote">
-      Memuat kutipan hari ini...
+    <div class="motivation-box" id="dailyQuote">Memuat kutipan hari ini...</div>
+  </section>
+
+  <section class="panel focus" aria-label="Fokus hari ini">
+    <div>
+      <p class="label" for="intentInput">Niat hari ini</p>
+      <div class="intent-row">
+        <input id="intentInput" maxlength="120" placeholder="Contoh: fokus kuliah sampai zuhur">
+        <button id="intentSave" class="btn small primary" type="button">Simpan</button>
+      </div>
+      <p id="intentSaved" class="intent-saved hidden"></p>
     </div>
+    <div class="next-card" id="nextCard" aria-live="polite"></div>
   </section>
 
   <section class="panel">
@@ -294,24 +321,46 @@ form label{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--muted
       <div class="stat"><b id="percent">0%</b><small>Progres</small></div>
     </div>
     <div class="bar" role="progressbar" aria-label="Progres harian"><div id="progress"></div></div>
+    <p id="supportMsg" class="support"></p>
   </section>
 
   <section class="panel">
     <div class="row">
-      <h2>Daftar Agenda</h2>
+      <h2>Daftar agenda</h2>
     </div>
     <nav class="days" id="days" aria-label="Pilih hari"></nav>
     <div class="toolbar">
       <input id="search" type="search" placeholder="Cari kegiatan..." aria-label="Cari kegiatan">
       <select id="filter" aria-label="Filter kategori"><option value="">Semua kategori</option></select>
     </div>
-    
     <div id="tasks"></div>
   </section>
 
+  <details class="panel reflect">
+    <summary>Refleksi malam <span class="muted" style="font-size:13px;font-weight:600">(opsional, sekitar 1 menit)</span></summary>
+    <label>Hal yang berjalan baik hari ini
+      <textarea id="refGood" rows="2" maxlength="300" placeholder="Sekecil apa pun boleh"></textarea>
+    </label>
+    <label>Satu langkah kecil untuk besok
+      <textarea id="refNext" rows="2" maxlength="300" placeholder="Cukup satu hal yang realistis"></textarea>
+    </label>
+    <div class="moods" role="group" aria-labelledby="moodLabel">
+      <p class="mood-label" id="moodLabel">Bagaimana perasaanmu hari ini?</p>
+      <button type="button" data-mood="1" aria-pressed="false">😔 Berat</button>
+      <button type="button" data-mood="2" aria-pressed="false">😌 Lelah</button>
+      <button type="button" data-mood="3" aria-pressed="false">😐 Biasa</button>
+      <button type="button" data-mood="4" aria-pressed="false">🙂 Baik</button>
+      <button type="button" data-mood="5" aria-pressed="false">🤩 Mantap</button>
+    </div>
+    <div class="reflect-foot">
+      <button id="refSave" class="btn small primary" type="button">Simpan refleksi</button>
+      <span id="refSaved" aria-live="polite"></span>
+    </div>
+  </details>
+
   <section class="panel">
-    <h2>Catatan & Backup (Cadangan)</h2>
-    <p class="muted" style="font-size: 14px; margin-top: 6px;">Jadwal tersimpan di HP/Browser ini. Jika Anda membersihkan memori browser, jadwal akan hilang. Gunakan <strong>Ekspor JSON</strong> di bawah secara rutin untuk menyimpan file jadwal sebagai cadangan.</p>
+    <h2>Catatan & backup</h2>
+    <p class="muted" style="font-size:14px;margin:8px 0 0">Jadwal tersimpan di browser ini. Jika memori browser dibersihkan, jadwal bisa hilang. Simpan <strong>Ekspor JSON</strong> secara rutin sebagai cadangan.</p>
     <div class="row" style="margin-top:14px">
       <span id="cloudStatus" class="muted">Mode lokal / offline</span>
       <div>
@@ -319,152 +368,275 @@ form label{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--muted
         <button id="logout" class="btn small hidden">Keluar</button>
       </div>
     </div>
-    <div class="toolbar" style="margin-top: 16px;">
-      <button id="export" class="btn small">⬇️ Ekspor JSON (Simpan)</button>
-      <button id="import" class="btn small">⬆️ Impor JSON (Pulihkan)</button>
+    <div class="toolbar" style="margin-top:16px">
+      <button id="export" class="btn small">⬇️ Ekspor JSON</button>
+      <button id="import" class="btn small">⬆️ Impor JSON</button>
       <input type="file" id="file" accept="application/json" class="hidden">
+      <button id="enableNotif" class="btn small hidden">Aktifkan pengingat</button>
       <button id="resetDay" class="btn small">Reset ceklis hari ini</button>
     </div>
   </section>
-  
+
   <p class="footer">Dibuat khusus untuk Kak Rofi fauzi — Daily Life OS</p>
 </main>
 
 <div class="fab-container">
-  <button class="fab" aria-label="Catatan Kilat Toko" onclick="document.getElementById('quickPad').showModal()">⚡</button>
-  <button id="new" class="fab fab-primary" aria-label="Tambah Jadwal">+</button>
+  <button id="openOrder" class="fab fab-order" aria-label="Catatan kilat AlmidaStore">⚡</button>
+  <button id="new" class="fab fab-primary" aria-label="Tambah jadwal">+</button>
 </div>
 
-<!-- Modal Quick Pad AlmidaStore -->
-<dialog id="quickPad">
+<!-- Catatan kilat AlmidaStore -->
+<dialog id="quickPad" aria-labelledby="quickTitle">
   <div class="dialog-header">
-    <h2>Catatan Kilat AlmidaStore</h2>
-    <button class="btn" onclick="document.getElementById('quickPad').close()">Tutup</button>
+    <h2 id="quickTitle">Catatan kilat AlmidaStore</h2>
+    <button class="btn small" id="closeOrder" type="button">Tutup</button>
   </div>
-  <p class="muted" style="font-size: 13px; margin-bottom: 16px;">Catat pesanan pulsa/kuota masuk tanpa merusak jadwal utama. Data tersimpan di memori peramban.</p>
-  
-  <form id="formOrder" style="display: flex; gap: 8px;">
-    <input type="text" id="orderInput" placeholder="Contoh: Axis 50rb - Kak Rina" required style="margin-bottom: 0;">
+  <p class="muted" style="font-size:13px;margin:0 0 16px">Catat pesanan masuk tanpa mengubah jadwal utama. Data tersimpan di browser ini.</p>
+  <form id="formOrder" class="order-form">
+    <input type="text" id="orderInput" placeholder="Contoh: Axis 50rb - Kak Rina" required aria-label="Isi catatan pesanan">
     <button type="submit" class="btn primary">Catat</button>
   </form>
   <ul id="quickOrderList"></ul>
 </dialog>
 
-<!-- Form Utama Tambah Agenda (Membiarkan app.js mengisi otomatis elemen select ini) -->
+<!-- Form tambah/ubah agenda (app.js mengisi pilihan hari) -->
 <dialog id="editor">
   <form id="editForm">
-    <div class="dialog-header">
-      <h2 id="formTitle">Tambah Kegiatan</h2>
-    </div>
+    <div class="dialog-header"><h2 id="formTitle">Tambah kegiatan</h2></div>
     <input type="hidden" id="taskId">
-    
     <label>Hari
-      <select id="taskDay" required></select>
+      <select id="taskDay" required>
+        <option value="Senin">Senin</option>
+        <option value="Selasa">Selasa</option>
+        <option value="Rabu">Rabu</option>
+        <option value="Kamis">Kamis</option>
+        <option value="Jumat">Jumat</option>
+        <option value="Sabtu">Sabtu</option>
+        <option value="Minggu">Minggu</option>
+      </select>
     </label>
-    
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
       <label>Mulai<input type="time" id="taskStart" required></label>
       <label>Selesai<input type="time" id="taskEnd" required></label>
     </div>
-    <label>Nama Kegiatan<input id="taskTitle" maxlength="150" required></label>
+    <label>Nama kegiatan<input id="taskTitle" maxlength="150" required></label>
     <label>Kategori<input id="taskCategory" maxlength="40" required placeholder="Contoh: ibadah, mutholaah, toko"></label>
     <label>Catatan<textarea id="taskNotes" rows="3" maxlength="1000"></textarea></label>
-    <div class="row">
+    <div class="form-row">
       <button type="button" class="btn" id="cancel">Batal</button>
-      <button type="submit" class="btn primary">Simpan Agenda</button>
+      <button type="submit" class="btn primary">Simpan agenda</button>
     </div>
   </form>
 </dialog>
 
 <script>
-  // Asisten Sapaan
-  const now = new Date();
-  const h = now.getHours();
-  let sapaan = h < 4 ? "Malam yang hening" : h < 11 ? "Pagi yang berkah" : h < 15 ? "Siang yang produktif" : h < 18 ? "Sore yang tenang" : "Malam yang damai";
-  document.getElementById("greeting").textContent = `${sapaan}, Kak Rofi fauzi!`;
+  // Sapaan sesuai waktu
+  (function(){
+    var now = new Date(), h = now.getHours();
+    var s = h < 4 ? "Malam yang hening" : h < 11 ? "Pagi yang berkah" : h < 15 ? "Siang yang produktif" : h < 18 ? "Sore yang tenang" : "Malam yang damai";
+    document.getElementById("greeting").textContent = s + ", Kak Rofi fauzi!";
 
-  // Format Tanggal Masehi & Penarikan Manual Bulan Hijriyah
-  const masehiOpts = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
-  document.getElementById("masehiDate").textContent = new Intl.DateTimeFormat('id-ID', masehiOpts).format(now);
-  
-  try {
-    const rawHijri = new Intl.DateTimeFormat('en-US-u-ca-islamic-umalqura', {day: 'numeric', month: 'numeric', year: 'numeric'}).format(now);
-    const parts = rawHijri.split('/');
-    if(parts.length >= 3) {
-      const hijriMonths = ["", "Muharram", "Shafar", "Rabiul Awal", "Rabiul Akhir", "Jumadil Awal", "Jumadil Akhir", "Rajab", "Sya'ban", "Ramadhan", "Syawal", "Dzulqa'dah", "Dzulhijjah"];
-      const monthIndex = parseInt(parts[0]);
-      const day = parseInt(parts[1]);
-      const year = parseInt(parts[2].split(' ')[0]);
-      document.getElementById("hijriDate").textContent = `${day} ${hijriMonths[monthIndex]} ${year} H`;
-    }
-  } catch (e) {
-    document.getElementById("hijriDate").textContent = "";
+    document.getElementById("masehiDate").textContent = new Intl.DateTimeFormat('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(now);
+
+    try{
+      var raw = new Intl.DateTimeFormat('en-US-u-ca-islamic-umalqura',{day:'numeric',month:'numeric',year:'numeric'}).format(now);
+      var parts = raw.split('/');
+      if(parts.length >= 3){
+        var months = ["","Muharram","Shafar","Rabiul Awal","Rabiul Akhir","Jumadil Awal","Jumadil Akhir","Rajab","Sya'ban","Ramadhan","Syawal","Dzulqa'dah","Dzulhijjah"];
+        document.getElementById("hijriDate").textContent = parseInt(parts[1]) + " " + months[parseInt(parts[0])] + " " + parseInt(parts[2]) + " H";
+      }
+    }catch(e){ document.getElementById("hijriDate").textContent = ""; }
+
+    var quotes = [
+      "Barangsiapa bersungguh-sungguh, sesungguhnya kesungguhannya itu adalah untuk dirinya sendiri.",
+      "Jangan menunda pekerjaan hari ini hingga esok hari, sebab esok memiliki urusannya sendiri.",
+      "Sesudah kesulitan itu pasti ada kemudahan. Tetaplah melangkah walau perlahan.",
+      "Ilmu itu seperti buruan, dan tulisan adalah ikatannya. Ikatlah ilmu dengan rajin mencatat.",
+      "Sebaik-baik manusia adalah yang paling bermanfaat bagi manusia lainnya. Semangat berniaga dan berbagi!",
+      "Tugas yang menumpuk tidak akan selesai hanya dengan dipikirkan. Mulailah dengan Bismillah."
+    ];
+    document.getElementById("dailyQuote").textContent = quotes[Math.floor(Math.random()*quotes.length)];
+  })();
+</script>
+
+<script>
+(function(){
+  var $ = function(id){ return document.getElementById(id); };
+  var todayKey = new Date().toLocaleDateString('sv-SE');
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function safeGet(key, fallback){
+    try{ var v = localStorage.getItem(key); return v === null ? fallback : JSON.parse(v); }
+    catch(e){ return fallback; }
+  }
+  function safeSet(key, value){
+    try{ localStorage.setItem(key, JSON.stringify(value)); return true; }
+    catch(e){ return false; }
   }
 
-  // Afirmasi Harian
-  const quotes = [
-    "Barangsiapa bersungguh-sungguh, sesungguhnya kesungguhannya itu adalah untuk dirinya sendiri.",
-    "Jangan menunda pekerjaan hari ini hingga esok hari, sebab esok memiliki urusannya sendiri.",
-    "Sesudah kesulitan itu pasti ada kemudahan. Tetaplah melangkah walau perlahan.",
-    "Ilmu itu seperti buruan, dan tulisan adalah ikatannya. Ikatlah ilmu dengan rajin mencatat.",
-    "Sebaik-baik manusia adalah yang paling bermanfaat bagi manusia lainnya. Semangat berniaga dan berbagi!",
-    "Tugas yang menumpuk tidak akan selesai hanya dengan dipikirkan. Mulailah dengan Bismillah."
-  ];
-  document.getElementById("dailyQuote").textContent = quotes[Math.floor(Math.random() * quotes.length)];
+  /* ---------- 1. Niat hari ini ---------- */
+  var intentKey = 'dl_intent_' + todayKey;
+  var intentInput = $('intentInput'), intentSaved = $('intentSaved');
+  function showIntent(text){
+    intentSaved.textContent = text ? 'Niatmu hari ini: ' + text : '';
+    intentSaved.classList.toggle('hidden', !text);
+  }
+  intentInput.value = safeGet(intentKey, '') || '';
+  showIntent(intentInput.value.trim());
+  $('intentSave').addEventListener('click', function(){
+    var v = intentInput.value.trim();
+    if(v){ safeSet(intentKey, v); } else { try{ localStorage.removeItem(intentKey); }catch(e){} }
+    showIntent(v);
+  });
+  intentInput.addEventListener('keydown', function(e){
+    if(e.key === 'Enter'){ e.preventDefault(); $('intentSave').click(); }
+  });
 
-  // Logika Quick Pad AlmidaStore
-  let quickOrders = JSON.parse(localStorage.getItem('almida_quick_orders')) || [];
-  function renderOrders() {
-    const ul = document.getElementById('quickOrderList');
-    ul.innerHTML = "";
-    quickOrders.forEach((order, idx) => {
-      const li = document.createElement("li");
-      li.innerHTML = `<span>⚡ ${order}</span> <button class="del-btn" onclick="delOrder(${idx})">×</button>`;
+  /* ---------- 2. Kegiatan berikutnya (dibaca dari daftar yang tampil) ---------- */
+  var nextCard = $('nextCard');
+  function setNext(main, sub){
+    nextCard.replaceChildren();
+    var lbl = document.createElement('p'); lbl.className = 'label'; lbl.textContent = 'Kegiatan berikutnya';
+    var t = document.createElement('p'); t.className = 'next-text'; t.textContent = main;
+    nextCard.appendChild(lbl); nextCard.appendChild(t);
+    if(sub){
+      var s = document.createElement('p'); s.className = 'next-sub'; s.textContent = sub;
+      nextCard.appendChild(s);
+    }
+  }
+  function renderNext(){
+    var items = Array.prototype.slice.call(document.querySelectorAll('#tasks .task'));
+    if(!items.length){ setNext('Belum ada kegiatan', 'Tekan tombol + untuk menambah jadwal.'); return; }
+    var nowMin = new Date().getHours()*60 + new Date().getMinutes();
+    var pick = null, undone = 0;
+    items.forEach(function(el){
+      var cb = el.querySelector('input[type="checkbox"]');
+      var done = el.classList.contains('done') || (cb && cb.checked);
+      if(done || pick) return;
+      undone++;
+      var tm = el.querySelector('.time');
+      var m = tm && tm.textContent.match(/(\d{1,2})[:.](\d{2})/);
+      if(!m) return;
+      var start = parseInt(m[1],10)*60 + parseInt(m[2],10);
+      if(start >= nowMin - 30) pick = { el: el, time: tm.textContent.trim() };
+    });
+    if(pick){
+      var title = pick.el.querySelector('.title');
+      setNext(title ? title.textContent.trim() : 'Kegiatan', pick.time);
+    } else if(undone === 0){
+      setNext('Semua kegiatan sudah selesai', 'Beristirahatlah dengan tenang, atau tambahkan kegiatan baru.');
+    } else {
+      setNext('Tidak ada kegiatan berikutnya', 'Ada kegiatan yang belum dicentang. Tandai jika sudah, atau geser jadwalnya.');
+    }
+  }
+  var tasksEl = $('tasks');
+  new MutationObserver(renderNext).observe(tasksEl, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
+  document.addEventListener('change', function(e){ if(e.target && e.target.type === 'checkbox') setTimeout(renderNext, 0); });
+  setInterval(renderNext, 60000);
+  renderNext();
+
+  /* ---------- 3. Dukungan progres + perayaan sekali per hari ---------- */
+  var pct = $('percent'), supportEl = $('supportMsg');
+  function renderSupport(){
+    var v = parseInt(pct.textContent, 10) || 0;
+    var msg;
+    if(v === 0) msg = 'Mulai dari satu kegiatan kecil. Itu sudah sebuah langkah.';
+    else if(v < 50) msg = 'Sudah berjalan. Lanjutkan pelan-pelan, tidak perlu terburu-buru.';
+    else if(v < 100) msg = 'Lebih dari separuh jalan. Kamu sudah bekerja dengan baik.';
+    else msg = 'Alhamdulillah, semua kegiatan selesai hari ini. Istirahatlah dengan tenang.';
+    supportEl.textContent = msg;
+
+    if(v === 100 && !reduceMotion && typeof window.confetti === 'function' && safeGet('dl_celebrated', '') !== todayKey){
+      safeSet('dl_celebrated', todayKey);
+      window.confetti({ particleCount: 140, spread: 80, origin: { y: 0.6 }, colors: ['#0F7A5A','#E0A84E','#2563EB'] });
+    }
+  }
+  new MutationObserver(renderSupport).observe(pct, { childList: true, characterData: true, subtree: true });
+  renderSupport();
+
+  /* ---------- 4. Konfirmasi sebelum reset ceklis ---------- */
+  // Konfirmasi reset sudah ditangani app.js, jadi tidak perlu ditambahkan di sini.
+
+  /* ---------- 5. Catatan kilat AlmidaStore ---------- */
+  var quickPad = $('quickPad');
+  var orders = safeGet('almida_quick_orders', []);
+  if(!Array.isArray(orders)) orders = [];
+  function renderOrders(){
+    var ul = $('quickOrderList');
+    ul.replaceChildren();
+    if(!orders.length){
+      var empty = document.createElement('li'); empty.className = 'order-empty';
+      empty.textContent = 'Belum ada catatan pesanan.';
+      ul.appendChild(empty);
+      return;
+    }
+    orders.forEach(function(text, idx){
+      var li = document.createElement('li');
+      var span = document.createElement('span'); span.textContent = '⚡ ' + text;
+      var del = document.createElement('button');
+      del.type = 'button'; del.className = 'del-btn';
+      del.setAttribute('aria-label', 'Hapus catatan');
+      del.textContent = '×';
+      del.addEventListener('click', function(){
+        orders.splice(idx, 1);
+        safeSet('almida_quick_orders', orders);
+        renderOrders();
+      });
+      li.appendChild(span); li.appendChild(del);
       ul.appendChild(li);
     });
   }
-  document.getElementById('formOrder').addEventListener('submit', (e) => {
+  $('formOrder').addEventListener('submit', function(e){
     e.preventDefault();
-    const input = document.getElementById('orderInput');
-    quickOrders.push(input.value);
-    localStorage.setItem('almida_quick_orders', JSON.stringify(quickOrders));
-    input.value = "";
+    var input = $('orderInput');
+    var v = input.value.trim();
+    if(!v) return;
+    var time = new Date().toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' });
+    orders.push(v + ' · ' + time);
+    safeSet('almida_quick_orders', orders);
+    input.value = '';
     renderOrders();
+    input.focus();
   });
-  window.delOrder = function(idx) {
-    quickOrders.splice(idx, 1);
-    localStorage.setItem('almida_quick_orders', JSON.stringify(quickOrders));
-    renderOrders();
+  $('openOrder').addEventListener('click', function(){ renderOrders(); quickPad.showModal(); });
+  $('closeOrder').addEventListener('click', function(){ quickPad.close(); });
+  renderOrders();
+
+  /* ---------- 6. Refleksi malam ---------- */
+  var refKey = 'dl_reflect_' + todayKey;
+  var ref = safeGet(refKey, {}) || {};
+  var mood = Number(ref.mood) || 0;
+  $('refGood').value = ref.good || '';
+  $('refNext').value = ref.next || '';
+  var moodBtns = document.querySelectorAll('[data-mood]');
+  function paintMood(){
+    moodBtns.forEach(function(b){ b.setAttribute('aria-pressed', String(Number(b.dataset.mood) === mood)); });
   }
-  renderOrders(); 
+  moodBtns.forEach(function(b){
+    b.addEventListener('click', function(){ mood = Number(b.dataset.mood); paintMood(); });
+  });
+  paintMood();
+  $('refSave').addEventListener('click', function(){
+    var ok = safeSet(refKey, { good: $('refGood').value.trim(), next: $('refNext').value.trim(), mood: mood });
+    $('refSaved').textContent = ok ? 'Tersimpan. Terima kasih sudah meluangkan waktu untuk dirimu.' : 'Gagal menyimpan. Coba lagi.';
+  });
 
-  // Pemicu Confetti saat persentase berubah ke 100% dari app.js
-  const observer = new MutationObserver(function(mutations) {
-    mutations.forEach(function(mutation) {
-      if (mutation.target.textContent.trim() === "100%") {
-        confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#0F7A5A', '#E0A84E', '#3B82F6'] });
-      }
+  /* ---------- 7. Warna kategori (kontras diperbaiki untuk teks putih) ---------- */
+  var colorObserver = new MutationObserver(function(){
+    document.querySelectorAll('.tag').forEach(function(tag){
+      var t = tag.textContent.toLowerCase();
+      if(t.indexOf('kuliah') !== -1) tag.style.background = '#2563EB';
+      else if(t.indexOf('toko') !== -1 || t.indexOf('rekap') !== -1) tag.style.background = '#B45309';
+      else if(t.indexOf('ibadah') !== -1) tag.style.background = '#0F7A5A';
+      else if(/mutholaah|kitab|bahtsul|mengajar/.test(t)) tag.style.background = '#7C3AED';
+      else tag.style.background = '#5F6E66';
     });
   });
-  const percentEl = document.getElementById('percent');
-  if(percentEl) observer.observe(percentEl, { characterData: true, childList: true, subtree: true });
-
-  // Mewarnai kategori secara otomatis dari hasil render app.js
-  const taskObserver = new MutationObserver(() => {
-    document.querySelectorAll('.tag').forEach(tag => {
-      const text = tag.textContent.toLowerCase();
-      if (text.includes('kuliah')) tag.style.background = '#3B82F6';
-      else if (text.includes('toko') || text.includes('rekap')) tag.style.background = '#F59E0B';
-      else if (text.includes('ibadah')) tag.style.background = '#10B981';
-      else if (text.includes('mutholaah') || text.includes('kitab') || text.includes('bahtsul') || text.includes('mengajar')) tag.style.background = '#8B5CF6';
-      else tag.style.background = '#66756D';
-    });
-  });
-  const tasksContainer = document.getElementById('tasks');
-  if(tasksContainer) taskObserver.observe(tasksContainer, { childList: true });
+  colorObserver.observe(tasksEl, { childList: true, subtree: true });
+})();
 </script>
 
 <script src="./firebase-config.js"></script>
-<script type="module" src="./app.js"></script>
+<script type="module" src="./app_v2.js"></script>
 </body>
 </html>
