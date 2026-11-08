@@ -78,6 +78,7 @@ function render() {
         ${t.notes ? `<div class="note">${escapeHtml(t.notes)}</div>` : ''}
       </div>
       <div class="actions">
+        <button class="btn small" data-copy="${escapeHtml(t.id)}" aria-label="Salin ke hari lain">⧉</button>
         <button class="btn small" data-edit="${escapeHtml(t.id)}" aria-label="Edit kegiatan">✎</button>
         <button class="btn small" data-delete="${escapeHtml(t.id)}" aria-label="Hapus kegiatan">×</button>
       </div>
@@ -93,6 +94,8 @@ $('tasks').onchange = e => { if (e.target.dataset.check) { db.checks[dateKey() +
 $('tasks').onclick = e => {
   const edit = e.target.closest('[data-edit]'), del = e.target.closest('[data-delete]');
   if (edit) openEditor(db.tasks.find(x => x.id === edit.dataset.edit));
+  const cp = e.target.closest('[data-copy]');
+  if (cp) openCopy(cp.dataset.copy);
   if (del && confirm('Hapus kegiatan ini dari jadwal mingguan?')) {
     db.tasks = db.tasks.filter(x => x.id !== del.dataset.delete); save(); render();
   }
@@ -115,6 +118,51 @@ function openEditor(t) {
 
 $('new').onclick = () => openEditor();
 $('cancel').onclick = () => $('editor').close();
+
+/* ---------- Salin kegiatan ke hari lain ---------- */
+let copySourceId = null;
+function openCopy(id) {
+  const t = db.tasks.find(x => x.id === id);
+  if (!t) return;
+  copySourceId = id;
+  $('copyInfo').textContent = `${t.title} (${t.start}–${t.end}), saat ini di ${t.day}`;
+  $('copyDay').innerHTML = DAYS.filter(d => d !== t.day).map(d => `<option value="${d}">${d}</option>`).join('');
+  $('copyDialog').showModal();
+}
+$('copyCancel').onclick = () => $('copyDialog').close();
+$('copyForm').onsubmit = e => {
+  e.preventDefault();
+  const src = db.tasks.find(x => x.id === copySourceId);
+  if (!src) { $('copyDialog').close(); return; }
+  const target = $('copyDay').value;
+  const dup = db.tasks.some(x => x.day === target && x.start === src.start && x.end === src.end && x.title === src.title);
+  if (dup) { alert(`Kegiatan ini sudah ada di ${target}.`); return; }
+  db.tasks.push({ ...src, id: 'custom-' + crypto.randomUUID(), day: target });
+  save();
+  $('copyDialog').close();
+  render();
+  alert(`Kegiatan disalin ke ${target}.`);
+};
+
+/* ---------- Banner pengingat dan tunda ---------- */
+let snoozeTimer = null;
+function showBanner(title, body, allowSnooze = true) {
+  $('bannerTitle').textContent = title;
+  $('bannerBody').textContent = body;
+  $('bannerSnooze').classList.toggle('hidden', !allowSnooze);
+  $('reminderBanner').classList.remove('hidden');
+}
+$('bannerSnooze').onclick = () => {
+  const title = $('bannerTitle').textContent, body = $('bannerBody').textContent;
+  $('reminderBanner').classList.add('hidden');
+  clearTimeout(snoozeTimer);
+  // Tunda 10 menit, dan hanya sekali (tidak bisa ditunda lagi)
+  snoozeTimer = setTimeout(() => showReminder(title, body, false), 10 * 60 * 1000);
+};
+$('bannerClose').onclick = () => {
+  clearTimeout(snoozeTimer);
+  $('reminderBanner').classList.add('hidden');
+};
 
 $('editForm').onsubmit = e => {
   e.preventDefault();
@@ -257,7 +305,8 @@ setupNotifButton();
 
 // Notifikasi lewat service worker lebih andal di Android dan saat aplikasi terpasang.
 // Jika tidak tersedia, dicoba dengan Notification biasa.
-async function showReminder(title, body) {
+async function showReminder(title, body, allowSnooze = true) {
+  showBanner(title, body, allowSnooze);
   if (!canNotify || Notification.permission !== 'granted') return;
   const options = { body, icon: './icon-192.png', tag: 'daily-life-os-reminder' };
   try {
@@ -287,5 +336,18 @@ setInterval(() => {
     if (navigator.vibrate) {
       navigator.vibrate([200, 100, 200]);
     }
+  }
+}, 60000);
+
+// Pengingat 5 menit sebelum kegiatan dimulai
+let lastPreNotified = '';
+setInterval(() => {
+  const soon = new Date(Date.now() + 5 * 60000); // dihitung dari waktu sekarang agar aman saat lewat tengah malam
+  const day = DAYS[soon.getDay()];
+  const time = String(soon.getHours()).padStart(2, '0') + '.' + String(soon.getMinutes()).padStart(2, '0');
+  const t = db.tasks.find(x => x.day === day && x.start === time);
+  if (t && lastPreNotified !== t.id) {
+    lastPreNotified = t.id;
+    showReminder('5 menit lagi', `${t.title}\nJam: ${t.start} - ${t.end}`, false);
   }
 }, 60000);
