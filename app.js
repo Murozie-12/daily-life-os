@@ -1,13 +1,271 @@
-const DAYS=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];const $=id=>document.getElementById(id);const KEY='daily-life-os-v1';let db={tasks:[],checks:{}};let selected=DAYS[new Date().getDay()],deferredPrompt=null,cloud=null,uid=null,saveTimer;
-function dateKey(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}
-function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function save(){localStorage.setItem(KEY,JSON.stringify(db));if(cloud&&uid){clearTimeout(saveTimer);saveTimer=setTimeout(async()=>{try{await cloud.setDoc(cloud.doc(cloud.firestore,'users',uid),{data:db,updatedAt:cloud.serverTimestamp()},{merge:true});$('cloudStatus').textContent='Tersinkron ke Firebase'}catch(e){$('cloudStatus').textContent='Sinkron gagal: '+e.message}},800)}}
-function active(){return db.tasks.filter(x=>x.day===selected).sort((a,b)=>a.start.localeCompare(b.start))}
-function render(){const key=dateKey();$('dateLabel').textContent=new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'});$('daylabel').textContent=selected;$('days').innerHTML=DAYS.map(d=>`<button class="btn small ${selected===d?'active':''}" data-day="${d}">${d.slice(0,3)}</button>`).join('');const all=active(),done=all.filter(t=>db.checks[key+'|'+t.id]).length,pct=all.length?Math.round(done/all.length*100):0;$('total').textContent=all.length;$('complete').textContent=done;$('percent').textContent=pct+'%';$('progress').style.width=pct+'%';const categories=[...new Set(db.tasks.map(x=>x.category))].sort(),f=$('filter').value;$('filter').innerHTML='<option value="">Semua kategori</option>'+categories.map(c=>`<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');$('filter').value=categories.includes(f)?f:'';const q=$('search').value.toLowerCase();const visible=all.filter(t=>(!$('filter').value||t.category===$('filter').value)&&(!q||(t.title+' '+t.notes).toLowerCase().includes(q)));$('tasks').innerHTML=visible.length?visible.map(t=>`<div class="task ${db.checks[key+'|'+t.id]?'done':''}"><input aria-label="Tandai selesai" type="checkbox" data-check="${escapeHtml(t.id)}" ${db.checks[key+'|'+t.id]?'checked':''}><div class="time">${escapeHtml(t.start)}–${escapeHtml(t.end)}</div><div class="body"><div class="title">${escapeHtml(t.title)}</div><span class="tag">${escapeHtml(t.category)}</span>${t.notes?`<div class="note">${escapeHtml(t.notes)}</div>`:''}</div><div class="actions"><button class="btn small" data-edit="${escapeHtml(t.id)}" aria-label="Edit kegiatan">✎</button><button class="btn small" data-delete="${escapeHtml(t.id)}" aria-label="Hapus kegiatan">×</button></div></div>`).join(''):'<p class="muted">Belum ada kegiatan yang cocok.</p>'}
-$('days').onclick=e=>{const b=e.target.closest('[data-day]');if(b){selected=b.dataset.day;render()}};$('tasks').onchange=e=>{if(e.target.dataset.check){db.checks[dateKey()+'|'+e.target.dataset.check]=e.target.checked;save();render()}};$('tasks').onclick=e=>{const edit=e.target.closest('[data-edit]'),del=e.target.closest('[data-delete]');if(edit)openEditor(db.tasks.find(x=>x.id===edit.dataset.edit));if(del&&confirm('Hapus kegiatan ini dari jadwal mingguan?')){db.tasks=db.tasks.filter(x=>x.id!==del.dataset.delete);save();render()}};$('search').oninput=render;$('filter').onchange=render;
-function openEditor(t){$('editForm').reset();$('formTitle').textContent=t?'Edit kegiatan':'Tambah kegiatan';$('taskId').value=t?.id||'';$('taskDay').value=t?.day||selected;$('taskStart').value=t?.start?.replace('.',':')||'08:00';$('taskEnd').value=t?.end?.replace('.',':')||'09:00';$('taskTitle').value=t?.title||'';$('taskCategory').value=t?.category||'Pribadi';$('taskNotes').value=t?.notes||'';$('editor').showModal()}
-$('new').onclick=()=>openEditor();$('cancel').onclick=()=>$('editor').close();$('editForm').onsubmit=e=>{e.preventDefault();const id=$('taskId').value||'custom-'+crypto.randomUUID();const task={id,day:$('taskDay').value,start:$('taskStart').value.replace(':','.'),end:$('taskEnd').value.replace(':','.'),title:$('taskTitle').value.trim(),category:$('taskCategory').value.trim(),notes:$('taskNotes').value.trim()};if(task.end<=task.start){alert('Jam selesai harus setelah jam mulai.');return}const i=db.tasks.findIndex(x=>x.id===id);if(i>=0)db.tasks[i]=task;else db.tasks.push(task);selected=task.day;save();$('editor').close();render()};
-$('export').onclick=()=>{const a=document.createElement('a');const u=URL.createObjectURL(new Blob([JSON.stringify(db,null,2)],{type:'application/json'}));a.href=u;a.download='daily-life-os-backup-'+dateKey()+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)};$('import').onclick=()=>$('file').click();$('file').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const x=JSON.parse(await f.text());if(!Array.isArray(x.tasks)||!x.checks||typeof x.checks!=='object'||x.tasks.some(t=>!t.id||!DAYS.includes(t.day)||!t.title))throw Error('Format cadangan tidak valid');if(confirm('Ganti seluruh jadwal dan progres dengan cadangan ini?')){db={tasks:x.tasks,checks:x.checks};save();render()}}catch(err){alert(err.message)}e.target.value=''};$('resetDay').onclick=()=>{if(!confirm('Hapus checklist tanggal hari ini?'))return;const prefix=dateKey()+'|';Object.keys(db.checks).forEach(k=>{if(k.startsWith(prefix))delete db.checks[k]});save();render()};
-window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;$('install').classList.remove('hidden')});$('install').onclick=async()=>{if(deferredPrompt){deferredPrompt.prompt();await deferredPrompt.userChoice;deferredPrompt=null;$('install').classList.add('hidden')}};window.addEventListener('appinstalled',()=>$('install').classList.add('hidden'));if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});
-async function setupFirebase(){const cfg=window.FIREBASE_CONFIG;if(!cfg||!cfg.apiKey||!cfg.projectId)return;try{const appMod=await import('https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js'),authMod=await import('https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js'),dbMod=await import('https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js');const app=appMod.initializeApp(cfg),auth=authMod.getAuth(app),firestore=dbMod.getFirestore(app);cloud={...dbMod,firestore};$('login').classList.remove('hidden');$('cloudStatus').textContent='Firebase siap — login untuk sinkron';$('login').onclick=()=>authMod.signInWithPopup(auth,new authMod.GoogleAuthProvider()).catch(e=>alert('Login gagal: '+e.message));$('logout').onclick=()=>authMod.signOut(auth);authMod.onAuthStateChanged(auth,async user=>{uid=user?.uid||null;$('login').classList.toggle('hidden',!!user);$('logout').classList.toggle('hidden',!user);if(!user){$('cloudStatus').textContent='Belum login — data lokal';return}try{const ref=dbMod.doc(firestore,'users',uid),snap=await dbMod.getDoc(ref);if(snap.exists()&&snap.data().data?.tasks){if(confirm('Gunakan jadwal tersimpan dari Firebase? Pilih Batal untuk mengunggah jadwal lokal ke cloud.'))db=snap.data().data;else await dbMod.setDoc(ref,{data:db,updatedAt:dbMod.serverTimestamp()});}else await dbMod.setDoc(ref,{data:db,updatedAt:dbMod.serverTimestamp()});localStorage.setItem(KEY,JSON.stringify(db));$('cloudStatus').textContent='Login: '+(user.email||'akun Google');render()}catch(e){$('cloudStatus').textContent='Firebase error: '+e.message}})}catch(e){$('cloudStatus').textContent='Firebase tidak tersedia (offline / konfigurasi): '+e.message}}
-(async()=>{DAYS.forEach(d=>{$('taskDay').insertAdjacentHTML('beforeend',`<option value="${d}">${d}</option>`)});try{const saved=localStorage.getItem(KEY);if(saved){db=JSON.parse(saved)}else{const r=await fetch('./schedule.json');db={tasks:await r.json(),checks:{}};save()}}catch(e){db={tasks:[],checks:{}};$('cloudStatus').textContent='Jadwal awal gagal dimuat: '+e.message}render();setupFirebase()})();
+const DAYS = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+const $ = id => document.getElementById(id);
+const KEY = 'daily-life-os-v1';
+let db = { tasks: [], checks: {} };
+let selected = DAYS[new Date().getDay()], deferredPrompt = null, cloud = null, uid = null, saveTimer;
+
+function dateKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+function escapeHtml(s) {
+  return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+// Fitur Baru: Membersihkan riwayat ceklis yang usianya lebih dari 7 hari agar Firebase tidak penuh
+function cleanupOldChecks() {
+  const today = new Date();
+  Object.keys(db.checks).forEach(key => {
+    const datePart = key.split('|')[0];
+    const checkDate = new Date(datePart);
+    const diffDays = (today - checkDate) / (1000 * 60 * 60 * 24);
+    if (diffDays > 7) {
+      delete db.checks[key];
+    }
+  });
+}
+
+function save() {
+  cleanupOldChecks(); // Panggil fungsi pembersihan otomatis
+  localStorage.setItem(KEY, JSON.stringify(db));
+  if (cloud && uid) {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(async () => {
+      try {
+        await cloud.setDoc(cloud.doc(cloud.firestore, 'users', uid), { data: db, updatedAt: cloud.serverTimestamp() }, { merge: true });
+        $('cloudStatus').textContent = 'Tersinkron ke Firebase';
+      } catch (e) {
+        $('cloudStatus').textContent = 'Sinkron gagal: ' + e.message;
+      }
+    }, 800);
+  }
+}
+
+function active() {
+  return db.tasks.filter(x => x.day === selected).sort((a, b) => a.start.localeCompare(b.start));
+}
+
+function render() {
+  const key = dateKey();
+  $('dateLabel').textContent = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+  $('daylabel').textContent = selected;
+  $('days').innerHTML = DAYS.map(d => `<button class="btn small ${selected === d ? 'active' : ''}" data-day="${d}">${d.slice(0, 3)}</button>`).join('');
+
+  const all = active(), done = all.filter(t => db.checks[key + '|' + t.id]).length, pct = all.length ? Math.round(done / all.length * 100) : 0;
+  $('total').textContent = all.length;
+  $('complete').textContent = done;
+  $('percent').textContent = pct + '%';
+  $('progress').style.width = pct + '%';
+
+  const categories = [...new Set(db.tasks.map(x => x.category))].sort(), f = $('filter').value;
+  $('filter').innerHTML = '<option value="">Semua kategori</option>' + categories.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+  $('filter').value = categories.includes(f) ? f : '';
+
+  const q = $('search').value.toLowerCase();
+  const visible = all.filter(t => (!$('filter').value || t.category === $('filter').value) && (!q || (t.title + ' ' + t.notes).toLowerCase().includes(q)));
+
+  $('tasks').innerHTML = visible.length ? visible.map(t => `
+    <div class="task ${db.checks[key + '|' + t.id] ? 'done' : ''}">
+      <input aria-label="Tandai selesai" type="checkbox" data-check="${escapeHtml(t.id)}" ${db.checks[key + '|' + t.id] ? 'checked' : ''}>
+      <div class="time">${escapeHtml(t.start)}–${escapeHtml(t.end)}</div>
+      <div class="body">
+        <div class="title">${escapeHtml(t.title)}</div>
+        <span class="tag">${escapeHtml(t.category)}</span>
+        ${t.notes ? `<div class="note">${escapeHtml(t.notes)}</div>` : ''}
+      </div>
+      <div class="actions">
+        <button class="btn small" data-edit="${escapeHtml(t.id)}" aria-label="Edit kegiatan">✎</button>
+        <button class="btn small" data-delete="${escapeHtml(t.id)}" aria-label="Hapus kegiatan">×</button>
+      </div>
+    </div>
+  `).join('') : '<p class="muted">Belum ada kegiatan yang cocok.</p>';
+}
+
+$('days').onclick = e => { const b = e.target.closest('[data-day]'); if (b) { selected = b.dataset.day; render(); } };
+$('tasks').onchange = e => { if (e.target.dataset.check) { db.checks[dateKey() + '|' + e.target.dataset.check] = e.target.checked; save(); render(); } };
+$('tasks').onclick = e => {
+  const edit = e.target.closest('[data-edit]'), del = e.target.closest('[data-delete]');
+  if (edit) openEditor(db.tasks.find(x => x.id === edit.dataset.edit));
+  if (del && confirm('Hapus kegiatan ini dari jadwal mingguan?')) {
+    db.tasks = db.tasks.filter(x => x.id !== del.dataset.delete); save(); render();
+  }
+};
+$('search').oninput = render;
+$('filter').onchange = render;
+
+function openEditor(t) {
+  $('editForm').reset();
+  $('formTitle').textContent = t ? 'Edit kegiatan' : 'Tambah kegiatan';
+  $('taskId').value = t?.id || '';
+  $('taskDay').value = t?.day || selected;
+  $('taskStart').value = t?.start?.replace('.', ':') || '08:00';
+  $('taskEnd').value = t?.end?.replace('.', ':') || '09:00';
+  $('taskTitle').value = t?.title || '';
+  $('taskCategory').value = t?.category || 'Pribadi';
+  $('taskNotes').value = t?.notes || '';
+  $('editor').showModal();
+}
+
+$('new').onclick = () => openEditor();
+$('cancel').onclick = () => $('editor').close();
+
+$('editForm').onsubmit = e => {
+  e.preventDefault();
+  const id = $('taskId').value || 'custom-' + crypto.randomUUID();
+  const task = {
+    id,
+    day: $('taskDay').value,
+    start: $('taskStart').value.replace(':', '.'),
+    end: $('taskEnd').value.replace(':', '.'),
+    title: $('taskTitle').value.trim(),
+    category: $('taskCategory').value.trim(),
+    notes: $('taskNotes').value.trim()
+  };
+  if (task.end <= task.start) { alert('Jam selesai harus setelah jam mulai.'); return; }
+  const i = db.tasks.findIndex(x => x.id === id);
+  if (i >= 0) db.tasks[i] = task;
+  else db.tasks.push(task);
+  selected = task.day;
+  save();
+  $('editor').close();
+  render();
+};
+
+$('export').onclick = () => {
+  const a = document.createElement('a');
+  const u = URL.createObjectURL(new Blob([JSON.stringify(db, null, 2)], { type: 'application/json' }));
+  a.href = u;
+  a.download = 'daily-life-os-backup-' + dateKey() + '.json';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(u), 1000);
+};
+
+$('import').onclick = () => $('file').click();
+$('file').onchange = async e => {
+  const f = e.target.files[0];
+  if (!f) return;
+  try {
+    const x = JSON.parse(await f.text());
+    if (!Array.isArray(x.tasks) || !x.checks || typeof x.checks !== 'object' || x.tasks.some(t => !t.id || !DAYS.includes(t.day) || !t.title)) throw Error('Format cadangan tidak valid');
+    if (confirm('Ganti seluruh jadwal dan progres dengan cadangan ini?')) {
+      db = { tasks: x.tasks, checks: x.checks };
+      save();
+      render();
+    }
+  } catch (err) { alert(err.message) }
+  e.target.value = '';
+};
+
+$('resetDay').onclick = () => {
+  if (!confirm('Hapus checklist tanggal hari ini?')) return;
+  const prefix = dateKey() + '|';
+  Object.keys(db.checks).forEach(k => { if (k.startsWith(prefix)) delete db.checks[k] });
+  save();
+  render();
+};
+
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredPrompt = e; $('install').classList.remove('hidden') });
+$('install').onclick = async () => { if (deferredPrompt) { deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null; $('install').classList.add('hidden') } };
+window.addEventListener('appinstalled', () => $('install').classList.add('hidden'));
+
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => { });
+
+async function setupFirebase() {
+  const cfg = window.FIREBASE_CONFIG;
+  if (!cfg || !cfg.apiKey || !cfg.projectId) return;
+  try {
+    const appMod = await import('https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js'),
+          authMod = await import('https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js'),
+          dbMod = await import('https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js');
+    const app = appMod.initializeApp(cfg),
+          auth = authMod.getAuth(app),
+          firestore = dbMod.getFirestore(app);
+
+    cloud = { ...dbMod, firestore };
+    $('login').classList.remove('hidden');
+    $('cloudStatus').textContent = 'Firebase siap — login untuk sinkron';
+    
+    $('login').onclick = () => authMod.signInWithPopup(auth, new authMod.GoogleAuthProvider()).catch(e => alert('Login gagal: ' + e.message));
+    $('logout').onclick = () => authMod.signOut(auth);
+
+    authMod.onAuthStateChanged(auth, async user => {
+      uid = user?.uid || null;
+      $('login').classList.toggle('hidden', !!user);
+      $('logout').classList.toggle('hidden', !user);
+      if (!user) { $('cloudStatus').textContent = 'Belum login — data lokal'; return }
+      try {
+        const ref = dbMod.doc(firestore, 'users', uid), snap = await dbMod.getDoc(ref);
+        if (snap.exists() && snap.data().data?.tasks) {
+          if (confirm('Gunakan jadwal tersimpan dari Firebase? Pilih Batal untuk mengunggah jadwal lokal ke cloud.')) {
+            db = snap.data().data;
+          } else {
+            await dbMod.setDoc(ref, { data: db, updatedAt: dbMod.serverTimestamp() });
+          }
+        } else {
+          await dbMod.setDoc(ref, { data: db, updatedAt: dbMod.serverTimestamp() });
+        }
+        localStorage.setItem(KEY, JSON.stringify(db));
+        $('cloudStatus').textContent = 'Login: ' + (user.email || 'akun Google');
+        render();
+      } catch (e) { $('cloudStatus').textContent = 'Firebase error: ' + e.message }
+    });
+  } catch (e) {
+    $('cloudStatus').textContent = 'Firebase tidak tersedia (offline / konfigurasi): ' + e.message;
+  }
+}
+
+(async () => {
+  // Opsi hari (Senin-Minggu) kini langsung ada di index.html, baris ini dinonaktifkan
+  // DAYS.forEach(d=>{$('taskDay').insertAdjacentHTML('beforeend',`<option value="${d}">${d}</option>`)});
+  try {
+    const saved = localStorage.getItem(KEY);
+    if (saved) {
+      db = JSON.parse(saved);
+    } else {
+      const r = await fetch('./schedule.json');
+      db = { tasks: await r.json(), checks: {} };
+      save();
+    }
+  } catch (e) {
+    db = { tasks: [], checks: {} };
+    $('cloudStatus').textContent = 'Jadwal awal gagal dimuat: ' + e.message;
+  }
+  render();
+  setupFirebase();
+})();
+
+// Fitur Baru: Auto-Alarm Notifikasi & Getar
+if (Notification.permission === 'default') {
+  Notification.requestPermission();
+}
+
+let lastNotified = "";
+setInterval(() => {
+  const now = new Date();
+  const currentDay = DAYS[now.getDay()];
+  
+  // Memformat jam agar sesuai dengan format di schedule.json (misal: "08.00")
+  const currentTime = String(now.getHours()).padStart(2, '0') + '.' + String(now.getMinutes()).padStart(2, '0');
+  
+  // Cari tugas yang hari dan waktunya pas dengan sekarang
+  const currentTask = db.tasks.find(t => t.day === currentDay && t.start === currentTime);
+  
+  if (currentTask && lastNotified !== currentTask.id) {
+    lastNotified = currentTask.id; // Hindari notifikasi ganda di menit yang sama
+    
+    // Munculkan notifikasi sistem
+    if (Notification.permission === 'granted') {
+      new Notification("Waktunya Kegiatan Baru!", {
+        body: `${currentTask.title}\nJam: ${currentTask.start} - ${currentTask.end}`,
+        icon: "./icon-192.png" 
+      });
+    }
+    
+    // Efek getar di HP (Getar-Jeda-Getar)
+    if (navigator.vibrate) {
+      navigator.vibrate([200, 100, 200]);
+    }
+  }
+}, 60000); // interval 60.000 ms (1 menit)
+  
