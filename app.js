@@ -4,6 +4,9 @@ const KEY = 'daily-life-os-v1';
 let db = { tasks: [], checks: {} };
 let selected = DAYS[new Date().getDay()], deferredPrompt = null, cloud = null, uid = null, saveTimer;
 
+// Pengecekan notifikasi yang aman di semua browser
+const canNotify = 'Notification' in window;
+
 function dateKey() {
   const d = new Date();
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -13,7 +16,7 @@ function escapeHtml(s) {
   return String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 
-// Fitur Baru: Membersihkan riwayat ceklis yang usianya lebih dari 7 hari agar Firebase tidak penuh
+// Membersihkan riwayat ceklis yang usianya lebih dari 7 hari agar Firebase tidak penuh
 function cleanupOldChecks() {
   const today = new Date();
   Object.keys(db.checks).forEach(key => {
@@ -27,7 +30,7 @@ function cleanupOldChecks() {
 }
 
 function save() {
-  cleanupOldChecks(); // Panggil fungsi pembersihan otomatis
+  cleanupOldChecks();
   localStorage.setItem(KEY, JSON.stringify(db));
   if (cloud && uid) {
     clearTimeout(saveTimer);
@@ -80,6 +83,9 @@ function render() {
       </div>
     </div>
   `).join('') : '<p class="muted">Belum ada kegiatan yang cocok.</p>';
+
+  // Animasi item hanya dijalankan pada render pertama, supaya tidak berkedip setiap centang
+  $('tasks').classList.add('ready');
 }
 
 $('days').onclick = e => { const b = e.target.closest('[data-day]'); if (b) { selected = b.dataset.day; render(); } };
@@ -185,7 +191,7 @@ async function setupFirebase() {
     cloud = { ...dbMod, firestore };
     $('login').classList.remove('hidden');
     $('cloudStatus').textContent = 'Firebase siap — login untuk sinkron';
-    
+
     $('login').onclick = () => authMod.signInWithPopup(auth, new authMod.GoogleAuthProvider()).catch(e => alert('Login gagal: ' + e.message));
     $('logout').onclick = () => authMod.signOut(auth);
 
@@ -216,8 +222,6 @@ async function setupFirebase() {
 }
 
 (async () => {
-  // Opsi hari (Senin-Minggu) kini langsung ada di index.html, baris ini dinonaktifkan
-  // DAYS.forEach(d=>{$('taskDay').insertAdjacentHTML('beforeend',`<option value="${d}">${d}</option>`)});
   try {
     const saved = localStorage.getItem(KEY);
     if (saved) {
@@ -235,37 +239,54 @@ async function setupFirebase() {
   setupFirebase();
 })();
 
-// Fitur Baru: Auto-Alarm Notifikasi & Getar
-if (Notification.permission === 'default') {
-  Notification.requestPermission();
+/* ---------- Pengingat ---------- */
+
+// Tombol "Aktifkan pengingat" hanya muncul jika browser mendukung notifikasi dan izin belum diberikan
+function setupNotifButton() {
+  const btn = $('enableNotif');
+  if (!btn || !canNotify || Notification.permission !== 'default') return;
+  btn.classList.remove('hidden');
+  btn.onclick = async () => {
+    try {
+      const result = await Notification.requestPermission();
+      if (result === 'granted') btn.classList.add('hidden');
+    } catch (e) { /* sebagian browser lama tidak mendukung versi promise */ }
+  };
+}
+setupNotifButton();
+
+// Notifikasi lewat service worker lebih andal di Android dan saat aplikasi terpasang.
+// Jika tidak tersedia, dicoba dengan Notification biasa.
+async function showReminder(title, body) {
+  if (!canNotify || Notification.permission !== 'granted') return;
+  const options = { body, icon: './icon-192.png', tag: 'daily-life-os-reminder' };
+  try {
+    if ('serviceWorker' in navigator) {
+      const reg = await navigator.serviceWorker.ready;
+      if (reg && reg.showNotification) { await reg.showNotification(title, options); return; }
+    }
+  } catch (e) { /* lanjut ke fallback */ }
+  try { new Notification(title, options); } catch (e) { /* browser tidak mendukung konstruktor ini */ }
 }
 
-let lastNotified = "";
+let lastNotified = '';
 setInterval(() => {
   const now = new Date();
   const currentDay = DAYS[now.getDay()];
-  
-  // Memformat jam agar sesuai dengan format di schedule.json (misal: "08.00")
+
+  // Format jam sesuai schedule.json (misal "08.00")
   const currentTime = String(now.getHours()).padStart(2, '0') + '.' + String(now.getMinutes()).padStart(2, '0');
-  
-  // Cari tugas yang hari dan waktunya pas dengan sekarang
+
   const currentTask = db.tasks.find(t => t.day === currentDay && t.start === currentTime);
-  
+
   if (currentTask && lastNotified !== currentTask.id) {
-    lastNotified = currentTask.id; // Hindari notifikasi ganda di menit yang sama
-    
-    // Munculkan notifikasi sistem
-    if (Notification.permission === 'granted') {
-      new Notification("Waktunya Kegiatan Baru!", {
-        body: `${currentTask.title}\nJam: ${currentTask.start} - ${currentTask.end}`,
-        icon: "./icon-192.png" 
-      });
-    }
-    
-    // Efek getar di HP (Getar-Jeda-Getar)
+    lastNotified = currentTask.id; // hindari notifikasi ganda di menit yang sama
+
+    showReminder('Waktunya Kegiatan Baru!', `${currentTask.title}\nJam: ${currentTask.start} - ${currentTask.end}`);
+
     if (navigator.vibrate) {
       navigator.vibrate([200, 100, 200]);
     }
   }
-}, 60000); // interval 60.000 ms (1 menit)
-  
+}, 60000);
+                                                            
