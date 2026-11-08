@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<!-- Confetti Library (Gratis dari CDN) -->
+<!-- Confetti Library (Gratis) -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <title>Daily Life OS</title>
 <style>
@@ -26,11 +26,10 @@
   --line: #E7E2D6;
   --done: #2E9E75;
   
-  /* Color Coding Kategori */
-  --cat-kuliah: #3B82F6; /* Biru */
-  --cat-toko: #F59E0B;   /* Emas/Oranye */
-  --cat-ibadah: #10B981; /* Hijau Emerald */
-  --cat-kitab: #8B5CF6;  /* Ungu Lavender */
+  --cat-kuliah: #3B82F6; 
+  --cat-toko: #F59E0B;   
+  --cat-ibadah: #10B981; 
+  --cat-kitab: #8B5CF6;  
   
   --radius-lg: 24px;
   --radius: 16px;
@@ -97,24 +96,11 @@ small{font-size:13px; font-weight: 600;}
 }
 .greet > *{position:relative}
 .ar{font-family:"Amiri",serif;direction:rtl;line-height:1.7;margin:0}
-
-/* Sholawat di Puncak */
-.sholawat-top {
-  font-size: 24px; color: var(--gold); margin-bottom: 16px;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
+.sholawat-top { font-size: 24px; color: var(--gold); margin-bottom: 16px; text-shadow: 0 2px 4px rgba(0,0,0,0.2); }
 .greet .ar-main{font-size:32px;color:#fff; font-weight:bold;}
 .greet .tr{font-size:14px;color:rgba(255,255,255,.9);margin:0}
 .greet .sapaan{font-size:20px;font-weight:800;margin:12px 0 4px}
 
-/* Hijriah & Masehi */
-.date-pill {
-  display: inline-block; background: rgba(255,255,255,0.15);
-  backdrop-filter: blur(8px); padding: 6px 14px; border-radius: 999px;
-  font-size: 13px; font-weight: 600; margin-top: 10px; border: 1px solid rgba(255,255,255,0.2);
-}
-
-/* Glassmorphism Afirmasi */
 .motivation-box {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
@@ -129,10 +115,7 @@ small{font-size:13px; font-weight: 600;}
   text-align: left;
   box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 }
-.motivation-box::before {
-  content: "❝"; font-size: 24px; color: var(--gold); 
-  display: block; margin-bottom: -10px; opacity: 0.8;
-}
+.motivation-box::before { content: "❝"; font-size: 24px; color: var(--gold); display: block; margin-bottom: -10px; opacity: 0.8; }
 
 /* ---------- Panels ---------- */
 .panel{
@@ -165,6 +148,13 @@ small{font-size:13px; font-weight: 600;}
 }
 .days .active{background:var(--green);border-color:var(--green);color:#fff; box-shadow: 0 4px 12px rgba(15,122,90,0.2);}
 
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0}
+.toolbar input,.toolbar select,form input,form select,form textarea{
+  background:var(--bg);border:1px solid var(--line);color:var(--ink);
+  border-radius:12px;padding:11px 13px;min-width:0;font-size:15px; width:100%;
+}
+.toolbar input{flex:1;min-width:150px}
+
 .btn{
   border:1px solid var(--line);background:var(--card);color:var(--ink);
   border-radius:14px;padding:12px 18px;font-weight:700;font-size:14px;
@@ -174,14 +164,15 @@ small{font-size:13px; font-weight: 600;}
 .btn:active{transform:scale(.97)}
 .btn.primary{background:var(--green);border-color:var(--green);color:#fff;}
 .btn.primary:hover{background:var(--green-deep);}
+.btn.small{padding:8px 12px;font-size:13px}
 .btn.focus-btn {background: var(--bg); color: var(--green); border-color: var(--green); padding: 6px 12px; font-size: 12px; border-radius: 8px;}
 
-/* ---------- Task List & Micro-interactions ---------- */
+/* ---------- Task List ---------- */
 #tasks{margin-top:8px;}
 .task{
   display:flex;align-items:flex-start;gap:16px;
   border-bottom:1px solid var(--line);padding:20px 0;
-  animation: slideUp 0.4s ease forwards; opacity: 0;
+  animation: slideUp 0.4s ease forwards;
 }
 .task:last-child { border-bottom: none; }
 @keyframes slideUp { from {opacity: 0; transform: translateY(15px);} to {opacity: 1; transform: translateY(0);} }
@@ -210,7 +201,7 @@ small{font-size:13px; font-weight: 600;}
 .task .body{flex:1;min-width:0}
 
 /* Animated Strikethrough */
-.task .title{font-weight:700;color:var(--ink); font-size: 16px; display: inline-block; position: relative;}
+.task .title{font-weight:700;color:var(--ink); font-size: 16px; display: inline-block; position: relative; word-wrap:break-word;}
 .task.done .title { color: var(--muted); }
 .task.done .title::after {
   content: ""; position: absolute; left: 0; top: 50%;
@@ -218,20 +209,20 @@ small{font-size:13px; font-weight: 600;}
   animation: strike 0.3s ease-out forwards;
 }
 @keyframes strike { 0% { width: 0; } 100% { width: 100%; } }
-
 .task.done .time {color: var(--muted);}
 
-/* Colorful Tags */
 .tag{
   font-size:12px;font-weight:800; color: #fff;
   border-radius:999px;padding:4px 12px;
   display:inline-block;margin-top:8px; text-transform: uppercase; letter-spacing: 0.05em;
+  background: var(--muted); /* Fallback warna kategori */
 }
-.tag-kuliah { background: var(--cat-kuliah); }
-.tag-toko { background: var(--cat-toko); }
-.tag-ibadah { background: var(--cat-ibadah); }
-.tag-mutholaah { background: var(--cat-kitab); }
-.tag-default { background: var(--muted); }
+.note{font-size:13px;color:var(--muted);margin-top:6px}
+.actions{display:flex;gap:6px; margin-top: 8px;}
+
+/* Empty state */
+.empty{text-align:center;padding:28px 12px;color:var(--muted)}
+.empty b{display:block;color:var(--ink);font-size:16px;margin-bottom:4px}
 
 /* ---------- Floating Action Button (FAB) ---------- */
 .fab-container { position: fixed; bottom: 30px; right: 30px; z-index: 100; display: flex; flex-direction: column; gap: 12px; }
@@ -255,6 +246,8 @@ dialog{
 dialog::backdrop{background:rgba(0,0,0,.5); backdrop-filter: blur(4px);}
 .dialog-header {display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;}
 .dialog-header h2 {margin: 0; font-size: 20px;}
+form{display:grid;gap:12px}
+form label{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--muted)}
 
 /* Quick Pad List */
 #quickOrderList { list-style: none; padding: 0; margin: 16px 0; max-height: 250px; overflow-y: auto; }
@@ -268,10 +261,8 @@ dialog::backdrop{background:rgba(0,0,0,.5); backdrop-filter: blur(4px);}
 /* Focus Timer */
 .timer-display { font-size: 64px; font-weight: 800; color: var(--green); text-align: center; font-variant-numeric: tabular-nums; margin: 20px 0; }
 
-form input,form select{
-  background:var(--bg);border:1px solid var(--line);color:var(--ink);
-  border-radius:12px;padding:14px;font-size:15px; width: 100%; margin-bottom: 14px;
-}
+#cloudStatus{font-size:14px;font-weight:600}
+.footer{color:var(--muted);font-size:13px;margin:28px 0 0;line-height:1.7;text-align:center}
 
 @media (max-width:550px){
   .wrap{padding:16px 14px 100px}
@@ -281,6 +272,7 @@ form input,form select{
   .stats{gap:8px}
   .stat b{font-size:24px}
   .fab-container { bottom: 20px; right: 20px; }
+  .actions{flex-direction:column}
 }
 </style>
 </head>
@@ -292,68 +284,77 @@ form input,form select{
       <p class="kicker">Daily Life OS</p>
       <h1>Agenda Asisten</h1>
     </div>
-    <!-- Penanggalan Dinamis -->
     <div style="text-align: right;">
       <div id="masehiDate" style="font-weight: 800; font-size: 15px;">Memuat...</div>
       <div id="hijriDate" class="muted" style="font-size: 13px; font-weight: 600;">Memuat...</div>
     </div>
   </header>
 
-  <!-- Kartu Penyambut Premium -->
   <section class="greet" aria-label="Sapaan">
-    <!-- Sholawat di posisi paling atas -->
     <div class="sholawat-top">
       <p class="ar">اللَّهُمَّ صَلِّ عَلَى سَيِّدِنَا مُحَمَّدٍ</p>
     </div>
-    
     <p class="ar ar-main" lang="ar">السَّلامُ عَلَيْكُمْ</p>
     <p class="tr">Assalamu'alaikum Warahmatullahi Wabarakatuh</p>
-    <p class="sapaan" id="greeting">Selamat beraktivitas, Rofi!</p>
+    <p class="sapaan" id="greeting">Selamat beraktivitas, Kak Rofi fauzi!</p>
     
-    <!-- Kotak Afirmasi Glassmorphism -->
     <div class="motivation-box" id="dailyQuote">
       Memuat kutipan hari ini...
     </div>
   </section>
 
-  <!-- Panel Progres & Statistik -->
   <section class="panel">
     <div class="row">
-      <h2>Statistik Hari Ini</h2>
+      <h2>Progres <span id="daylabel">hari ini</span></h2>
+      <span id="dateLabel" class="muted"></span>
     </div>
     <div class="stats">
-      <div class="stat"><b id="total">0</b><small>Target</small></div>
+      <div class="stat"><b id="total">0</b><small>Agenda</small></div>
       <div class="stat"><b id="complete">0</b><small>Selesai</small></div>
-      <div class="stat"><b id="percent">0%</b><small>Fokus</small></div>
+      <div class="stat"><b id="percent">0%</b><small>Progres</small></div>
     </div>
-    <div class="bar" role="progressbar"><div id="progress"></div></div>
+    <div class="bar" role="progressbar" aria-label="Progres harian"><div id="progress"></div></div>
   </section>
 
-  <!-- Panel Daftar Tugas Utama -->
   <section class="panel">
     <div class="row">
-      <h2>Jadwal Terjadwal</h2>
+      <h2>Daftar Agenda</h2>
     </div>
-    <!-- Filter Hari Dummy (Visualisasi UI) -->
-    <nav class="days" id="days" aria-label="Pilih hari">
-      <button class="active">Hari ini</button>
-      <button>Besok</button>
-      <button>Lusa</button>
-    </nav>
+    <nav class="days" id="days" aria-label="Pilih hari"></nav>
+    <div class="toolbar">
+      <input id="search" type="search" placeholder="Cari kegiatan..." aria-label="Cari kegiatan">
+      <select id="filter" aria-label="Filter kategori"><option value="">Semua kategori</option></select>
+    </div>
     
-    <!-- Daftar Tugas Dinamis -->
-    <div id="tasks">
-      <!-- Tugas akan disuntikkan via JavaScript -->
+    <!-- Wadah ini akan diisi oleh logika app.js milikmu -->
+    <div id="tasks"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Catatan & Sinkronisasi Cloud</h2>
+    <div class="row" style="margin-top:14px">
+      <span id="cloudStatus" class="muted">Mode lokal / offline</span>
+      <div>
+        <button id="login" class="btn small hidden">Login Google</button>
+        <button id="logout" class="btn small hidden">Keluar</button>
+      </div>
+    </div>
+    <div class="toolbar">
+      <button id="export" class="btn small">Ekspor JSON</button>
+      <button id="import" class="btn small">Impor JSON</button>
+      <input type="file" id="file" accept="application/json" class="hidden">
+      <button id="resetDay" class="btn small">Reset ceklis hari ini</button>
     </div>
   </section>
+  
+  <p class="footer">Dibuat khusus untuk Kak Rofi fauzi — Daily Life OS</p>
 </main>
 
 <!-- Floating Action Buttons -->
 <div class="fab-container">
-  <!-- FAB Quick Order AlmidaStore -->
   <button class="fab" aria-label="Catatan Kilat Toko" onclick="document.getElementById('quickPad').showModal()">⚡</button>
-  <!-- FAB Tambah Tugas (Opsional jika ingin dipakai nanti) -->
-  <button class="fab fab-primary" aria-label="Tambah Jadwal" onclick="alert('Form tambah tugas disiapkan di sini.')">+</button>
+  <!-- Tombol ini sudah tersambung kembali ke app.js untuk memunculkan form tambah agenda -->
+  <button id="new" class="fab fab-primary" aria-label="Tambah Jadwal">+</button>
 </div>
 
 <!-- Modal Quick Pad AlmidaStore -->
@@ -362,135 +363,75 @@ form input,form select{
     <h2>Catatan Kilat AlmidaStore</h2>
     <button class="btn" onclick="document.getElementById('quickPad').close()">Tutup</button>
   </div>
-  <p class="muted" style="font-size: 13px; margin-bottom: 16px;">Catat pesanan pulsa/kuota masuk dengan cepat tanpa merusak jadwal utama. Data tersimpan di perangkat.</p>
+  <p class="muted" style="font-size: 13px; margin-bottom: 16px;">Catat pesanan pulsa/kuota masuk tanpa merusak jadwal utama. Data tersimpan di memori peramban.</p>
   
   <form id="formOrder" style="display: flex; gap: 8px;">
     <input type="text" id="orderInput" placeholder="Contoh: Axis 50rb - Kak Rina" required style="margin-bottom: 0;">
     <button type="submit" class="btn primary">Catat</button>
   </form>
-  
-  <ul id="quickOrderList">
-    <!-- List pesanan -->
-  </ul>
+  <ul id="quickOrderList"></ul>
 </dialog>
 
-<!-- Modal Fokus Pomodoro -->
-<dialog id="focusModal">
-  <div class="dialog-header">
-    <h2 id="focusTitle">Mutholaah / Belajar</h2>
-    <button class="btn" onclick="stopTimer()">Akhiri</button>
-  </div>
-  <p class="muted" style="text-align: center; font-size: 14px;">Jauhkan *smartphone*, fokus penuh pada kegiatan ini.</p>
-  <div class="timer-display" id="timerDisplay">25:00</div>
-  <div style="display: flex; justify-content: center; gap: 10px;">
-    <button class="btn primary" id="btnStartTimer" onclick="startTimer()">Mulai Fokus</button>
-  </div>
+<!-- Form Utama Tambah Agenda (Dikembalikan untuk app.js) -->
+<dialog id="editor">
+  <form id="editForm">
+    <div class="dialog-header">
+      <h2 id="formTitle">Tambah Kegiatan</h2>
+    </div>
+    <input type="hidden" id="taskId">
+    <label>Hari<select id="taskDay" required></select></label>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+      <label>Mulai<input type="time" id="taskStart" required></label>
+      <label>Selesai<input type="time" id="taskEnd" required></label>
+    </div>
+    <label>Nama Kegiatan<input id="taskTitle" maxlength="150" required></label>
+    <label>Kategori<input id="taskCategory" maxlength="40" required placeholder="Contoh: ibadah, mutholaah, toko"></label>
+    <label>Catatan<textarea id="taskNotes" rows="3" maxlength="1000"></textarea></label>
+    <div class="row">
+      <button type="button" class="btn" id="cancel">Batal</button>
+      <button type="submit" class="btn primary">Simpan Agenda</button>
+    </div>
+  </form>
 </dialog>
 
-<!-- SCRIPT LOGIKA UI & ASISTEN PRIBADI -->
 <script>
-  // 1. Asisten Penentu Sapaan & Penanggalan Dinamis
+  // 1. Asisten Sapaan
   const now = new Date();
   const h = now.getHours();
   let sapaan = h < 4 ? "Malam yang hening" : h < 11 ? "Pagi yang berkah" : h < 15 ? "Siang yang produktif" : h < 18 ? "Sore yang tenang" : "Malam yang damai";
-  document.getElementById("greeting").textContent = `${sapaan}, Rofi!`;
+  document.getElementById("greeting").textContent = `${sapaan}, Kak Rofi fauzi!`;
 
-  // Format Masehi
+  // 2. Format Tanggal Masehi & Penarikan Manual Bulan Hijriyah (Memperbaiki bug "Mei")
   const masehiOpts = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
   document.getElementById("masehiDate").textContent = new Intl.DateTimeFormat('id-ID', masehiOpts).format(now);
   
-  // Format Hijriah (Gratis, Bawaan Browser)
   try {
-    const hijriOpts = { day: 'numeric', month: 'long', year: 'numeric' };
-    const hijriDate = new Intl.DateTimeFormat('id-ID-u-ca-islamic', hijriOpts).format(now);
-    document.getElementById("hijriDate").textContent = `${hijriDate} H`;
+    const rawHijri = new Intl.DateTimeFormat('en-US-u-ca-islamic-umalqura', {day: 'numeric', month: 'numeric', year: 'numeric'}).format(now);
+    const parts = rawHijri.split('/');
+    if(parts.length >= 3) {
+      const hijriMonths = ["", "Muharram", "Shafar", "Rabiul Awal", "Rabiul Akhir", "Jumadil Awal", "Jumadil Akhir", "Rajab", "Sya'ban", "Ramadhan", "Syawal", "Dzulqa'dah", "Dzulhijjah"];
+      const monthIndex = parseInt(parts[0]);
+      const day = parseInt(parts[1]);
+      const year = parseInt(parts[2].split(' ')[0]);
+      document.getElementById("hijriDate").textContent = `${day} ${hijriMonths[monthIndex]} ${year} H`;
+    }
   } catch (e) {
-    document.getElementById("hijriDate").textContent = "Penanggalan Hijriah";
+    document.getElementById("hijriDate").textContent = "";
   }
 
-  // 2. Afirmasi / Kutipan Harian Acak
+  // 3. Afirmasi Harian
   const quotes = [
     "Barangsiapa bersungguh-sungguh, sesungguhnya kesungguhannya itu adalah untuk dirinya sendiri.",
     "Jangan menunda pekerjaan hari ini hingga esok hari, sebab esok memiliki urusannya sendiri.",
     "Sesudah kesulitan itu pasti ada kemudahan. Tetaplah melangkah walau perlahan.",
     "Ilmu itu seperti buruan, dan tulisan adalah ikatannya. Ikatlah ilmu dengan rajin mencatat.",
     "Sebaik-baik manusia adalah yang paling bermanfaat bagi manusia lainnya. Semangat berniaga dan berbagi!",
-    "Tugas yang menumpuk tidak akan selesai hanya dengan dipikirkan. Mulailah dari yang terkecil dengan Bismillah."
+    "Tugas yang menumpuk tidak akan selesai hanya dengan dipikirkan. Mulailah dengan Bismillah."
   ];
   document.getElementById("dailyQuote").textContent = quotes[Math.floor(Math.random() * quotes.length)];
 
-  // 3. Simulasi Data Tugas dengan Color Coding
-  // Untuk data sungguhan, bisa hubungkan kembali dengan localStorage/Firebase app.js mu.
-  const sampleTasks = [
-    { id: 1, title: "Mutholaah Kitab Ta'limul Muta'allim", time: "05:00 - 06:00", cat: "mutholaah", done: false },
-    { id: 2, title: "Rekap Stok & Balas Chat AlmidaStore", time: "08:00 - 09:00", cat: "toko", done: false },
-    { id: 3, title: "Kelas: Teori Belajar dan Psikologi (Zoom)", time: "10:00 - 11:30", cat: "kuliah", done: false },
-    { id: 4, title: "Persiapan Shalat Dzuhur & Istirahat", time: "11:50 - 12:30", cat: "ibadah", done: false }
-  ];
-
-  function getCatClass(cat) {
-    switch(cat) {
-      case 'kuliah': return 'tag-kuliah';
-      case 'toko': return 'tag-toko';
-      case 'ibadah': return 'tag-ibadah';
-      case 'mutholaah': return 'tag-mutholaah';
-      default: return 'tag-default';
-    }
-  }
-
-  function renderTasks() {
-    const container = document.getElementById("tasks");
-    container.innerHTML = "";
-    let completed = 0;
-
-    sampleTasks.forEach((task, index) => {
-      if (task.done) completed++;
-      const div = document.createElement("article");
-      div.className = `task ${task.done ? 'done' : ''}`;
-      div.style.animationDelay = `${index * 0.1}s`; // Staggered animation
-      
-      div.innerHTML = `
-        <input type="checkbox" ${task.done ? 'checked' : ''} onchange="toggleTask(${task.id})">
-        <div class="body">
-          <span class="title">${task.title}</span><br>
-          <span class="tag ${getCatClass(task.cat)}">${task.cat}</span>
-        </div>
-        <div style="display:flex; flex-direction:column; align-items:flex-end; gap:8px;">
-          <div class="time">${task.time}</div>
-          ${!task.done ? `<button class="btn focus-btn" onclick="openFocus('${task.title}')">Fokus 25m</button>` : ''}
-        </div>
-      `;
-      container.appendChild(div);
-    });
-
-    // Update Progress
-    const total = sampleTasks.length;
-    const pct = total === 0 ? 0 : Math.round((completed / total) * 100);
-    document.getElementById("total").textContent = total;
-    document.getElementById("complete").textContent = completed;
-    document.getElementById("percent").textContent = pct + "%";
-    document.getElementById("progress").style.width = pct + "%";
-
-    // Confetti jika 100%
-    if (pct === 100 && total > 0) {
-      setTimeout(() => {
-        confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#0F7A5A', '#E0A84E', '#3B82F6'] });
-      }, 500);
-    }
-  }
-
-  window.toggleTask = function(id) {
-    const task = sampleTasks.find(t => t.id === id);
-    if (task) task.done = !task.done;
-    renderTasks();
-  };
-
-  // Inisialisasi awal
-  renderTasks();
-
-  // 4. Logika Quick Pad AlmidaStore (LocalStorage)
+  // 4. Logika Quick Pad AlmidaStore
   let quickOrders = JSON.parse(localStorage.getItem('almida_quick_orders')) || [];
-  
   function renderOrders() {
     const ul = document.getElementById('quickOrderList');
     ul.innerHTML = "";
@@ -500,8 +441,7 @@ form input,form select{
       ul.appendChild(li);
     });
   }
-  
-    document.getElementById('formOrder').addEventListener('submit', (e) => {
+  document.getElementById('formOrder').addEventListener('submit', (e) => {
     e.preventDefault();
     const input = document.getElementById('orderInput');
     quickOrders.push(input.value);
@@ -509,50 +449,26 @@ form input,form select{
     input.value = "";
     renderOrders();
   });
-
   window.delOrder = function(idx) {
     quickOrders.splice(idx, 1);
     localStorage.setItem('almida_quick_orders', JSON.stringify(quickOrders));
     renderOrders();
   }
-  renderOrders(); // Muat pesanan saat web dibuka
+  renderOrders(); 
 
-  // 5. Logika Fokus Mode (Pomodoro Timer)
-  let timerInterval;
-  let timeLeft = 25 * 60; // 25 Menit
-
-  window.openFocus = function(title) {
-    document.getElementById('focusTitle').textContent = title;
-    document.getElementById('focusModal').showModal();
-    timeLeft = 25 * 60;
-    updateTimerDisplay();
-    document.getElementById('btnStartTimer').disabled = false;
-  }
-
-  window.startTimer = function() {
-    document.getElementById('btnStartTimer').disabled = true;
-    clearInterval(timerInterval);
-    timerInterval = setInterval(() => {
-      timeLeft--;
-      updateTimerDisplay();
-      if (timeLeft <= 0) {
-        clearInterval(timerInterval);
-        alert("Waktu fokus selesai! Alhamdulillah.");
-        document.getElementById('btnStartTimer').disabled = false;
+  // Pemicu Confetti saat persentase berubah ke 100% dari app.js
+  const observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      if (mutation.target.textContent.trim() === "100%") {
+        confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#0F7A5A', '#E0A84E', '#3B82F6'] });
       }
-    }, 1000);
-  }
-
-  window.stopTimer = function() {
-    clearInterval(timerInterval);
-    document.getElementById('focusModal').close();
-  }
-
-  function updateTimerDisplay() {
-    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
-    const s = (timeLeft % 60).toString().padStart(2, '0');
-    document.getElementById('timerDisplay').textContent = `${m}:${s}`;
-  }
+    });
+  });
+  observer.observe(document.getElementById('percent'), { characterData: true, childList: true, subtree: true });
 </script>
+
+<!-- Mengembalikan sambungan ke file aplikasimu (Wajib Ada) -->
+<script src="./firebase-config.js"></script>
+<script type="module" src="./app.js"></script>
 </body>
 </html>
