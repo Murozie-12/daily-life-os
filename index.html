@@ -10,11 +10,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<!-- Confetti Library (Gratis) -->
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <title>Daily Life OS</title>
 <style>
 :root{
+  /* Hanya Mode Cerah (Light Mode) untuk Semangat Harian */
   --bg: #FBF8F1;
   --card: #FFFFFF;
   --green: #0F7A5A;
@@ -34,19 +34,7 @@
   --radius-lg: 24px;
   --radius: 16px;
   --shadow: 0 10px 30px rgba(10, 90, 67, 0.08);
-  color-scheme: light dark;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #121A16;
-    --card: #1A241F;
-    --ink: #E8EBE9;
-    --muted: #9AA69F;
-    --line: #2D3D35;
-    --mint: #153226;
-    --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  }
+  color-scheme: light;
 }
 
 *{box-sizing:border-box}
@@ -57,7 +45,6 @@ body{
   font:16px/1.6 "Plus Jakarta Sans",system-ui,sans-serif;
   min-height:100vh;
   -webkit-font-smoothing:antialiased;
-  transition: background 0.3s, color 0.3s;
 }
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer; border:none; background:transparent;}
@@ -215,7 +202,7 @@ small{font-size:13px; font-weight: 600;}
   font-size:12px;font-weight:800; color: #fff;
   border-radius:999px;padding:4px 12px;
   display:inline-block;margin-top:8px; text-transform: uppercase; letter-spacing: 0.05em;
-  background: var(--muted); /* Fallback warna kategori */
+  background: var(--muted);
 }
 .note{font-size:13px;color:var(--muted);margin-top:6px}
 .actions{display:flex;gap:6px; margin-top: 8px;}
@@ -257,9 +244,6 @@ form label{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--muted
   font-weight: 600; font-size: 14px;
 }
 .del-btn { color: #EF4444; font-weight: bold; font-size: 18px; padding: 4px 8px; }
-
-/* Focus Timer */
-.timer-display { font-size: 64px; font-weight: 800; color: var(--green); text-align: center; font-variant-numeric: tabular-nums; margin: 20px 0; }
 
 #cloudStatus{font-size:14px;font-weight:600}
 .footer{color:var(--muted);font-size:13px;margin:28px 0 0;line-height:1.7;text-align:center}
@@ -331,7 +315,8 @@ form label{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--muted
   </section>
 
   <section class="panel">
-    <h2>Catatan & Sinkronisasi Cloud</h2>
+    <h2>Catatan & Backup (Cadangan)</h2>
+    <p class="muted" style="font-size: 14px; margin-top: 6px;">Jadwalmu tersimpan di HP/Browser ini. Jika kamu membersihkan memori browser, jadwal bisa hilang. Gunakan tombol <strong>Ekspor JSON</strong> di bawah untuk menyimpan cadangan file jadwalmu.</p>
     <div class="row" style="margin-top:14px">
       <span id="cloudStatus" class="muted">Mode lokal / offline</span>
       <div>
@@ -339,9 +324,9 @@ form label{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--muted
         <button id="logout" class="btn small hidden">Keluar</button>
       </div>
     </div>
-    <div class="toolbar">
-      <button id="export" class="btn small">Ekspor JSON</button>
-      <button id="import" class="btn small">Impor JSON</button>
+    <div class="toolbar" style="margin-top: 16px;">
+      <button id="export" class="btn small">⬇️ Ekspor JSON (Simpan)</button>
+      <button id="import" class="btn small">⬆️ Impor JSON (Pulihkan)</button>
       <input type="file" id="file" accept="application/json" class="hidden">
       <button id="resetDay" class="btn small">Reset ceklis hari ini</button>
     </div>
@@ -353,7 +338,6 @@ form label{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--muted
 <!-- Floating Action Buttons -->
 <div class="fab-container">
   <button class="fab" aria-label="Catatan Kilat Toko" onclick="document.getElementById('quickPad').showModal()">⚡</button>
-  <!-- Tombol ini sudah tersambung kembali ke app.js untuk memunculkan form tambah agenda -->
   <button id="new" class="fab fab-primary" aria-label="Tambah Jadwal">+</button>
 </div>
 
@@ -372,14 +356,25 @@ form label{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--muted
   <ul id="quickOrderList"></ul>
 </dialog>
 
-<!-- Form Utama Tambah Agenda (Dikembalikan untuk app.js) -->
+<!-- Form Utama Tambah Agenda (Sudah Diperbaiki Harinya!) -->
 <dialog id="editor">
   <form id="editForm">
     <div class="dialog-header">
       <h2 id="formTitle">Tambah Kegiatan</h2>
     </div>
     <input type="hidden" id="taskId">
-    <label>Hari<select id="taskDay" required></select></label>
+    <label>Hari
+      <select id="taskDay" required>
+        <option value="" disabled selected>Pilih Hari...</option>
+        <option value="Senin">Senin</option>
+        <option value="Selasa">Selasa</option>
+        <option value="Rabu">Rabu</option>
+        <option value="Kamis">Kamis</option>
+        <option value="Jumat">Jumat</option>
+        <option value="Sabtu">Sabtu</option>
+        <option value="Minggu">Minggu</option>
+      </select>
+    </label>
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
       <label>Mulai<input type="time" id="taskStart" required></label>
       <label>Selesai<input type="time" id="taskEnd" required></label>
@@ -401,7 +396,7 @@ form label{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--muted
   let sapaan = h < 4 ? "Malam yang hening" : h < 11 ? "Pagi yang berkah" : h < 15 ? "Siang yang produktif" : h < 18 ? "Sore yang tenang" : "Malam yang damai";
   document.getElementById("greeting").textContent = `${sapaan}, Kak Rofi fauzi!`;
 
-  // 2. Format Tanggal Masehi & Penarikan Manual Bulan Hijriyah (Memperbaiki bug "Mei")
+  // 2. Format Tanggal Masehi & Penarikan Manual Bulan Hijriyah
   const masehiOpts = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
   document.getElementById("masehiDate").textContent = new Intl.DateTimeFormat('id-ID', masehiOpts).format(now);
   
@@ -456,7 +451,7 @@ form label{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--muted
   }
   renderOrders(); 
 
-  // Pemicu Confetti saat persentase berubah ke 100% dari app.js
+  // Pemicu Confetti saat persentase berubah ke 100%
   const observer = new MutationObserver(function(mutations) {
     mutations.forEach(function(mutation) {
       if (mutation.target.textContent.trim() === "100%") {
@@ -464,10 +459,12 @@ form label{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--muted
       }
     });
   });
-  observer.observe(document.getElementById('percent'), { characterData: true, childList: true, subtree: true });
+  const percentEl = document.getElementById('percent');
+  if(percentEl) {
+    observer.observe(percentEl, { characterData: true, childList: true, subtree: true });
+  }
 </script>
 
-<!-- Mengembalikan sambungan ke file aplikasimu (Wajib Ada) -->
 <script src="./firebase-config.js"></script>
 <script type="module" src="./app.js"></script>
 </body>
