@@ -1,0 +1,28 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      function owner() {
+        return request.auth != null && request.auth.uid == userId;
+      }
+      function validPayload() {
+        return request.resource.data.keys().hasOnly(['data', 'updatedAt'])
+          && request.resource.data.keys().hasAll(['data', 'updatedAt'])
+          && request.resource.data.data is map
+          && request.resource.data.data.keys().hasOnly(['tasks', 'checks'])
+          && request.resource.data.data.keys().hasAll(['tasks', 'checks'])
+          && request.resource.data.data.tasks is list
+          && request.resource.data.data.checks is map
+          && request.resource.data.updatedAt == request.time
+          && request.resource.size() < 900000;
+      }
+      allow get: if owner();
+      allow list: if false;
+      allow create, update: if owner() && validPayload();
+      allow delete: if owner();
+    }
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
