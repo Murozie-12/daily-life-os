@@ -4,43 +4,66 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0F7A5A">
-<meta name="description" content="Daily Life OS — jadwal kuliah, toko, ibadah dan mutholaah">
+<meta name="description" content="Daily Life OS — Asisten Pribadi: Jadwal kuliah, AlmidaStore, ibadah dan mutholaah">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- Confetti Library (Gratis dari CDN) -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <title>Daily Life OS</title>
 <style>
 :root{
-  --bg:#FBF8F1;
-  --card:#FFFFFF;
-  --green:#0F7A5A;
-  --green-deep:#0A5A43;
-  --gold:#E0A84E;
-  --mint:#E6F3EC;
-  --ink:#1E2B25;
-  --muted:#66756D;
-  --line:#E7E2D6;
-  --done:#2E9E75;
-  --radius-lg:24px;
-  --radius:16px;
-  --shadow:0 1px 2px rgba(30,43,37,.04),0 8px 24px rgba(30,43,37,.06);
-  color-scheme:light;
+  --bg: #FBF8F1;
+  --card: #FFFFFF;
+  --green: #0F7A5A;
+  --green-deep: #0A5A43;
+  --gold: #E0A84E;
+  --mint: #E6F3EC;
+  --ink: #1E2B25;
+  --muted: #66756D;
+  --line: #E7E2D6;
+  --done: #2E9E75;
+  
+  /* Color Coding Kategori */
+  --cat-kuliah: #3B82F6; /* Biru */
+  --cat-toko: #F59E0B;   /* Emas/Oranye */
+  --cat-ibadah: #10B981; /* Hijau Emerald */
+  --cat-kitab: #8B5CF6;  /* Ungu Lavender */
+  
+  --radius-lg: 24px;
+  --radius: 16px;
+  --shadow: 0 10px 30px rgba(10, 90, 67, 0.08);
+  color-scheme: light dark;
 }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121A16;
+    --card: #1A241F;
+    --ink: #E8EBE9;
+    --muted: #9AA69F;
+    --line: #2D3D35;
+    --mint: #153226;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  }
+}
+
 *{box-sizing:border-box}
 html,body{margin:0}
 body{
   background:var(--bg);
   color:var(--ink);
-  font:16px/1.6 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font:16px/1.6 "Plus Jakarta Sans",system-ui,sans-serif;
   min-height:100vh;
   -webkit-font-smoothing:antialiased;
+  transition: background 0.3s, color 0.3s;
 }
 button,input,select,textarea{font:inherit;color:inherit}
-button{cursor:pointer}
+button{cursor:pointer; border:none; background:transparent;}
 button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible{
-  outline:2px solid var(--green);outline-offset:2px;
+  outline:2px solid var(--gold);outline-offset:2px;
 }
 a{color:var(--green)}
 .hidden{display:none!important}
@@ -48,163 +71,216 @@ a{color:var(--green)}
 .wrap{max-width:720px;margin:0 auto;padding:24px 18px 96px}
 
 /* ---------- Header ---------- */
-header{position:relative;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-h1{font-size:28px;font-weight:800;letter-spacing:-.02em;margin:4px 0 2px;color:var(--green-deep)}
+header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+h1{font-size:26px;font-weight:800;letter-spacing:-.02em;margin:4px 0 2px;color:var(--green-deep)}
 h2{font-size:18px;font-weight:700;margin:0;letter-spacing:-.01em}
 .muted,small{color:var(--muted)}
-small{font-size:13px}
-.kicker{font-size:13px;color:var(--muted);margin:0}
+small{font-size:13px; font-weight: 600;}
+.kicker{font-size:13px;color:var(--gold);font-weight:800;letter-spacing:0.05em;margin:0;text-transform:uppercase;}
 
-/* ---------- Greeting card (elemen utama) ---------- */
+/* ---------- Greeting Card (Premium) ---------- */
 .greet{
   position:relative;
   overflow:hidden;
-  background:linear-gradient(135deg,var(--green) 0%,var(--green-deep) 100%);
+  background:linear-gradient(135deg,var(--green-deep) 0%,var(--green) 100%);
   color:#fff;
   border-radius:var(--radius-lg);
-  padding:24px 22px;
+  padding:28px 24px;
   margin-top:16px;
-  box-shadow:0 14px 34px rgba(15,122,90,.25);
+  box-shadow:0 18px 40px rgba(15,122,90,.3);
+  text-align: center;
 }
 .greet::before{
-  /* pola geometris sangat tipis sebagai ornamen */
-  content:"";
-  position:absolute;inset:0;
-  background-image:
-    repeating-linear-gradient(45deg,rgba(255,255,255,.05) 0 1px,transparent 1px 14px),
-    repeating-linear-gradient(-45deg,rgba(255,255,255,.05) 0 1px,transparent 1px 14px);
+  content:""; position:absolute; inset:0;
+  background-image: radial-gradient(circle at top right, rgba(255,255,255,0.1) 0%, transparent 60%);
   pointer-events:none;
 }
 .greet > *{position:relative}
-.ar{font-family:"Amiri",serif;direction:rtl;unicode-bidi:isolate;line-height:1.7;margin:0}
-.greet .ar-main{font-size:30px;color:#fff}
-.greet .tr{font-size:14px;color:rgba(255,255,255,.85);margin:0}
-.greet .sapaan{font-size:18px;font-weight:700;margin:14px 0 2px}
-.greet .sub{font-size:14px;color:rgba(255,255,255,.85);margin:0}
-.greet .divider{height:1px;background:rgba(255,255,255,.22);margin:16px 0}
-.greet .ar-small{font-size:22px;color:#FFE7B0}
-.greet .ar-small-tr{font-size:13px;color:rgba(255,255,255,.8)}
+.ar{font-family:"Amiri",serif;direction:rtl;line-height:1.7;margin:0}
+
+/* Sholawat di Puncak */
+.sholawat-top {
+  font-size: 24px; color: var(--gold); margin-bottom: 16px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+.greet .ar-main{font-size:32px;color:#fff; font-weight:bold;}
+.greet .tr{font-size:14px;color:rgba(255,255,255,.9);margin:0}
+.greet .sapaan{font-size:20px;font-weight:800;margin:12px 0 4px}
+
+/* Hijriah & Masehi */
+.date-pill {
+  display: inline-block; background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(8px); padding: 6px 14px; border-radius: 999px;
+  font-size: 13px; font-weight: 600; margin-top: 10px; border: 1px solid rgba(255,255,255,0.2);
+}
+
+/* Glassmorphism Afirmasi */
+.motivation-box {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-left: 4px solid var(--gold);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-top: 24px;
+  font-style: italic;
+  font-size: 14.5px;
+  color: #fff;
+  line-height: 1.6;
+  text-align: left;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+.motivation-box::before {
+  content: "❝"; font-size: 24px; color: var(--gold); 
+  display: block; margin-bottom: -10px; opacity: 0.8;
+}
 
 /* ---------- Panels ---------- */
 .panel{
-  background:var(--card);
-  border:1px solid var(--line);
-  border-radius:var(--radius-lg);
-  padding:20px;
-  margin-top:16px;
+  background:var(--card); border: 1px solid rgba(0,0,0,0.03);
+  border-radius:var(--radius-lg); padding:24px; margin-top:20px;
   box-shadow:var(--shadow);
 }
 .row{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
 
 /* ---------- Progres ---------- */
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
-.stat{background:var(--mint);border-radius:var(--radius);padding:14px 8px;text-align:center}
-.stat b{display:block;font-size:26px;font-weight:800;color:var(--green-deep);font-variant-numeric:tabular-nums;letter-spacing:-.02em}
-.stat small{font-size:12px;color:var(--muted)}
-.bar{height:10px;background:#EFEADF;border-radius:20px;overflow:hidden;margin:16px 0 12px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
+.stat{background:var(--mint);border-radius:var(--radius);padding:16px 8px;text-align:center; transition: transform 0.2s;}
+.stat:hover {transform: translateY(-2px);}
+.stat b{display:block;font-size:28px;font-weight:800;color:var(--green-deep);letter-spacing:-.02em}
+.stat small{font-size:12px;font-weight:700;color:var(--muted); text-transform: uppercase;}
+.bar{height:12px;background:var(--line);border-radius:20px;overflow:hidden;margin:20px 0 12px}
 .bar>div{
-  height:100%;width:0;
-  background:linear-gradient(90deg,var(--green),var(--gold));
-  border-radius:20px;
-  transition:width .5s cubic-bezier(.2,.7,.2,1);
-}
-.notice{
-  font-size:13px;color:var(--muted);
-  background:#FBF3E2;border-left:3px solid var(--gold);
-  border-radius:10px;padding:10px 12px;line-height:1.6;
+  height:100%;width:0; background:linear-gradient(90deg,var(--green),var(--gold));
+  border-radius:20px; transition:width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* ---------- Agenda ---------- */
-.days{display:flex;gap:8px;overflow-x:auto;padding:4px 0 12px;margin:0 -4px;scrollbar-width:none}
+/* ---------- Toolbar & Buttons ---------- */
+.days{display:flex;gap:10px;overflow-x:auto;padding:8px 0 16px;margin:0 -4px;scrollbar-width:none; position: sticky; top: 0; background: var(--card); z-index: 10; margin-top: 10px;}
 .days::-webkit-scrollbar{display:none}
 .days button{
   white-space:nowrap;flex:1 0 auto;
-  background:var(--bg);border:1px solid var(--line);
-  border-radius:999px;padding:9px 14px;font-weight:600;font-size:14px;color:var(--ink);
+  background:var(--bg); border:1px solid var(--line);
+  border-radius:999px;padding:10px 18px;font-weight:700;font-size:14px;color:var(--ink);
+  transition: all 0.2s;
 }
-.days button:hover{border-color:var(--green)}
-.days .active{background:var(--green);border-color:var(--green);color:#fff}
-
-.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0}
-.toolbar input,.toolbar select,form input,form select,form textarea{
-  background:var(--bg);border:1px solid var(--line);color:var(--ink);
-  border-radius:12px;padding:11px 13px;min-width:0;font-size:15px;
-}
-.toolbar input{flex:1;min-width:150px}
-.toolbar input::placeholder{color:#9AA69F}
+.days .active{background:var(--green);border-color:var(--green);color:#fff; box-shadow: 0 4px 12px rgba(15,122,90,0.2);}
 
 .btn{
-  border:1px solid var(--line);background:#fff;color:var(--ink);
-  border-radius:12px;padding:10px 14px;font-weight:600;font-size:14px;
-  transition:background .15s,border-color .15s,transform .1s;
+  border:1px solid var(--line);background:var(--card);color:var(--ink);
+  border-radius:14px;padding:12px 18px;font-weight:700;font-size:14px;
+  transition:all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
 }
-.btn:hover{border-color:var(--green);color:var(--green-deep)}
-.btn:active{transform:scale(.98)}
-.btn.primary{background:var(--green);border-color:var(--green);color:#fff}
-.btn.primary:hover{background:var(--green-deep);color:#fff}
-.btn.small{padding:8px 12px;font-size:13px}
+.btn:hover{border-color:var(--green); transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.05);}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--green);border-color:var(--green);color:#fff;}
+.btn.primary:hover{background:var(--green-deep);}
+.btn.focus-btn {background: var(--bg); color: var(--green); border-color: var(--green); padding: 6px 12px; font-size: 12px; border-radius: 8px;}
 
-/* ---------- Task list ---------- */
-#tasks{margin-top:4px}
+/* ---------- Task List & Micro-interactions ---------- */
+#tasks{margin-top:8px;}
 .task{
-  display:flex;align-items:flex-start;gap:12px;
-  border-top:1px solid var(--line);padding:16px 0;
+  display:flex;align-items:flex-start;gap:16px;
+  border-bottom:1px solid var(--line);padding:20px 0;
+  animation: slideUp 0.4s ease forwards; opacity: 0;
 }
-.task:first-child{border-top:0}
-.task input[type=checkbox]{width:20px;height:20px;accent-color:var(--done);margin-top:3px;flex:none}
-.time{
-  font-size:13px;font-weight:700;color:var(--green);
-  font-variant-numeric:tabular-nums;min-width:96px;padding-top:1px;
+.task:last-child { border-bottom: none; }
+@keyframes slideUp { from {opacity: 0; transform: translateY(15px);} to {opacity: 1; transform: translateY(0);} }
+
+/* Bouncing Checkbox Custom */
+.task input[type="checkbox"] {
+  appearance: none; -webkit-appearance: none;
+  width: 24px; height: 24px; flex-shrink: 0;
+  border: 2px solid var(--muted); border-radius: 8px;
+  margin-top: 2px; cursor: pointer; position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--card);
 }
+.task input[type="checkbox"]:checked {
+  background: var(--done); border-color: var(--done);
+  animation: bounceCheck 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.task input[type="checkbox"]:checked::after {
+  content: "✓"; color: white; position: absolute;
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+  font-size: 16px; font-weight: 800;
+}
+@keyframes bounceCheck { 0% {transform: scale(1)} 50% {transform: scale(1.3)} 100% {transform: scale(1)} }
+
+.time{ font-size:14px; font-weight:800; color:var(--ink); min-width:96px; padding-top:2px; }
 .task .body{flex:1;min-width:0}
-.task .title{font-weight:600;color:var(--ink);word-wrap:break-word}
-.task.done .title{text-decoration:line-through;color:var(--muted)}
-.task.done .time{color:var(--muted)}
-.tag{
-  font-size:12px;font-weight:600;color:var(--green-deep);
-  background:var(--mint);border-radius:999px;padding:3px 10px;
-  display:inline-block;margin-top:8px;
+
+/* Animated Strikethrough */
+.task .title{font-weight:700;color:var(--ink); font-size: 16px; display: inline-block; position: relative;}
+.task.done .title { color: var(--muted); }
+.task.done .title::after {
+  content: ""; position: absolute; left: 0; top: 50%;
+  height: 2px; background: var(--muted); border-radius: 2px;
+  animation: strike 0.3s ease-out forwards;
 }
-.note{font-size:13px;color:var(--muted);margin-top:6px}
-.actions{display:flex;gap:6px}
+@keyframes strike { 0% { width: 0; } 100% { width: 100%; } }
 
-/* Empty state */
-.empty{text-align:center;padding:28px 12px;color:var(--muted)}
-.empty b{display:block;color:var(--ink);font-size:16px;margin-bottom:4px}
+.task.done .time {color: var(--muted);}
 
-/* ---------- Sinkronisasi / cadangan ---------- */
-.panel p{margin:8px 0 0}
-#cloudStatus{font-size:14px;font-weight:600}
+/* Colorful Tags */
+.tag{
+  font-size:12px;font-weight:800; color: #fff;
+  border-radius:999px;padding:4px 12px;
+  display:inline-block;margin-top:8px; text-transform: uppercase; letter-spacing: 0.05em;
+}
+.tag-kuliah { background: var(--cat-kuliah); }
+.tag-toko { background: var(--cat-toko); }
+.tag-ibadah { background: var(--cat-ibadah); }
+.tag-mutholaah { background: var(--cat-kitab); }
+.tag-default { background: var(--muted); }
 
-.footer{color:var(--muted);font-size:13px;margin:28px 0 0;line-height:1.7;text-align:center}
-.footer .ar-footer{font-family:"Amiri",serif;font-size:20px;color:var(--green);margin:0 0 6px;direction:rtl}
+/* ---------- Floating Action Button (FAB) ---------- */
+.fab-container { position: fixed; bottom: 30px; right: 30px; z-index: 100; display: flex; flex-direction: column; gap: 12px; }
+.fab {
+  width: 60px; height: 60px; border-radius: 50%;
+  background: var(--gold); color: #fff; font-size: 24px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 8px 20px rgba(224, 168, 78, 0.4);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+.fab:hover { transform: scale(1.08) rotate(5deg); box-shadow: 0 12px 25px rgba(224, 168, 78, 0.5); }
+.fab-primary { background: var(--green); box-shadow: 0 8px 20px rgba(15, 122, 90, 0.4); }
 
-/* ---------- Dialog ---------- */
+/* ---------- Dialogs (Modals) ---------- */
 dialog{
   background:var(--card);color:var(--ink);
   border:1px solid var(--line);border-radius:var(--radius-lg);
-  width:min(480px,94vw);padding:22px;
-  box-shadow:0 24px 60px rgba(30,43,37,.18);
+  width:min(500px,92vw);padding:28px;
+  box-shadow:0 24px 60px rgba(0,0,0,.2);
 }
-dialog::backdrop{background:rgba(30,43,37,.35)}
-form{display:grid;gap:12px}
-form label{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--muted)}
-form h2{margin-bottom:4px}
+dialog::backdrop{background:rgba(0,0,0,.5); backdrop-filter: blur(4px);}
+.dialog-header {display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;}
+.dialog-header h2 {margin: 0; font-size: 20px;}
+
+/* Quick Pad List */
+#quickOrderList { list-style: none; padding: 0; margin: 16px 0; max-height: 250px; overflow-y: auto; }
+#quickOrderList li {
+  background: var(--bg); padding: 14px; border-radius: 12px; margin-bottom: 10px;
+  display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--line);
+  font-weight: 600; font-size: 14px;
+}
+.del-btn { color: #EF4444; font-weight: bold; font-size: 18px; padding: 4px 8px; }
+
+/* Focus Timer */
+.timer-display { font-size: 64px; font-weight: 800; color: var(--green); text-align: center; font-variant-numeric: tabular-nums; margin: 20px 0; }
+
+form input,form select{
+  background:var(--bg);border:1px solid var(--line);color:var(--ink);
+  border-radius:12px;padding:14px;font-size:15px; width: 100%; margin-bottom: 14px;
+}
 
 @media (max-width:550px){
-  .wrap{padding:18px 14px 80px}
-  h1{font-size:25px}
-  .greet{padding:20px 18px}
-  .greet .ar-main{font-size:26px}
-  .task{gap:10px}
-  .time{min-width:78px;font-size:12px}
-  .actions{flex-direction:column}
+  .wrap{padding:16px 14px 100px}
+  .greet{padding:24px 20px}
+  .greet .ar-main{font-size:28px}
+  .time{min-width:78px;font-size:13px}
   .stats{gap:8px}
-  .stat{padding:12px 4px}
-  .stat b{font-size:22px}
-}
-@media (prefers-reduced-motion:reduce){
-  *{transition:none!important;animation:none!important}
+  .stat b{font-size:24px}
+  .fab-container { bottom: 20px; right: 20px; }
 }
 </style>
 </head>
@@ -214,102 +290,269 @@ form h2{margin-bottom:4px}
   <header>
     <div>
       <p class="kicker">Daily Life OS</p>
-      <h1>Kegiatan hari ini</h1>
-      <small>Kuliah • Almida Store • Kitab • Ibadah</small>
+      <h1>Agenda Asisten</h1>
     </div>
-    <button class="btn small hidden" id="install">Pasang aplikasi</button>
+    <!-- Penanggalan Dinamis -->
+    <div style="text-align: right;">
+      <div id="masehiDate" style="font-weight: 800; font-size: 15px;">Memuat...</div>
+      <div id="hijriDate" class="muted" style="font-size: 13px; font-weight: 600;">Memuat...</div>
+    </div>
   </header>
 
+  <!-- Kartu Penyambut Premium -->
   <section class="greet" aria-label="Sapaan">
+    <!-- Sholawat di posisi paling atas -->
+    <div class="sholawat-top">
+      <p class="ar">اللَّهُمَّ صَلِّ عَلَى سَيِّدِنَا مُحَمَّدٍ</p>
+    </div>
+    
     <p class="ar ar-main" lang="ar">السَّلامُ عَلَيْكُمْ</p>
-    <p class="tr">Assalamu'alaikum</p>
-    <p class="sapaan" id="greeting">Selamat datang</p>
-    <p class="sub">Semoga hari ini penuh berkah dan kelancaran.</p>
-    <div class="divider"></div>
-    <p class="ar ar-small" lang="ar">أَهْلاً وَسَهْلاً</p>
-    <p class="ar-small-tr">Ahlan wa sahlan</p>
+    <p class="tr">Assalamu'alaikum Warahmatullahi Wabarakatuh</p>
+    <p class="sapaan" id="greeting">Selamat beraktivitas, Rofi!</p>
+    
+    <!-- Kotak Afirmasi Glassmorphism -->
+    <div class="motivation-box" id="dailyQuote">
+      Memuat kutipan hari ini...
+    </div>
   </section>
 
+  <!-- Panel Progres & Statistik -->
   <section class="panel">
     <div class="row">
-      <h2>Progres <span id="daylabel">hari ini</span></h2>
-      <span id="dateLabel" class="muted"></span>
+      <h2>Statistik Hari Ini</h2>
     </div>
     <div class="stats">
-      <div class="stat"><b id="total">0</b><small>Agenda</small></div>
+      <div class="stat"><b id="total">0</b><small>Target</small></div>
       <div class="stat"><b id="complete">0</b><small>Selesai</small></div>
-      <div class="stat"><b id="percent">0%</b><small>Progres</small></div>
+      <div class="stat"><b id="percent">0%</b><small>Fokus</small></div>
     </div>
-    <div class="bar" role="progressbar" aria-label="Progres harian"><div id="progress"></div></div>
-    <div class="notice">Toko buka 08.00–20.00. Saat kuliah, salat, atau mengajar, pesanan ditangani setelah kegiatan utama selesai. Jam salat di jadwal merupakan blok perkiraan, bukan waktu azan aktual.</div>
+    <div class="bar" role="progressbar"><div id="progress"></div></div>
   </section>
 
+  <!-- Panel Daftar Tugas Utama -->
   <section class="panel">
     <div class="row">
-      <h2>Agenda mingguan</h2>
-      <button id="new" class="btn primary small">+ Tambah kegiatan</button>
+      <h2>Jadwal Terjadwal</h2>
     </div>
-    <nav class="days" id="days" aria-label="Pilih hari"></nav>
-    <div class="toolbar">
-      <input id="search" type="search" placeholder="Cari kegiatan..." aria-label="Cari kegiatan">
-      <select id="filter" aria-label="Filter kategori"><option value="">Semua kategori</option></select>
+    <!-- Filter Hari Dummy (Visualisasi UI) -->
+    <nav class="days" id="days" aria-label="Pilih hari">
+      <button class="active">Hari ini</button>
+      <button>Besok</button>
+      <button>Lusa</button>
+    </nav>
+    
+    <!-- Daftar Tugas Dinamis -->
+    <div id="tasks">
+      <!-- Tugas akan disuntikkan via JavaScript -->
     </div>
-    <div id="tasks"></div>
   </section>
-
-  <section class="panel">
-    <h2>Catatan & sinkronisasi</h2>
-    <p class="muted">Progres tersimpan di perangkat ini. Aktifkan Firebase untuk sinkronisasi antarperangkat dengan akun Google.</p>
-    <div class="row" style="margin-top:14px">
-      <span id="cloudStatus" class="muted">Mode lokal / offline</span>
-      <div>
-        <button id="login" class="btn small hidden">Login Google</button>
-        <button id="logout" class="btn small hidden">Keluar</button>
-      </div>
-    </div>
-    <div class="toolbar">
-      <button id="export" class="btn small">Ekspor cadangan JSON</button>
-      <button id="import" class="btn small">Impor cadangan</button>
-      <input type="file" id="file" accept="application/json" class="hidden">
-      <button id="resetDay" class="btn small">Reset ceklis hari ini</button>
-    </div>
-    <small>Checklist dibedakan per tanggal. Kegiatan berulang setiap minggu. Cadangan JSON mencakup kegiatan, status, dan catatan.</small>
-  </section>
-
-  <p class="footer">
-    <span class="ar-footer" lang="ar">اللَّهُمَّ صَلِّ عَلَى سَيِّدِنَا مُحَمَّدٍ</span>
-    Allahumma sholli 'ala sayyidina Muhammad<br>
-    Aplikasi ini bisa dipasang dari browser Android setelah diterbitkan di GitHub Pages. Pengingat otomatis ketika aplikasi tertutup belum tersedia pada versi awal. Jangan masukkan kata sandi atau data sensitif dalam catatan.
-  </p>
 </main>
 
-<dialog id="editor">
-  <form id="editForm">
-    <h2 id="formTitle">Tambah kegiatan</h2>
-    <input type="hidden" id="taskId">
-    <label>Hari<select id="taskDay" required></select></label>
-    <label>Mulai<input type="time" id="taskStart" required></label>
-    <label>Selesai<input type="time" id="taskEnd" required></label>
-    <label>Kegiatan<input id="taskTitle" maxlength="150" required></label>
-    <label>Kategori<input id="taskCategory" maxlength="40" required></label>
-    <label>Catatan<textarea id="taskNotes" rows="3" maxlength="1000"></textarea></label>
-    <div class="row">
-      <button type="button" class="btn" id="cancel">Batal</button>
-      <button type="submit" class="btn primary">Simpan</button>
-    </div>
+<!-- Floating Action Buttons -->
+<div class="fab-container">
+  <!-- FAB Quick Order AlmidaStore -->
+  <button class="fab" aria-label="Catatan Kilat Toko" onclick="document.getElementById('quickPad').showModal()">⚡</button>
+  <!-- FAB Tambah Tugas (Opsional jika ingin dipakai nanti) -->
+  <button class="fab fab-primary" aria-label="Tambah Jadwal" onclick="alert('Form tambah tugas disiapkan di sini.')">+</button>
+</div>
+
+<!-- Modal Quick Pad AlmidaStore -->
+<dialog id="quickPad">
+  <div class="dialog-header">
+    <h2>Catatan Kilat AlmidaStore</h2>
+    <button class="btn" onclick="document.getElementById('quickPad').close()">Tutup</button>
+  </div>
+  <p class="muted" style="font-size: 13px; margin-bottom: 16px;">Catat pesanan pulsa/kuota masuk dengan cepat tanpa merusak jadwal utama. Data tersimpan di perangkat.</p>
+  
+  <form id="formOrder" style="display: flex; gap: 8px;">
+    <input type="text" id="orderInput" placeholder="Contoh: Axis 50rb - Kak Rina" required style="margin-bottom: 0;">
+    <button type="submit" class="btn primary">Catat</button>
   </form>
+  
+  <ul id="quickOrderList">
+    <!-- List pesanan -->
+  </ul>
 </dialog>
 
+<!-- Modal Fokus Pomodoro -->
+<dialog id="focusModal">
+  <div class="dialog-header">
+    <h2 id="focusTitle">Mutholaah / Belajar</h2>
+    <button class="btn" onclick="stopTimer()">Akhiri</button>
+  </div>
+  <p class="muted" style="text-align: center; font-size: 14px;">Jauhkan *smartphone*, fokus penuh pada kegiatan ini.</p>
+  <div class="timer-display" id="timerDisplay">25:00</div>
+  <div style="display: flex; justify-content: center; gap: 10px;">
+    <button class="btn primary" id="btnStartTimer" onclick="startTimer()">Mulai Fokus</button>
+  </div>
+</dialog>
+
+<!-- SCRIPT LOGIKA UI & ASISTEN PRIBADI -->
 <script>
-  // Sapaan sesuai waktu. Berdiri sendiri, tidak mengganggu app.js.
-  (function(){
-    var h = new Date().getHours();
-    var s = h < 4 ? "Selamat malam" : h < 11 ? "Selamat pagi" : h < 15 ? "Selamat siang" : h < 18 ? "Selamat sore" : "Selamat malam";
-    var el = document.getElementById("greeting");
-    if (el) el.textContent = s;
-  })();
+  // 1. Asisten Penentu Sapaan & Penanggalan Dinamis
+  const now = new Date();
+  const h = now.getHours();
+  let sapaan = h < 4 ? "Malam yang hening" : h < 11 ? "Pagi yang berkah" : h < 15 ? "Siang yang produktif" : h < 18 ? "Sore yang tenang" : "Malam yang damai";
+  document.getElementById("greeting").textContent = `${sapaan}, Rofi!`;
+
+  // Format Masehi
+  const masehiOpts = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+  document.getElementById("masehiDate").textContent = new Intl.DateTimeFormat('id-ID', masehiOpts).format(now);
+  
+  // Format Hijriah (Gratis, Bawaan Browser)
+  try {
+    const hijriOpts = { day: 'numeric', month: 'long', year: 'numeric' };
+    const hijriDate = new Intl.DateTimeFormat('id-ID-u-ca-islamic', hijriOpts).format(now);
+    document.getElementById("hijriDate").textContent = `${hijriDate} H`;
+  } catch (e) {
+    document.getElementById("hijriDate").textContent = "Penanggalan Hijriah";
+  }
+
+  // 2. Afirmasi / Kutipan Harian Acak
+  const quotes = [
+    "Barangsiapa bersungguh-sungguh, sesungguhnya kesungguhannya itu adalah untuk dirinya sendiri.",
+    "Jangan menunda pekerjaan hari ini hingga esok hari, sebab esok memiliki urusannya sendiri.",
+    "Sesudah kesulitan itu pasti ada kemudahan. Tetaplah melangkah walau perlahan.",
+    "Ilmu itu seperti buruan, dan tulisan adalah ikatannya. Ikatlah ilmu dengan rajin mencatat.",
+    "Sebaik-baik manusia adalah yang paling bermanfaat bagi manusia lainnya. Semangat berniaga dan berbagi!",
+    "Tugas yang menumpuk tidak akan selesai hanya dengan dipikirkan. Mulailah dari yang terkecil dengan Bismillah."
+  ];
+  document.getElementById("dailyQuote").textContent = quotes[Math.floor(Math.random() * quotes.length)];
+
+  // 3. Simulasi Data Tugas dengan Color Coding
+  // Untuk data sungguhan, bisa hubungkan kembali dengan localStorage/Firebase app.js mu.
+  const sampleTasks = [
+    { id: 1, title: "Mutholaah Kitab Ta'limul Muta'allim", time: "05:00 - 06:00", cat: "mutholaah", done: false },
+    { id: 2, title: "Rekap Stok & Balas Chat AlmidaStore", time: "08:00 - 09:00", cat: "toko", done: false },
+    { id: 3, title: "Kelas: Teori Belajar dan Psikologi (Zoom)", time: "10:00 - 11:30", cat: "kuliah", done: false },
+    { id: 4, title: "Persiapan Shalat Dzuhur & Istirahat", time: "11:50 - 12:30", cat: "ibadah", done: false }
+  ];
+
+  function getCatClass(cat) {
+    switch(cat) {
+      case 'kuliah': return 'tag-kuliah';
+      case 'toko': return 'tag-toko';
+      case 'ibadah': return 'tag-ibadah';
+      case 'mutholaah': return 'tag-mutholaah';
+      default: return 'tag-default';
+    }
+  }
+
+  function renderTasks() {
+    const container = document.getElementById("tasks");
+    container.innerHTML = "";
+    let completed = 0;
+
+    sampleTasks.forEach((task, index) => {
+      if (task.done) completed++;
+      const div = document.createElement("article");
+      div.className = `task ${task.done ? 'done' : ''}`;
+      div.style.animationDelay = `${index * 0.1}s`; // Staggered animation
+      
+      div.innerHTML = `
+        <input type="checkbox" ${task.done ? 'checked' : ''} onchange="toggleTask(${task.id})">
+        <div class="body">
+          <span class="title">${task.title}</span><br>
+          <span class="tag ${getCatClass(task.cat)}">${task.cat}</span>
+        </div>
+        <div style="display:flex; flex-direction:column; align-items:flex-end; gap:8px;">
+          <div class="time">${task.time}</div>
+          ${!task.done ? `<button class="btn focus-btn" onclick="openFocus('${task.title}')">Fokus 25m</button>` : ''}
+        </div>
+      `;
+      container.appendChild(div);
+    });
+
+    // Update Progress
+    const total = sampleTasks.length;
+    const pct = total === 0 ? 0 : Math.round((completed / total) * 100);
+    document.getElementById("total").textContent = total;
+    document.getElementById("complete").textContent = completed;
+    document.getElementById("percent").textContent = pct + "%";
+    document.getElementById("progress").style.width = pct + "%";
+
+    // Confetti jika 100%
+    if (pct === 100 && total > 0) {
+      setTimeout(() => {
+        confetti({ particleCount: 150, spread: 80, origin: { y: 0.6 }, colors: ['#0F7A5A', '#E0A84E', '#3B82F6'] });
+      }, 500);
+    }
+  }
+
+  window.toggleTask = function(id) {
+    const task = sampleTasks.find(t => t.id === id);
+    if (task) task.done = !task.done;
+    renderTasks();
+  };
+
+  // Inisialisasi awal
+  renderTasks();
+
+  // 4. Logika Quick Pad AlmidaStore (LocalStorage)
+  let quickOrders = JSON.parse(localStorage.getItem('almida_quick_orders')) || [];
+  
+  function renderOrders() {
+    const ul = document.getElementById('quickOrderList');
+    ul.innerHTML = "";
+    quickOrders.forEach((order, idx) => {
+      const li = document.createElement("li");
+      li.innerHTML = `<span>⚡ ${order}</span> <button class="del-btn" onclick="delOrder(${idx})">×</button>`;
+      ul.appendChild(li);
+    });
+  }
+  
+    document.getElementById('formOrder').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const input = document.getElementById('orderInput');
+    quickOrders.push(input.value);
+    localStorage.setItem('almida_quick_orders', JSON.stringify(quickOrders));
+    input.value = "";
+    renderOrders();
+  });
+
+  window.delOrder = function(idx) {
+    quickOrders.splice(idx, 1);
+    localStorage.setItem('almida_quick_orders', JSON.stringify(quickOrders));
+    renderOrders();
+  }
+  renderOrders(); // Muat pesanan saat web dibuka
+
+  // 5. Logika Fokus Mode (Pomodoro Timer)
+  let timerInterval;
+  let timeLeft = 25 * 60; // 25 Menit
+
+  window.openFocus = function(title) {
+    document.getElementById('focusTitle').textContent = title;
+    document.getElementById('focusModal').showModal();
+    timeLeft = 25 * 60;
+    updateTimerDisplay();
+    document.getElementById('btnStartTimer').disabled = false;
+  }
+
+  window.startTimer = function() {
+    document.getElementById('btnStartTimer').disabled = true;
+    clearInterval(timerInterval);
+    timerInterval = setInterval(() => {
+      timeLeft--;
+      updateTimerDisplay();
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        alert("Waktu fokus selesai! Alhamdulillah.");
+        document.getElementById('btnStartTimer').disabled = false;
+      }
+    }, 1000);
+  }
+
+  window.stopTimer = function() {
+    clearInterval(timerInterval);
+    document.getElementById('focusModal').close();
+  }
+
+  function updateTimerDisplay() {
+    const m = Math.floor(timeLeft / 60).toString().padStart(2, '0');
+    const s = (timeLeft % 60).toString().padStart(2, '0');
+    document.getElementById('timerDisplay').textContent = `${m}:${s}`;
+  }
 </script>
-<script src="./firebase-config.js"></script>
-<script type="module" src="./app.js"></script>
 </body>
 </html>
