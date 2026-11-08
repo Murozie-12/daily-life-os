@@ -1,0 +1,1100 @@
+[
+  {
+    "id": "base-1",
+    "day": "Senin",
+    "start": "04.10",
+    "end": "04.35",
+    "title": "Salat Subuh (sesuaikan azan)",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-2",
+    "day": "Senin",
+    "start": "04.35",
+    "end": "07.00",
+    "title": "Tidur lanjutan",
+    "category": "Istirahat",
+    "notes": ""
+  },
+  {
+    "id": "base-3",
+    "day": "Senin",
+    "start": "07.00",
+    "end": "08.00",
+    "title": "Sarapan, mandi, persiapan toko",
+    "category": "Pribadi",
+    "notes": ""
+  },
+  {
+    "id": "base-4",
+    "day": "Senin",
+    "start": "08.00",
+    "end": "09.30",
+    "title": "Toko + muthola'ah ringan saat sepi",
+    "category": "Toko",
+    "notes": ""
+  },
+  {
+    "id": "base-5",
+    "day": "Senin",
+    "start": "09.30",
+    "end": "10.15",
+    "title": "Muthola'ah materi Senin",
+    "category": "Mutholaah",
+    "notes": ""
+  },
+  {
+    "id": "base-6",
+    "day": "Senin",
+    "start": "10.20",
+    "end": "12.00",
+    "title": "Kuliah Zoom; jeda Zuhur bila masuk waktu",
+    "category": "Kuliah",
+    "notes": ""
+  },
+  {
+    "id": "base-7",
+    "day": "Senin",
+    "start": "12.00",
+    "end": "12.40",
+    "title": "Zuhur + makan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-8",
+    "day": "Senin",
+    "start": "12.40",
+    "end": "14.45",
+    "title": "Toko + muthola'ah (60 menit fokus jika memungkinkan)",
+    "category": "Mutholaah",
+    "notes": "Blok fleksibel; toko tetap buka, pesan dapat mengantre"
+  },
+  {
+    "id": "base-9",
+    "day": "Senin",
+    "start": "14.45",
+    "end": "15.15",
+    "title": "Asar sesuai azan + jeda",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-10",
+    "day": "Senin",
+    "start": "15.15",
+    "end": "17.35",
+    "title": "Toko + finalisasi materi (60 menit)",
+    "category": "Mutholaah",
+    "notes": "Blok fleksibel; toko tetap buka, pesan dapat mengantre"
+  },
+  {
+    "id": "base-11",
+    "day": "Senin",
+    "start": "17.35",
+    "end": "18.20",
+    "title": "Magrib sesuai azan + makan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-12",
+    "day": "Senin",
+    "start": "18.20",
+    "end": "19.00",
+    "title": "Toko / persiapan mengajar",
+    "category": "Toko",
+    "notes": ""
+  },
+  {
+    "id": "base-13",
+    "day": "Senin",
+    "start": "19.00",
+    "end": "19.25",
+    "title": "Isya sesuai azan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-14",
+    "day": "Senin",
+    "start": "19.25",
+    "end": "20.00",
+    "title": "Penutupan toko + ringkasan kitab",
+    "category": "Toko",
+    "notes": ""
+  },
+  {
+    "id": "base-15",
+    "day": "Senin",
+    "start": "20.00",
+    "end": "21.00",
+    "title": "Mengajar kitab",
+    "category": "Mengajar",
+    "notes": ""
+  },
+  {
+    "id": "base-16",
+    "day": "Senin",
+    "start": "21.00",
+    "end": "21.30",
+    "title": "Rekap & evaluasi toko",
+    "category": "Rekap",
+    "notes": ""
+  },
+  {
+    "id": "base-17",
+    "day": "Senin",
+    "start": "21.30",
+    "end": "22.15",
+    "title": "Catatan mengajar + persiapan tidur",
+    "category": "Pribadi",
+    "notes": ""
+  },
+  {
+    "id": "base-18",
+    "day": "Senin",
+    "start": "22.15",
+    "end": "04.10",
+    "title": "Tidur utama (lintas hari)",
+    "category": "Istirahat",
+    "notes": ""
+  },
+  {
+    "id": "base-19",
+    "day": "Selasa",
+    "start": "04.10",
+    "end": "04.35",
+    "title": "Subuh sesuai azan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-20",
+    "day": "Selasa",
+    "start": "04.35",
+    "end": "06.45",
+    "title": "Tidur lanjutan",
+    "category": "Istirahat",
+    "notes": ""
+  },
+  {
+    "id": "base-21",
+    "day": "Selasa",
+    "start": "06.45",
+    "end": "07.45",
+    "title": "Muthola'ah kitab Selasa (60 menit)",
+    "category": "Mutholaah",
+    "notes": ""
+  },
+  {
+    "id": "base-22",
+    "day": "Selasa",
+    "start": "07.45",
+    "end": "08.35",
+    "title": "Sarapan + buka toko 08.00",
+    "category": "Toko",
+    "notes": ""
+  },
+  {
+    "id": "base-23",
+    "day": "Selasa",
+    "start": "08.40",
+    "end": "12.00",
+    "title": "Kuliah Zoom 2 sesi; respons toko tertunda",
+    "category": "Kuliah",
+    "notes": ""
+  },
+  {
+    "id": "base-24",
+    "day": "Selasa",
+    "start": "12.00",
+    "end": "12.50",
+    "title": "Zuhur + makan + cek pesanan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-25",
+    "day": "Selasa",
+    "start": "13.00",
+    "end": "14.40",
+    "title": "Kuliah Zoom",
+    "category": "Kuliah",
+    "notes": ""
+  },
+  {
+    "id": "base-26",
+    "day": "Selasa",
+    "start": "14.40",
+    "end": "15.15",
+    "title": "Asar sesuai azan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-27",
+    "day": "Selasa",
+    "start": "15.15",
+    "end": "16.15",
+    "title": "Muthola'ah kitab Selasa (60 menit), toko antre",
+    "category": "Mutholaah",
+    "notes": "Blok fleksibel; toko tetap buka, pesan dapat mengantre"
+  },
+  {
+    "id": "base-28",
+    "day": "Selasa",
+    "start": "16.15",
+    "end": "17.35",
+    "title": "Toko + muthola'ah (60 menit bila memungkinkan)",
+    "category": "Mutholaah",
+    "notes": "Blok fleksibel; toko tetap buka, pesan dapat mengantre"
+  },
+  {
+    "id": "base-29",
+    "day": "Selasa",
+    "start": "17.35",
+    "end": "18.20",
+    "title": "Magrib sesuai azan + makan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-30",
+    "day": "Selasa",
+    "start": "18.20",
+    "end": "19.00",
+    "title": "Toko + cek materi",
+    "category": "Toko",
+    "notes": ""
+  },
+  {
+    "id": "base-31",
+    "day": "Selasa",
+    "start": "19.00",
+    "end": "19.25",
+    "title": "Isya sesuai azan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-32",
+    "day": "Selasa",
+    "start": "19.25",
+    "end": "20.00",
+    "title": "Tutup toko / persiapan ngaji",
+    "category": "Toko",
+    "notes": ""
+  },
+  {
+    "id": "base-33",
+    "day": "Selasa",
+    "start": "20.00",
+    "end": "21.00",
+    "title": "Mengajar kitab",
+    "category": "Mengajar",
+    "notes": ""
+  },
+  {
+    "id": "base-34",
+    "day": "Selasa",
+    "start": "21.00",
+    "end": "21.30",
+    "title": "Rekap & evaluasi toko",
+    "category": "Rekap",
+    "notes": ""
+  },
+  {
+    "id": "base-35",
+    "day": "Selasa",
+    "start": "21.30",
+    "end": "22.15",
+    "title": "Istirahat dan tidur",
+    "category": "Istirahat",
+    "notes": ""
+  },
+  {
+    "id": "base-36",
+    "day": "Selasa",
+    "start": "22.15",
+    "end": "04.10",
+    "title": "Tidur utama (lintas hari)",
+    "category": "Istirahat",
+    "notes": ""
+  },
+  {
+    "id": "base-37",
+    "day": "Rabu",
+    "start": "04.10",
+    "end": "04.35",
+    "title": "Subuh sesuai azan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-38",
+    "day": "Rabu",
+    "start": "04.35",
+    "end": "06.20",
+    "title": "Tidur lanjutan",
+    "category": "Istirahat",
+    "notes": ""
+  },
+  {
+    "id": "base-39",
+    "day": "Rabu",
+    "start": "06.20",
+    "end": "06.55",
+    "title": "Sarapan + persiapan Zoom",
+    "category": "Pribadi",
+    "notes": ""
+  },
+  {
+    "id": "base-40",
+    "day": "Rabu",
+    "start": "07.00",
+    "end": "08.40",
+    "title": "Kuliah Zoom; buka toko 08.00, balasan tertunda",
+    "category": "Kuliah",
+    "notes": ""
+  },
+  {
+    "id": "base-41",
+    "day": "Rabu",
+    "start": "08.40",
+    "end": "10.10",
+    "title": "Toko + telaah bahtsul masail",
+    "category": "Bahtsul",
+    "notes": "Blok fleksibel; toko tetap buka, pesan dapat mengantre"
+  },
+  {
+    "id": "base-42",
+    "day": "Rabu",
+    "start": "10.20",
+    "end": "12.00",
+    "title": "Kuliah Zoom; jeda Zuhur bila masuk waktu",
+    "category": "Kuliah",
+    "notes": ""
+  },
+  {
+    "id": "base-43",
+    "day": "Rabu",
+    "start": "12.00",
+    "end": "13.00",
+    "title": "Zuhur + makan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-44",
+    "day": "Rabu",
+    "start": "13.00",
+    "end": "14.30",
+    "title": "Toko + cek referensi bahtsul",
+    "category": "Bahtsul",
+    "notes": "Blok fleksibel; toko tetap buka, pesan dapat mengantre"
+  },
+  {
+    "id": "base-45",
+    "day": "Rabu",
+    "start": "14.40",
+    "end": "16.20",
+    "title": "Kuliah Zoom; atur jeda Asar",
+    "category": "Kuliah",
+    "notes": ""
+  },
+  {
+    "id": "base-46",
+    "day": "Rabu",
+    "start": "16.20",
+    "end": "17.35",
+    "title": "Toko + finalisasi rumusan bahtsul",
+    "category": "Bahtsul",
+    "notes": "Blok fleksibel; toko tetap buka, pesan dapat mengantre"
+  },
+  {
+    "id": "base-47",
+    "day": "Rabu",
+    "start": "17.35",
+    "end": "18.20",
+    "title": "Magrib sesuai azan + makan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-48",
+    "day": "Rabu",
+    "start": "18.20",
+    "end": "19.00",
+    "title": "Toko / review referensi",
+    "category": "Toko",
+    "notes": ""
+  },
+  {
+    "id": "base-49",
+    "day": "Rabu",
+    "start": "19.00",
+    "end": "19.25",
+    "title": "Isya sesuai azan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-50",
+    "day": "Rabu",
+    "start": "19.25",
+    "end": "20.00",
+    "title": "Tutup toko + siap bahtsul",
+    "category": "Toko",
+    "notes": ""
+  },
+  {
+    "id": "base-51",
+    "day": "Rabu",
+    "start": "20.00",
+    "end": "21.00",
+    "title": "Bahtsul masail; catat topik pekan depan",
+    "category": "Mengajar",
+    "notes": ""
+  },
+  {
+    "id": "base-52",
+    "day": "Rabu",
+    "start": "21.00",
+    "end": "21.30",
+    "title": "Rekap & evaluasi toko",
+    "category": "Rekap",
+    "notes": ""
+  },
+  {
+    "id": "base-53",
+    "day": "Rabu",
+    "start": "21.30",
+    "end": "22.15",
+    "title": "Catat masalah baru + istirahat",
+    "category": "Bahtsul",
+    "notes": ""
+  },
+  {
+    "id": "base-54",
+    "day": "Rabu",
+    "start": "22.15",
+    "end": "04.10",
+    "title": "Tidur utama (lintas hari)",
+    "category": "Istirahat",
+    "notes": ""
+  },
+  {
+    "id": "base-55",
+    "day": "Kamis",
+    "start": "04.10",
+    "end": "04.35",
+    "title": "Subuh sesuai azan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-56",
+    "day": "Kamis",
+    "start": "04.35",
+    "end": "07.00",
+    "title": "Tidur lanjutan",
+    "category": "Istirahat",
+    "notes": ""
+  },
+  {
+    "id": "base-57",
+    "day": "Kamis",
+    "start": "07.00",
+    "end": "08.35",
+    "title": "Sarapan + buka toko",
+    "category": "Toko",
+    "notes": ""
+  },
+  {
+    "id": "base-58",
+    "day": "Kamis",
+    "start": "08.40",
+    "end": "12.00",
+    "title": "Kuliah Zoom 2 sesi; jeda Zuhur jika perlu",
+    "category": "Kuliah",
+    "notes": ""
+  },
+  {
+    "id": "base-59",
+    "day": "Kamis",
+    "start": "12.00",
+    "end": "13.00",
+    "title": "Zuhur + makan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-60",
+    "day": "Kamis",
+    "start": "13.00",
+    "end": "14.30",
+    "title": "Telaah topik bahtsul minggu depan (60 menit) + toko",
+    "category": "Bahtsul",
+    "notes": "Blok fleksibel; toko tetap buka, pesan dapat mengantre"
+  },
+  {
+    "id": "base-61",
+    "day": "Kamis",
+    "start": "14.30",
+    "end": "15.15",
+    "title": "Asar sesuai azan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-62",
+    "day": "Kamis",
+    "start": "15.15",
+    "end": "17.35",
+    "title": "Toko + persiapan kitab Sabtu (60 menit)",
+    "category": "Mutholaah",
+    "notes": "Blok fleksibel; toko tetap buka, pesan dapat mengantre"
+  },
+  {
+    "id": "base-63",
+    "day": "Kamis",
+    "start": "17.35",
+    "end": "18.20",
+    "title": "Magrib + makan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-64",
+    "day": "Kamis",
+    "start": "18.20",
+    "end": "19.00",
+    "title": "Toko",
+    "category": "Toko",
+    "notes": ""
+  },
+  {
+    "id": "base-65",
+    "day": "Kamis",
+    "start": "19.00",
+    "end": "19.25",
+    "title": "Isya sesuai azan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-66",
+    "day": "Kamis",
+    "start": "19.25",
+    "end": "20.00",
+    "title": "Tutup toko",
+    "category": "Toko",
+    "notes": ""
+  },
+  {
+    "id": "base-67",
+    "day": "Kamis",
+    "start": "20.00",
+    "end": "20.30",
+    "title": "Rekap & evaluasi toko",
+    "category": "Rekap",
+    "notes": ""
+  },
+  {
+    "id": "base-68",
+    "day": "Kamis",
+    "start": "20.30",
+    "end": "21.30",
+    "title": "Tugas kuliah prioritas",
+    "category": "Kuliah",
+    "notes": ""
+  },
+  {
+    "id": "base-69",
+    "day": "Kamis",
+    "start": "21.30",
+    "end": "22.15",
+    "title": "Waktu pribadi + persiapan tidur",
+    "category": "Istirahat",
+    "notes": ""
+  },
+  {
+    "id": "base-70",
+    "day": "Kamis",
+    "start": "22.15",
+    "end": "04.10",
+    "title": "Tidur utama (lintas hari)",
+    "category": "Istirahat",
+    "notes": ""
+  },
+  {
+    "id": "base-71",
+    "day": "Jumat",
+    "start": "04.10",
+    "end": "04.35",
+    "title": "Subuh sesuai azan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-72",
+    "day": "Jumat",
+    "start": "04.35",
+    "end": "07.00",
+    "title": "Tidur lanjutan",
+    "category": "Istirahat",
+    "notes": ""
+  },
+  {
+    "id": "base-73",
+    "day": "Jumat",
+    "start": "07.00",
+    "end": "08.35",
+    "title": "Sarapan + buka toko",
+    "category": "Toko",
+    "notes": ""
+  },
+  {
+    "id": "base-74",
+    "day": "Jumat",
+    "start": "08.40",
+    "end": "10.20",
+    "title": "Kuliah Zoom",
+    "category": "Kuliah",
+    "notes": ""
+  },
+  {
+    "id": "base-75",
+    "day": "Jumat",
+    "start": "10.20",
+    "end": "11.15",
+    "title": "Toko + muthola'ah Sabtu",
+    "category": "Mutholaah",
+    "notes": "Blok fleksibel; toko tetap buka, pesan dapat mengantre"
+  },
+  {
+    "id": "base-76",
+    "day": "Jumat",
+    "start": "11.15",
+    "end": "12.45",
+    "title": "Salat Jumat bila wajib / Zuhur sesuai waktu",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-77",
+    "day": "Jumat",
+    "start": "12.45",
+    "end": "14.40",
+    "title": "Toko + bahtsul 60 menit",
+    "category": "Bahtsul",
+    "notes": "Blok fleksibel; toko tetap buka, pesan dapat mengantre"
+  },
+  {
+    "id": "base-78",
+    "day": "Jumat",
+    "start": "14.40",
+    "end": "15.15",
+    "title": "Asar sesuai azan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-79",
+    "day": "Jumat",
+    "start": "15.15",
+    "end": "17.35",
+    "title": "Toko + muthola'ah Sabtu (60 menit)",
+    "category": "Mutholaah",
+    "notes": "Blok fleksibel; toko tetap buka, pesan dapat mengantre"
+  },
+  {
+    "id": "base-80",
+    "day": "Jumat",
+    "start": "17.35",
+    "end": "18.20",
+    "title": "Magrib + makan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-81",
+    "day": "Jumat",
+    "start": "18.20",
+    "end": "19.00",
+    "title": "Toko",
+    "category": "Toko",
+    "notes": ""
+  },
+  {
+    "id": "base-82",
+    "day": "Jumat",
+    "start": "19.00",
+    "end": "19.25",
+    "title": "Isya sesuai azan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-83",
+    "day": "Jumat",
+    "start": "19.25",
+    "end": "20.00",
+    "title": "Tutup toko",
+    "category": "Toko",
+    "notes": ""
+  },
+  {
+    "id": "base-84",
+    "day": "Jumat",
+    "start": "20.00",
+    "end": "20.30",
+    "title": "Rekap & evaluasi toko",
+    "category": "Rekap",
+    "notes": ""
+  },
+  {
+    "id": "base-85",
+    "day": "Jumat",
+    "start": "20.30",
+    "end": "21.30",
+    "title": "Tugas kuliah / istirahat",
+    "category": "Pribadi",
+    "notes": ""
+  },
+  {
+    "id": "base-86",
+    "day": "Jumat",
+    "start": "21.30",
+    "end": "22.15",
+    "title": "Persiapan tidur",
+    "category": "Istirahat",
+    "notes": ""
+  },
+  {
+    "id": "base-87",
+    "day": "Jumat",
+    "start": "22.15",
+    "end": "04.10",
+    "title": "Tidur utama (lintas hari)",
+    "category": "Istirahat",
+    "notes": ""
+  },
+  {
+    "id": "base-88",
+    "day": "Sabtu",
+    "start": "04.10",
+    "end": "04.35",
+    "title": "Subuh sesuai azan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-89",
+    "day": "Sabtu",
+    "start": "04.35",
+    "end": "07.00",
+    "title": "Tidur lanjutan",
+    "category": "Istirahat",
+    "notes": ""
+  },
+  {
+    "id": "base-90",
+    "day": "Sabtu",
+    "start": "07.00",
+    "end": "08.00",
+    "title": "Sarapan dan persiapan",
+    "category": "Pribadi",
+    "notes": ""
+  },
+  {
+    "id": "base-91",
+    "day": "Sabtu",
+    "start": "08.00",
+    "end": "10.00",
+    "title": "Toko + muthola'ah Sabtu (60 menit fokus)",
+    "category": "Mutholaah",
+    "notes": "Blok fleksibel; toko tetap buka, pesan dapat mengantre"
+  },
+  {
+    "id": "base-92",
+    "day": "Sabtu",
+    "start": "10.00",
+    "end": "11.30",
+    "title": "Toko + tugas kuliah",
+    "category": "Toko",
+    "notes": ""
+  },
+  {
+    "id": "base-93",
+    "day": "Sabtu",
+    "start": "11.30",
+    "end": "12.15",
+    "title": "Zuhur sesuai azan + makan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-94",
+    "day": "Sabtu",
+    "start": "12.15",
+    "end": "14.30",
+    "title": "Toko + finalisasi muthola'ah Sabtu",
+    "category": "Mutholaah",
+    "notes": "Blok fleksibel; toko tetap buka, pesan dapat mengantre"
+  },
+  {
+    "id": "base-95",
+    "day": "Sabtu",
+    "start": "14.30",
+    "end": "15.15",
+    "title": "Asar sesuai azan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-96",
+    "day": "Sabtu",
+    "start": "15.15",
+    "end": "15.50",
+    "title": "Persiapan mengajar kitab",
+    "category": "Mutholaah",
+    "notes": ""
+  },
+  {
+    "id": "base-97",
+    "day": "Sabtu",
+    "start": "16.00",
+    "end": "17.00",
+    "title": "Mengajar kitab; toko antre",
+    "category": "Mengajar",
+    "notes": ""
+  },
+  {
+    "id": "base-98",
+    "day": "Sabtu",
+    "start": "17.00",
+    "end": "17.35",
+    "title": "Toko + bahtsul 45 menit bila sepi",
+    "category": "Bahtsul",
+    "notes": "Blok fleksibel; toko tetap buka, pesan dapat mengantre"
+  },
+  {
+    "id": "base-99",
+    "day": "Sabtu",
+    "start": "17.35",
+    "end": "18.20",
+    "title": "Magrib + makan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-100",
+    "day": "Sabtu",
+    "start": "18.20",
+    "end": "19.00",
+    "title": "Toko",
+    "category": "Toko",
+    "notes": ""
+  },
+  {
+    "id": "base-101",
+    "day": "Sabtu",
+    "start": "19.00",
+    "end": "19.25",
+    "title": "Isya sesuai azan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-102",
+    "day": "Sabtu",
+    "start": "19.25",
+    "end": "20.00",
+    "title": "Tutup toko",
+    "category": "Toko",
+    "notes": ""
+  },
+  {
+    "id": "base-103",
+    "day": "Sabtu",
+    "start": "20.00",
+    "end": "20.30",
+    "title": "Rekap & evaluasi toko",
+    "category": "Rekap",
+    "notes": ""
+  },
+  {
+    "id": "base-104",
+    "day": "Sabtu",
+    "start": "20.30",
+    "end": "22.15",
+    "title": "Waktu pribadi / istirahat",
+    "category": "Istirahat",
+    "notes": ""
+  },
+  {
+    "id": "base-105",
+    "day": "Sabtu",
+    "start": "22.15",
+    "end": "04.10",
+    "title": "Tidur utama (lintas hari)",
+    "category": "Istirahat",
+    "notes": ""
+  },
+  {
+    "id": "base-106",
+    "day": "Minggu",
+    "start": "04.10",
+    "end": "04.35",
+    "title": "Subuh sesuai azan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-107",
+    "day": "Minggu",
+    "start": "04.35",
+    "end": "07.00",
+    "title": "Tidur lanjutan",
+    "category": "Istirahat",
+    "notes": ""
+  },
+  {
+    "id": "base-108",
+    "day": "Minggu",
+    "start": "07.00",
+    "end": "08.00",
+    "title": "Sarapan, persiapan toko",
+    "category": "Pribadi",
+    "notes": ""
+  },
+  {
+    "id": "base-109",
+    "day": "Minggu",
+    "start": "08.00",
+    "end": "10.00",
+    "title": "Toko + muthola'ah Senin (60 menit fokus)",
+    "category": "Mutholaah",
+    "notes": "Blok fleksibel; toko tetap buka, pesan dapat mengantre"
+  },
+  {
+    "id": "base-110",
+    "day": "Minggu",
+    "start": "10.00",
+    "end": "11.30",
+    "title": "Toko / urusan pribadi",
+    "category": "Toko",
+    "notes": ""
+  },
+  {
+    "id": "base-111",
+    "day": "Minggu",
+    "start": "11.30",
+    "end": "12.15",
+    "title": "Zuhur sesuai azan + makan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-112",
+    "day": "Minggu",
+    "start": "12.15",
+    "end": "14.40",
+    "title": "Toko + muthola'ah Senin (60 menit)",
+    "category": "Mutholaah",
+    "notes": "Blok fleksibel; toko tetap buka, pesan dapat mengantre"
+  },
+  {
+    "id": "base-113",
+    "day": "Minggu",
+    "start": "14.40",
+    "end": "15.15",
+    "title": "Asar sesuai azan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-114",
+    "day": "Minggu",
+    "start": "15.15",
+    "end": "17.35",
+    "title": "Toko + bahtsul 45 menit",
+    "category": "Bahtsul",
+    "notes": "Blok fleksibel; toko tetap buka, pesan dapat mengantre"
+  },
+  {
+    "id": "base-115",
+    "day": "Minggu",
+    "start": "17.35",
+    "end": "18.20",
+    "title": "Magrib + makan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-116",
+    "day": "Minggu",
+    "start": "18.20",
+    "end": "19.00",
+    "title": "Toko",
+    "category": "Toko",
+    "notes": ""
+  },
+  {
+    "id": "base-117",
+    "day": "Minggu",
+    "start": "19.00",
+    "end": "19.25",
+    "title": "Isya sesuai azan",
+    "category": "Ibadah",
+    "notes": "Sesuaikan dengan jadwal azan KBB pada tanggal berjalan"
+  },
+  {
+    "id": "base-118",
+    "day": "Minggu",
+    "start": "19.25",
+    "end": "20.00",
+    "title": "Tutup toko + siapkan daftar setoran",
+    "category": "Toko",
+    "notes": ""
+  },
+  {
+    "id": "base-119",
+    "day": "Minggu",
+    "start": "20.00",
+    "end": "21.00",
+    "title": "Menerima hafalan santri (tanpa muthola'ah)",
+    "category": "Mengajar",
+    "notes": ""
+  },
+  {
+    "id": "base-120",
+    "day": "Minggu",
+    "start": "21.00",
+    "end": "21.30",
+    "title": "Rekap & evaluasi toko",
+    "category": "Rekap",
+    "notes": ""
+  },
+  {
+    "id": "base-121",
+    "day": "Minggu",
+    "start": "21.30",
+    "end": "22.15",
+    "title": "Evaluasi pekanan + tidur",
+    "category": "Istirahat",
+    "notes": ""
+  },
+  {
+    "id": "base-122",
+    "day": "Minggu",
+    "start": "22.15",
+    "end": "04.10",
+    "title": "Tidur utama (lintas hari)",
+    "category": "Istirahat",
+    "notes": ""
+  }
+]
