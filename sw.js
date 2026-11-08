@@ -1,17 +1,24 @@
-const CACHE = 'daily-life-os-v1';
+const CACHE = 'daily-life-os-v2';
+
+// Daftar ini harus persis sesuai nama file yang ada di folder aplikasi.
+// Jika ada satu file yang tidak ditemukan, service worker gagal dipasang sama sekali.
 const CORE = [
-  './', 
-  './index.html', 
-  './app.js', 
-  './schedule.json', 
-  './firebase-config.js', 
-  './manifest.webmanifest', 
-  './icon-192.png', 
+  './',
+  './index.html',
+  './app.js',
+  './schedule.json',
+  './firebase-config.js',
+  './manifest.webmanifest',
+  './icon-192.png',
   './icon-512.png'
 ];
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).then(() => self.skipWaiting()));
+  e.waitUntil(
+    caches.open(CACHE)
+      .then(c => c.addAll(CORE))
+      .then(() => self.skipWaiting())
+  );
 });
 
 self.addEventListener('activate', e => {
@@ -22,24 +29,19 @@ self.addEventListener('activate', e => {
   );
 });
 
-// Menggunakan Strategi Network-First: 
-// Selalu usahakan mengambil data terbaru dari internet. Jika offline, baru pakai cache.
+// Network-first: ambil data terbaru dari internet dulu. Jika offline, pakai cache.
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET' || new URL(e.request.url).origin !== self.location.origin) return;
-  
+
   e.respondWith(
     fetch(e.request)
       .then(response => {
-        // Jika berhasil mengambil dari internet, perbarui cache secara otomatis
         if (response.ok) {
           const copy = response.clone();
           caches.open(CACHE).then(c => c.put(e.request, copy));
         }
         return response;
       })
-      .catch(() => {
-        // Jika sedang offline (tidak ada internet), ambil dari cache
-        return caches.match(e.request).then(response => response || caches.match('./index.html'));
-      })
+      .catch(() => caches.match(e.request).then(response => response || caches.match('./index.html')))
   );
 });
